@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/06 14:34:29 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/06 17:28:13 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,9 @@ int	ft_command(t_mini *mini, char **argv)
 	if (mini_command(mini, argv[0], argv) == FALSE)
 	{
 		cmd_path = check_cmd(mini, argv[0], &file_info);
-		if (S_ISDIR(file_info.st_mode))
-		{
-			error_1(argv[0], "is a directory");
-			exit_num_set(126);
+		if (check_filemode_cmdpath(argv, file_info, cmd_path) == ERROR)
 			return (0);
-		}
-		exe_cmd(cmd_path, argv, mini->path);
+		exe_cmd(cmd_path, argv, mini->path, mini->sig_flag);
 		if (cmd_path != NULL)
 		{
 			free(cmd_path);

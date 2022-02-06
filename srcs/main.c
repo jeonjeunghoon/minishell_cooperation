@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/03 14:59:46 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/06 18:02:04 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	minishell_init(t_mini *mini)
 	mini->input->token_lst = NULL;
 	mini->input->argv_lst = NULL;
 	mini->input->user_input = NULL;
+	mini->sig_flag = FALSE;
 	return (0);
 }
 
@@ -60,11 +61,11 @@ int	main(int argc, const char **argv, char **envp)
 		return (0);
 	if (memory_allocation(&mini, envp) == ERROR)
 		ft_error();
-	ft_signal();
 	while (TRUE)
 	{
 		if (minishell_init(mini) == ERROR)
 			ft_error();
+		ft_signal(&(mini->sig_flag));
 		if (ft_prompt(mini) == ERROR)
 			ft_error();
 		if (mini->input->user_input[0] != '\0')

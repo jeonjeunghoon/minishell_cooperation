@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/06 14:30:23 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/06 18:08:23 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,20 @@ void	create_path_bundle(t_mini *mini)
 		mini->path = ft_split(path_str, ':');
 }
 
-void	exe_cmd(char *cmd_path, char **argv, char **envp)
+void	exe_cmd(char *cmd_path, char **argv, char **envp, t_bool sig_flag)
 {
 	pid_t	pid;
+	pid_t	child;
+	int		stat_loc;
 
-	pid = 0;
-	if (cmd_path == NULL)
-	{
-		error_1(argv[0], "command not found");
-		exit_num_set(127);
-		return ;
-	}
+	sig_flag = TRUE;
+	ft_signal(&sig_flag);
 	pid = fork();
 	if (pid > 0)
 	{
-		wait(0);
-		exit_num_set(0);
+		child = waitpid(pid, &stat_loc, WUNTRACED);
+		if (WIFEXITED(stat_loc))
+			exit_num_set(WSTOPSIG(stat_loc));
 	}
 	else if (pid == 0)
 		execve(cmd_path, argv, envp);

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/06 14:33:10 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/06 17:55:56 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_mini
 	char			**path;
 	t_input			*input;
 	struct termios	term;
+	t_bool			sig_flag;
 }	t_mini;
 
 // main
@@ -88,7 +89,7 @@ int		ft_parsing(t_mini *mini);
 
 // ft_signal
 void	sig_handler(int sig);
-void	ft_signal(void);
+void	ft_signal(t_bool *sig_flag);
 
 // minishell
 int		ft_command(t_mini *mini, char **argv);
@@ -176,10 +177,12 @@ void	verticalbar(t_list *head, char *argv, t_bool is_error);
 void	create_path_bundle(t_mini *mini);
 int		mini_command(t_mini *mini, char *cmd, char **argv);
 char	*check_cmd(t_mini *mini, char *cmd, struct stat *file_info);
-void	exe_cmd(char *cmd_path, char **argv, char **envp);
+void	exe_cmd(char *cmd_path, char **argv, char **envp, t_bool sig_flag);
 void	create_path_bundle(t_mini *mini);
 
 // command_utility2
+int		check_filemode_cmdpath(char **argv, struct stat file_info, \
+								char *cmd_path);
 t_bool	is_relative_path(t_mini *mini, char **file_path, \
 						char *cmd, struct stat *file_info);
 t_bool	is_absolute_path(char **file_path, char *cmd, struct stat *file_info);

@@ -6,11 +6,34 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/06 14:34:44 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/06 15:31:11 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int	check_filemode_cmdpath(char **argv, struct stat file_info, char *cmd_path)
+{
+	if (S_ISDIR(file_info.st_mode))
+	{
+		error_1(argv[0], "is a directory");
+		exit_num_set(126);
+		return (ERROR);
+	}
+	if (!S_ISREG(file_info.st_mode))
+	{
+		error_1(argv[0], "No such file or directory");
+		exit_num_set(127);
+		return (ERROR);
+	}
+	if (cmd_path == NULL)
+	{
+		error_1(argv[0], "command not found");
+		exit_num_set(127);
+		return (ERROR);
+	}
+	return (0);
+}
 
 t_bool	is_relative_path(t_mini *mini, char **file_path, char *cmd, struct stat *file_info)
 {
