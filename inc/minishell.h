@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/04 16:24:24 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/06 14:33:10 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,14 +170,19 @@ void	l_to_r_redirect(t_list *head, char *argv, t_bool is_error);
 // stream_utility2
 void	double_ampersand(t_list *head, t_bool is_error);
 void	double_verticalbar(t_list *head, t_bool is_error);
-void	verticalbar(t_list *head, char *argv, int *fd, t_bool is_error);
+void	verticalbar(t_list *head, char *argv, t_bool is_error);
 
 // command_utility
 void	create_path_bundle(t_mini *mini);
 int		mini_command(t_mini *mini, char *cmd, char **argv);
-char	*check_cmd(t_mini *mini, char *cmd);
+char	*check_cmd(t_mini *mini, char *cmd, struct stat *file_info);
 void	exe_cmd(char *cmd_path, char **argv, char **envp);
 void	create_path_bundle(t_mini *mini);
+
+// command_utility2
+t_bool	is_relative_path(t_mini *mini, char **file_path, \
+						char *cmd, struct stat *file_info);
+t_bool	is_absolute_path(char **file_path, char *cmd, struct stat *file_info);
 
 // export_utility
 int		is_valid_export(char *argv, int i);

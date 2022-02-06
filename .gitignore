@@ -1,2 +1,5 @@
-a.out
 minishell
+*.o
+.gitignore
+.vscode
+*.pdf

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/03 22:18:20 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/06 14:30:23 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,28 +44,14 @@ void	exe_cmd(char *cmd_path, char **argv, char **envp)
 		execve(cmd_path, argv, envp);
 }
 
-char	*check_cmd(t_mini *mini, char *cmd)
+char	*check_cmd(t_mini *mini, char *cmd, struct stat *file_info)
 {
-	struct stat	file_info;
 	char		*file_path;
-	char		*tmp;
-	int			i;
 
-	create_path_bundle(mini);
-	if (mini->path == NULL)
-		return (NULL);
-	tmp = ft_strjoin("/", cmd);
-	i = 0;
-	while (mini->path[i])
-	{
-		file_path = ft_strjoin(mini->path[i], tmp);
-		if (stat(file_path, &file_info) == SUCCESS)
-			break ;
-		free(file_path);
-		i++;
-	}
-	free(tmp);
-	if (mini->path[i] != NULL)
+	file_path = NULL;
+	if (is_absolute_path(&file_path, cmd, file_info) == TRUE)
+		return (file_path);
+	else if (is_relative_path(mini, &file_path, cmd, file_info) == TRUE)
 		return (file_path);
 	return (NULL);
 }
