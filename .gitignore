@@ -1,5 +1,6 @@
 minishell
+pipe_tmp*
 *.o
-.gitignore
 .vscode
 *.pdf
+*.a

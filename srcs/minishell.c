@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 18:30:24 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/07 20:56:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	mini_command(t_mini *mini, char *cmd, char **argv)
 	return (TRUE);
 }
 
-int	ft_command(t_mini *mini, char *argv)
+int	ft_command(t_mini *mini, t_argv *argv)
 {
 	char		*cmd_path;
 
