@@ -6,11 +6,39 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 17:53:48 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/07 18:20:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int	check_filemode_cmdpath(char *cmd, struct stat **file_info, char *cmd_path)
+{
+	t_bool	is_error;
+
+	is_error = 0;
+	if (ft_s_isdir((*file_info)->st_mode) == TRUE)
+	{
+		error_1(cmd, "is a directory");
+		exit_num_set(126);
+		is_error = ERROR;
+	}
+	else if (ft_s_isreg((*file_info)->st_mode) == FALSE)
+	{
+		error_1(cmd, "No such file or directory");
+		exit_num_set(127);
+		is_error = ERROR;
+	}
+	else if (cmd_path == NULL)
+	{
+		error_1(cmd, "command not found");
+		exit_num_set(127);
+		is_error = ERROR;
+	}
+	free(*file_info);
+	*file_info = NULL;
+	return (is_error);
+}
 
 void	create_path_bundle(t_mini *mini)
 {
@@ -23,23 +51,31 @@ void	create_path_bundle(t_mini *mini)
 		mini->path = ft_split(path_str, ':');
 }
 
-void	exe_cmd(char *cmd_path, char **argv, char **envp, t_bool sig_flag)
+void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd, struct stat *file_info)
 {
-	pid_t	pid;
-	pid_t	child;
-	int		stat_loc;
+	char		*tmp;
+	int			i;
 
-	sig_flag = TRUE;
-	ft_signal(&sig_flag);
-	pid = fork();
-	if (pid > 0)
+	create_path_bundle(mini);
+	if (mini->path == NULL)
+		return ;
+	tmp = ft_strjoin("/", cmd);
+	i = 0;
+	while (mini->path[i])
 	{
-		child = waitpid(pid, &stat_loc, WUNTRACED);
-		if (WIFEXITED(stat_loc))
-			exit_num_set(WSTOPSIG(stat_loc));
+		*cmd_path = ft_strjoin(mini->path[i], tmp);
+		if (stat(*cmd_path, file_info) == SUCCESS)
+			break ;
+		ft_free(cmd_path);
+		i++;
 	}
-	else if (pid == 0)
-		execve(cmd_path, argv, envp);
+	ft_free(&tmp);
+}
+
+void	set_absolute_path(char **cmd_path, char *cmd, struct stat *file_info)
+{
+	if (stat(cmd, file_info) == SUCCESS)
+		*cmd_path = ft_strdup(cmd);
 }
 
 int	check_cmd(t_mini *mini, char *cmd, char **cmd_path)
@@ -55,25 +91,4 @@ int	check_cmd(t_mini *mini, char *cmd, char **cmd_path)
 	if (check_filemode_cmdpath(cmd, &file_info, *cmd_path) == ERROR)
 		return (ERROR);
 	return (0);
-}
-
-int	mini_command(t_mini *mini, char *cmd, char **argv)
-{
-	if ((ft_strncmp(cmd, "echo", 5)) == 0)
-		ft_echo(mini, argv);
-	else if ((ft_strncmp(cmd, "cd", 3)) == 0)
-		ft_cd(mini, argv);
-	else if ((ft_strncmp(cmd, "pwd", 4)) == 0)
-		ft_pwd(argv);
-	else if ((ft_strncmp(cmd, "env", 4)) == 0)
-		ft_env(mini, argv);
-	else if ((ft_strncmp(cmd, "export", 7)) == 0)
-		ft_export(mini, argv);
-	else if ((ft_strncmp(cmd, "unset", 6)) == 0)
-		ft_unset(mini, argv);
-	else if ((ft_strncmp(cmd, "exit", 5)) == 0)
-		ft_exit(argv);
-	else
-		return (FALSE);
-	return (TRUE);
 }

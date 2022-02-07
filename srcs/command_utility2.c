@@ -6,63 +6,63 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 17:50:36 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/07 18:20:52 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	check_filemode_cmdpath(char *cmd, struct stat **file_info, char *cmd_path)
+int	ft_wstopsig(int stat_loc)
 {
-	t_bool	is_error;
+	int	x;
+	int	sig;
 
-	is_error = 0;
-	if (S_ISDIR((*file_info)->st_mode))
-	{
-		error_1(cmd, "is a directory");
-		exit_num_set(126);
-		is_error = ERROR;
-	}
-	else if (!S_ISREG((*file_info)->st_mode))
-	{
-		error_1(cmd, "No such file or directory");
-		exit_num_set(127);
-		is_error = ERROR;
-	}
-	else if (cmd_path == NULL)
-	{
-		error_1(cmd, "command not found");
-		exit_num_set(127);
-		is_error = ERROR;
-	}
-	free(*file_info);
-	*file_info = NULL;
-	return (is_error);
+	x = (*(int *)&(stat_loc));
+	sig = x >> 8;
+	return (sig);
 }
 
-void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd, struct stat *file_info)
+t_bool	ft_wifexited(int stat_loc)
 {
-	char		*tmp;
-	int			i;
+	int	x;
+	int	status;
 
-	create_path_bundle(mini);
-	if (mini->path == NULL)
-		return ;
-	tmp = ft_strjoin("/", cmd);
-	i = 0;
-	while (mini->path[i])
-	{
-		*cmd_path = ft_strjoin(mini->path[i], tmp);
-		if (stat(*cmd_path, file_info) == SUCCESS)
-			break ;
-		ft_free(cmd_path);
-		i++;
-	}
-	ft_free(&tmp);
+	x = *(int *)&(stat_loc);
+	status = x & 0177;
+	if (status == 0)
+		return (TRUE);
+	return (FALSE);
 }
 
-void	set_absolute_path(char **cmd_path, char *cmd, struct stat *file_info)
+t_bool	ft_s_isreg(int mode)
 {
-	if (stat(cmd, file_info) == SUCCESS)
-		*cmd_path = ft_strdup(cmd);
+	if ((mode & 0170000) == 0100000)
+		return (TRUE);
+	return (FALSE);
+}
+
+t_bool	ft_s_isdir(int mode)
+{
+	if ((mode & 0170000) == 0040000)
+		return (TRUE);
+	return (FALSE);
+}
+
+void	exe_cmd(char *cmd_path, char **argv, char **envp, t_bool sig_flag)
+{
+	pid_t	pid;
+	pid_t	child;
+	int		stat_loc;
+
+	sig_flag = TRUE;
+	ft_signal(&sig_flag);
+	pid = fork();
+	if (pid > 0)
+	{
+		child = waitpid(pid, &stat_loc, WUNTRACED);
+		if (ft_wifexited(stat_loc) == TRUE)
+			exit_num_set(ft_wstopsig(stat_loc));
+	}
+	else if (pid == 0)
+		execve(cmd_path, argv, envp);
 }

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 17:54:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/07 18:08:02 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	sig_handler(int sig);
 void	ft_signal(t_bool *sig_flag);
 
 // minishell
+int		mini_command(t_mini *mini, char *cmd, char **argv);
 int		ft_command(t_mini *mini, char **argv);
 int		ft_stream(t_mini *mini);
 int		minishell(t_mini *mini);
@@ -175,17 +176,15 @@ void	verticalbar(t_list *head, char *argv, t_bool is_error);
 
 // command_utility
 void	create_path_bundle(t_mini *mini);
-int		mini_command(t_mini *mini, char *cmd, char **argv);
-int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
-void	exe_cmd(char *cmd_path, char **argv, char **envp, t_bool sig_flag);
-void	create_path_bundle(t_mini *mini);
-
-// command_utility2
 int		check_filemode_cmdpath(char *cmd, struct stat **file_info, \
 								char *cmd_path);
 void	set_relative_path(t_mini *mini, char **cmd_path, \
 						char *cmd, struct stat *cmd_info);
 void	set_absolute_path(char **file_path, char *cmd, struct stat *file_info);
+int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
+
+// command_utility2
+void	exe_cmd(char *cmd_path, char **argv, char **envp, t_bool sig_flag);
 
 // export_utility
 int		is_valid_export(char *argv, int i);
