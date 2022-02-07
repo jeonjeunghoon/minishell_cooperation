@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 17:38:02 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/07 17:50:36 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd, struct stat *fi
 	while (mini->path[i])
 	{
 		*cmd_path = ft_strjoin(mini->path[i], tmp);
-		stat(*cmd_path, file_info);
-		if (S_ISREG(file_info->st_mode))
+		if (stat(*cmd_path, file_info) == SUCCESS)
 			break ;
 		ft_free(cmd_path);
 		i++;
@@ -64,7 +63,6 @@ void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd, struct stat *fi
 
 void	set_absolute_path(char **cmd_path, char *cmd, struct stat *file_info)
 {
-	stat(cmd, file_info);
-	if (S_ISREG(file_info->st_mode))
+	if (stat(cmd, file_info) == SUCCESS)
 		*cmd_path = ft_strdup(cmd);
 }
