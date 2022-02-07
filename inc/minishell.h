@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/06 17:55:56 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/07 17:37:06 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,16 +176,16 @@ void	verticalbar(t_list *head, char *argv, t_bool is_error);
 // command_utility
 void	create_path_bundle(t_mini *mini);
 int		mini_command(t_mini *mini, char *cmd, char **argv);
-char	*check_cmd(t_mini *mini, char *cmd, struct stat *file_info);
+int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
 void	exe_cmd(char *cmd_path, char **argv, char **envp, t_bool sig_flag);
 void	create_path_bundle(t_mini *mini);
 
 // command_utility2
-int		check_filemode_cmdpath(char **argv, struct stat file_info, \
+int		check_filemode_cmdpath(char *cmd, struct stat **file_info, \
 								char *cmd_path);
-t_bool	is_relative_path(t_mini *mini, char **file_path, \
-						char *cmd, struct stat *file_info);
-t_bool	is_absolute_path(char **file_path, char *cmd, struct stat *file_info);
+void	set_relative_path(t_mini *mini, char **cmd_path, \
+						char *cmd, struct stat *cmd_info);
+void	set_absolute_path(char **file_path, char *cmd, struct stat *file_info);
 
 // export_utility
 int		is_valid_export(char *argv, int i);
