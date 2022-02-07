@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utility.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 17:54:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/07 18:22:37 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,11 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 	int		i;
 
 	(*argv) = (t_argv *)malloc(sizeof(t_argv));
-	(*argv)->argv = (char **)malloc(sizeof(char *) * (size + 1));
+	(*argv)->argv = (char **)malloc(sizeof(char *) * (size + 2));
 	(*argv)->argv[size] = NULL;
+	(*argv)->was_pipe = FALSE;
+	(*argv)->is_input = FALSE;
+	(*argv)->is_pipe = FALSE;
 	i = 0;
 	while (token_lst != NULL && i < size && \
 			stream_flag_str(token_lst->content) == FALSE)
@@ -86,6 +89,9 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 		i++;
 		token_lst = token_lst->next;
 	}
+	//명령어 다음에 pipe가 오면 is_pipe = 1
+	if (token_lst && ((t_token *)token_lst->content)->token[0] == '|')
+		(*argv)->is_pipe = TRUE;
 	(*argv)->is_stream = FALSE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*argv));
 }
