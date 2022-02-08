@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/08 17:25:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/08 18:16:38 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 	int		fd2;
 	char	**new_argv;
 	int		size;
-	char	buf[1024];
+	char	*buf;
  
 	sig_flag = TRUE;
 	ft_signal(&sig_flag);
@@ -73,11 +73,14 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 		{
 			fd2 = open("pipe_tmp2", O_RDONLY, 0644);
 			fd = open("pipe_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			buf = malloc(sizeof(char) * 1025);
+			buf[1024] = '\0';
 			while (read(fd2, buf, sizeof(buf)))
 				write(fd, buf, ft_strlen(buf));
 			close(fd);
 			close(fd2);
 			unlink("pipe_tmp2");
+			ft_free(&buf);
 		}
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
