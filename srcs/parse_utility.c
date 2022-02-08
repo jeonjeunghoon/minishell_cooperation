@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 18:22:37 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/08 16:04:45 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 	int		i;
 
 	(*argv) = (t_argv *)malloc(sizeof(t_argv));
-	(*argv)->argv = (char **)malloc(sizeof(char *) * (size + 2));
+	(*argv)->argv = (char **)malloc(sizeof(char *) * (size + 1));
 	(*argv)->argv[size] = NULL;
 	(*argv)->was_pipe = FALSE;
 	(*argv)->is_input = FALSE;
