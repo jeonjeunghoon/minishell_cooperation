@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 21:10:54 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:15:29 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,8 @@ int	check_export_argv(char *argv)
 		if (is_valid_export(argv, i))
 		{
 			error_msg = ft_strjoin_bothside("`", argv, "'");
-			error_2("export", error_msg, "not a valid identifier");
+			error_2("export", error_msg, "not a valid identifier", 1);
 			free(error_msg);
-			exit_num_set(1);
 			return (ERROR);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/01/25 16:44:00 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:16:39 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,8 @@ void	check_unset_argv(char **argv, int *size)
 				&& !(argv[i][j] >= '0' && argv[i][j] <= '9')) \
 				|| (argv[i][0] >= '0' && argv[i][0] <= '9'))
 			{
-				msg_argv = ft_strjoin_bothside("'", argv[i], "'");
-				error_2(argv[0], msg_argv, "not a valid identifier");
-				exit_num_set(1);
+				msg_argv = ft_strjoin_bothside("`", argv[i], "'");
+				error_2(argv[0], msg_argv, "not a valid identifier", 1);
 				free(msg_argv);
 				(*size)--;
 				break ;

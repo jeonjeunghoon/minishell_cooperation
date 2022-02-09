@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_utility2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 14:20:15 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:11:32 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
-		execve(cmd_path, argv->argv, envp);
+		if (execve(cmd_path, argv->argv, envp) == -1)
+		{
+			printf("%s\n", strerror(errno));
+			exit_num_set(1);
+			exit(g_exit_state);
+		}
 	}
 }

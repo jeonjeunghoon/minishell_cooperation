@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 14:21:18 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:13:23 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,9 +149,9 @@ int		exit_exception(int argc, char **argv);
 void	ft_exit(char **argv);
 
 // ft_error
-void	error_symbol(char symbol);
-void	error_1(char *cmd, char *msg);
-void	error_2(char *cmd, char *argv, char *msg);
+void	error_symbol(char symbol, int exit_num);
+void	error_1(char *cmd, char *msg, int exit_num);
+void	error_2(char *cmd, char *argv, char *msg, int exit_num);
 void	ft_error(void);
 
 // utility

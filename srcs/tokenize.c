@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/03 22:22:41 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:59:08 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	refine_str(t_token *token, char **envp)
 	refine->envp = envp;
 	refine->str = token->token;
 	create_refined_str(refine);
-	ft_free(&(token->token));
+	ft_free(&token->token);
 	token->token = ft_strdup(refine->new_str);
-	ft_free(&(refine->new_str));
+	ft_free(&refine->new_str);
 	refine_init(refine);
 	free(refine);
 	refine = NULL;

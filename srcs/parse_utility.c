@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utility.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/08 16:04:45 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:17:44 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ t_bool	is_valid_symbol(char *str)
 	len = ft_strlen(str);
 	if (len == 1 && str[0] == '&')
 	{
-		error_1(str, "invalid symbol");
+		error_1(str, "invalid symbol", 258);
 		return (FALSE);
 	}
 	if (len == 2 && str[0] != str[1])
 	{
-		error_symbol(str[1]);
+		error_symbol(str[1], 258);
 		return (FALSE);
 	}
 	if (len > 2 || (len == 2 && str[0] != str[1]))
 	{
-		error_symbol(str[len - 1]);
+		error_symbol(str[len - 1], 258);
 		return (FALSE);
 	}
 	return (TRUE);

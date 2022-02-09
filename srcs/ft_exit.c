@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/03 15:03:02 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:15:05 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,9 @@ int	exit_exception(int argc, char **argv)
 	if (argc >= 2)
 	{
 		if (check_argv(argv[1]) == ERROR)
-		{
-			error_2("exit", argv[1], "numeric argument required");
-			exit_num_set(255);
-		}
+			error_2("exit", argv[1], "numeric argument required", 255);
 		else
-		{
-			error_1("exit", "too_many_arguments");
-			exit_num_set(1);
-		}
+			error_1("exit", "too many arguments", 1);
 		return (ERROR);
 	}
 	return (0);

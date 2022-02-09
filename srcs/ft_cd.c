@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/01/27 15:24:38 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:14:04 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	go_to_home(char **envp, char *path)
 		path = ft_getenv(envp, "HOME");
 		if (path == NULL)
 		{
-			error_2("cd", "HOME", "not set");
-			exit_num_set(1);
+			error_2("cd", "HOME", "not set", 1);
 			return (ERROR);
 		}
 		else
@@ -59,8 +58,7 @@ int	check_path(char *path)
 {
 	if (chdir(path) == ERROR)
 	{
-		error_2("cd", path, strerror(errno));
-		exit_num_set(1);
+		error_2("cd", path, strerror(errno), 1);
 		return (ERROR);
 	}
 	return (0);
