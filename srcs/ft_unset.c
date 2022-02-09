@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:57:24 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 17:48:30 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	position_init(int **position, int *size, char **envp, char **argv)
 	(*size) = 0;
 }
 
-void	check_unset_argv(char **argv, int *size)
+int	check_unset_argv(char **argv, int *size)
 {
 	int		i;
 	int		j;
@@ -110,10 +110,11 @@ void	check_unset_argv(char **argv, int *size)
 				error_2(argv[0], msg_argv, "not a valid identifier", 1);
 				free(msg_argv);
 				(*size)--;
-				break ;
+				return (ERROR);
 			}
 		}
 	}
+	return (0);
 }
 
 void	ft_unset(t_mini *mini, t_argv *argv)
@@ -124,12 +125,13 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	int		stat_loc;
 	pid_t	pid;
 
+	exit_num_set(0);
 	pid = fork();
 	if (pid > 0)
 	{
-		waitpid(pid, &stat_loc, WUNTRACED);
+		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
-		exit_num_set(g_exit_state);
+		exit_num_set(ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)
 	{
@@ -137,7 +139,8 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 		size = ft_two_dimension_size(argv->argv) - 1;
 		if (ft_two_dimension_size(argv->argv) > 1)
 		{
-			check_unset_argv(argv->argv, &size);
+			if (check_unset_argv(argv->argv, &size) == ERROR)
+				exit(g_exit_state);
 			if (size != 0)
 			{
 				position_init(&position, &size, mini->envp, argv->argv);

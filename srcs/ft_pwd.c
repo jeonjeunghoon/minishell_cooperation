@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 13:57:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:57:14 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 17:48:27 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ void	ft_pwd(t_argv *argv)
 	int		stat_loc;
 	pid_t	pid;
 
+	exit_num_set(0);
 	pid = fork();
 	if (pid > 0)
 	{
-		waitpid(pid, &stat_loc, WUNTRACED);
+		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
-		exit_num_set(stat_loc & 127);
+		exit_num_set(ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)
 	{
@@ -33,8 +34,12 @@ void	ft_pwd(t_argv *argv)
 		if (cwd)
 			printf("%s\n", cwd);
 		else if (cwd == NULL)
+		{
 			error_2(argv->argv[0], argv->argv[1], strerror(errno), 1);
+			free(cwd);
+		}
 		free(cwd);
+		cwd = NULL;
 		exit(g_exit_state);
 	}
 }

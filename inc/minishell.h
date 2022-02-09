@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:59:21 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 17:41:11 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void	ft_export(t_mini *mini, t_argv *argv);
 char	**create_unset_envp(char **envp, int *position, int size);
 void	get_position(int *position, char **envp, char **argv);
 void	position_init(int **position, int *size, char **envp, char **argv);
-void	check_unset_argv(char **argv, int *size);
+int		check_unset_argv(char **argv, int *size);
 void	ft_unset(t_mini *mini, t_argv *argv);
 
 // ft_env
@@ -220,12 +220,17 @@ void	set_absolute_path(char **file_path, char *cmd, struct stat *file_info);
 int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
 
 // command_utility2
-int		ft_wstopsig(int stat_loc);
-t_bool	ft_wifexited(int stat_loc);
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag);
 
+// ft_pipe
 void    when_there_is_pipe(t_argv *argv);
 void    pipe_tmp_copy(t_argv *argv);
+
+// w_utility
+int		ft_wexitstatus(int stat_loc);
+int		ft_wstopsig(int stat_loc);
+t_bool	ft_wifexited(int stat_loc);
+
 #endif

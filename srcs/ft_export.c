@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:56:08 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 17:48:25 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	check_export_argv(char *argv)
 	{
 		if (argv[i] == '=')
 			is_env++;
-		if (is_valid_export(argv, i))
+		if (is_valid_export(argv, i) == ERROR)
 		{
 			error_msg = ft_strjoin_bothside("`", argv, "'");
 			error_2("export", error_msg, "not a valid identifier", 1);
@@ -103,16 +103,16 @@ void	ft_export(t_mini *mini, t_argv *argv)
 {
 	int		i;
 	char	**new_envp;
-
 	int		stat_loc;
 	pid_t	pid;
 
+	exit_num_set(0);
 	pid = fork();
 	if (pid > 0)
 	{
-		waitpid(pid, &stat_loc, WUNTRACED);
+		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
-		exit_num_set(g_exit_state);
+		exit_num_set(ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)
 	{

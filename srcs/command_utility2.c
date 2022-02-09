@@ -6,33 +6,11 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:46:58 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 17:47:57 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-int	ft_wstopsig(int stat_loc)
-{
-	int	x;
-	int	sig;
-
-	x = (*(int *)&(stat_loc));
-	sig = x >> 8;
-	return (sig);
-}
-
-t_bool	ft_wifexited(int stat_loc)
-{
-	int	x;
-	int	status;
-
-	x = *(int *)&(stat_loc);
-	status = x & 0177;
-	if (status == 0)
-		return (TRUE);
-	return (FALSE);
-}
 
 t_bool	ft_s_isreg(int mode)
 {
@@ -58,7 +36,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 	pid = fork();
 	if (pid > 0)
 	{
-		waitpid(pid, &stat_loc, 0x00000002); // WUNTRACED
+		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
