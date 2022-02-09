@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 18:22:12 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 19:17:40 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,21 @@ t_bool	ft_s_isdir(int mode)
 	return (FALSE);
 }
 
-void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
+void	set_redirect(t_argv *redirect)
+{
+	if (redirect == NULL)
+		return ;
+	if (redirect->is_ltor)
+		// ltor();
+	else if (redirect->is_rtol)
+		// rtol();
+	else if (redirect->is_append)
+		// append();
+	else if (redirect->is_heredoc)
+		// heredoc();
+}
+
+void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_bool sig_flag)
 {
 	pid_t	pid;
 	int		stat_loc;
@@ -44,6 +58,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
+		set_redirect(redirect);
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
 			printf("%s\n", strerror(errno));
