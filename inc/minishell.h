@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 17:41:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 18:55:57 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,17 @@ typedef struct s_token
 typedef struct s_argv
 {
 	char	**argv;
+	t_bool	is_stream;
 	t_bool	was_pipe; //이전 argv에 pipe가 있는가? 
 	t_bool	is_pipe; //다음 argv에 pipe가 있는가? "du -h | sort -nr" 이면 du는 was = 0 is = 1, sort는 was = 1, is = 0
 	t_bool	is_input; //명령어의 input이 존재하는가? "ls -a | sort -nr a.txt"이면 ls 출력x, ls 내용과 무관하게 a.txt를 sort 이때 sort의 is_input은 1
-	t_bool	is_stream;
+	t_bool	is_ltor; // >
+	t_bool	is_append; // >>
+	t_bool	is_rtol; // <
+	t_bool	is_heredoc; // <<
+	t_bool	is_and; // &&
+	t_bool	is_or; // ||
+	t_bool	is_wildcard; // *
 }	t_argv;
 
 typedef struct s_input
@@ -172,6 +179,7 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 // parse_utility2
 void	exception_utility(char c, t_bool *sin, t_bool *dou);
 void	argv_lst_init(t_argv **str, t_argv **stream, int *size);
+void	argv_init(t_argv *argv);
 
 // tokenize
 void	refine_init(t_refine *refine);

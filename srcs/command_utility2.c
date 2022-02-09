@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 17:47:57 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 18:22:12 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 {
 	pid_t	pid;
 	int		stat_loc;
- 
+
 	sig_flag = TRUE;
 	ft_signal(&sig_flag);
 	pid = fork();

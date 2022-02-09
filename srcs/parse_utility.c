@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:17:44 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 18:57:10 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,26 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
 }
 
+void	check_stream(t_argv *argv, t_list *token_lst, char *str)
+{
+	if (str[0] == '|' && str[1] == '|')
+		argv->is_or = TRUE;
+	else if (str[0] == '|')
+		argv->is_pipe = TRUE;
+	else if (str[0] == '>' && str[1] == '>')
+		argv->is_append = TRUE;
+	else if (str[0] == '>')
+		argv->is_ltor = TRUE;
+	else if (str[0] == '<' && str[1] == '<')
+		argv->is_heredoc = TRUE;
+	else if (str[0] == '<')
+		argv->is_rtol = TRUE;
+	else if (str[0] == '&' && str[1] == '&')
+		argv->is_and = TRUE;
+	printf("is in parse_utility.c check_stream_func\n[| = %d || = %d > = %d >> = %d < = %d << = %d && = %d]\n", \
+	argv->is_pipe, argv->is_or, argv->is_ltor, argv->is_append, argv->is_rtol, argv->is_heredoc, argv->is_and);
+}
+
 void	create_argv(t_argv **argv, t_list *token_lst, \
 					t_list **argv_lst, int size)
 {
@@ -78,20 +98,19 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 	(*argv) = (t_argv *)malloc(sizeof(t_argv));
 	(*argv)->argv = (char **)malloc(sizeof(char *) * (size + 1));
 	(*argv)->argv[size] = NULL;
-	(*argv)->was_pipe = FALSE;
-	(*argv)->is_input = FALSE;
-	(*argv)->is_pipe = FALSE;
+	argv_init(*argv);
 	i = 0;
 	while (token_lst != NULL && i < size && \
 			stream_flag_str(token_lst->content) == FALSE)
 	{
 		(*argv)->argv[i] = ft_strdup(((t_token *)token_lst->content)->token);
+		if ((*argv)->argv[i][0] == '*')
+			(*argv)->is_wildcard = TRUE;
 		i++;
 		token_lst = token_lst->next;
 	}
-	//명령어 다음에 pipe가 오면 is_pipe = 1
-	if (token_lst && ((t_token *)token_lst->content)->token[0] == '|')
-		(*argv)->is_pipe = TRUE;
+	if (token_lst != NULL)
+		check_stream(*argv, token_lst, ((t_token *)token_lst->content)->token);
 	(*argv)->is_stream = FALSE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*argv));
 }

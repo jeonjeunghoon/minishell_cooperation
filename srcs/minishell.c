@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:25:33 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 19:00:22 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,42 +50,12 @@ int	ft_command(t_mini *mini, t_argv *argv)
 	return (0);
 }
 
-int	set_stream(t_list *head)
-{
-	char	*argv;
-	t_bool	is_error;
-
-	is_error = FALSE;
-	while (head != NULL)
-	{
-		argv = (((t_argv *)(head->content))->argv)[0];
-		if (argv[0] == '>')
-			l_to_r_redirect(head, argv, is_error);
-		else if (argv[0] == '<')
-			r_to_l_redirect(head, argv, is_error);
-		else if (argv[0] == '|')
-			verticalbar(head, argv, is_error);
-		else if (argv[0] == '&' && argv[1] == '&')
-			double_ampersand(head, is_error);
-		if (is_error == TRUE)
-			return (ERROR);
-		head = head->next;
-	}
-	return (0);
-}
-
 int	minishell(t_mini *mini)
 {
 	t_list	*head;
 	t_argv	*argv;
 	int		i;
 
-	head = mini->input->argv_lst;
-	// if (set_stream(head) == ERROR)
-	// {
-	// 	exit_num_set(1); // 수정해야함
-	// 	return (0);
-	// }
 	head = mini->input->argv_lst;
 	while (head != NULL)
 	{
@@ -100,7 +70,7 @@ int	minishell(t_mini *mini)
 				{
 					argv->is_input = 1;
 					break;
-				}	
+				}
 			}
 			ft_command(mini, argv);
 		}
