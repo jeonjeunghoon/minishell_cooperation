@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:12:20 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:48:08 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,16 @@ int	check_filemode_cmdpath(char *cmd, struct stat **file_info, char *cmd_path)
 	t_bool	is_error;
 
 	is_error = 0;
-	if (cmd_path == NULL)
+	if (ft_s_isdir((*file_info)->st_mode) == TRUE && cmd[0] != '\0')
+	{
+		error_1(cmd, "is a directory", 126);
+		is_error = ERROR;
+	}
+	else if (cmd_path == NULL)
 	{
 		error_1(cmd, "command not found", 127);
 		is_error = ERROR;
 	}
-	else if (ft_s_isreg((*file_info)->st_mode) == FALSE)
-	{
-		error_1(cmd, "No such file or directory", 127);
-		is_error = ERROR;
-	}
-	free(*file_info);
-	*file_info = NULL;
 	return (is_error);
 }
 
@@ -85,5 +83,7 @@ int	check_cmd(t_mini *mini, char *cmd, char **cmd_path)
 		return (ERROR);
 	if (*cmd_path == NULL)
 		*cmd_path = ft_strdup(cmd);
+	free(file_info);
+	file_info = NULL;
 	return (0);
 }

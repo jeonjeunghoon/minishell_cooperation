@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:26:04 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:46:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,14 @@ t_bool	ft_s_isdir(int mode)
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 {
 	pid_t	pid;
-	pid_t	child;
 	int		stat_loc;
-	int		fd;
-	int		fd2;
-	int		len;
-	char	buf[1024];
  
 	sig_flag = TRUE;
 	ft_signal(&sig_flag);
 	pid = fork();
 	if (pid > 0)
 	{
-		child = waitpid(pid, &stat_loc, 0x00000002); // WUNTRACED
+		waitpid(pid, &stat_loc, 0x00000002); // WUNTRACED
 		pipe_tmp_copy(argv);
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
