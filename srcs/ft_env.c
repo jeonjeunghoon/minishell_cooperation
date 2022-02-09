@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:59 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:14:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:23:55 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,27 @@ void	show_env(char **envp)
 	}
 }
 
-void	ft_env(t_mini *mini, char **argv)
+void	ft_env(t_mini *mini, t_argv *argv)
 {
-	if (ft_two_dimension_size(argv) != 1)
+	int		stat_loc;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid > 0)
 	{
-		error_2(argv[0], argv[1], "With no options or arguments", 1);
-		return ;
+		waitpid(pid, &stat_loc, WUNTRACED);
+		pipe_tmp_copy(argv);
+		exit_num_set(g_exit_state);
 	}
-	show_env(mini->envp);
-	exit_num_set(g_exit_state);
+	else if (pid == 0)
+	{
+		when_there_is_pipe(argv);
+		if (ft_two_dimension_size(argv->argv) != 1)
+		{
+			error_2(argv->argv[0], argv->argv[1], "With no options or arguments", 1);
+			return;
+		}
+		show_env(mini->envp);
+		exit(0);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:13:23 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:24:26 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	sig_func(int sig);
 void	ft_signal(t_bool *sig_flag);
 
 // minishell
-int		mini_command(t_mini *mini, char *cmd, char **argv);
+int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
 int		ft_command(t_mini *mini, t_argv *argv);
 int		set_stream(t_list *head);
 int		minishell(t_mini *mini);
@@ -113,40 +113,40 @@ int		minishell(t_mini *mini);
 // ft_echo
 void	print_msg(char **envp, char **argv, int start_ptr, int n_flag);
 int		n_option(char *argv, int *start_ptr);
-int		ft_echo(t_mini *mini, char **argv);
+int		ft_echo(t_mini *mini, t_argv *argv);
 
 // ft_cd
 void	set_env_cd(t_mini *mini, char *old_pwd);
 int		go_to_home(char **envp, char *path);
 int		check_path(char *path);
 char	*get_path(char **envp, char *argv);
-void	ft_cd(t_mini *mini, char **argv);
+void	ft_cd(t_mini *mini, t_argv *argv);
 
 // ft_pwd
-void	ft_pwd(char **argv);
+void	ft_pwd(t_argv *argv);
 
 // ft_export
 char	*get_envname_export(char *argv);
 int		is_valid_export(char *argv, int i);
 char	**create_export_envp(char **envp, char *env);
 int		check_export_argv(char *argv);
-void	ft_export(t_mini *mini, char **argv);
+void	ft_export(t_mini *mini, t_argv *argv);
 
 // ft_unset
 char	**create_unset_envp(char **envp, int *position, int size);
 void	get_position(int *position, char **envp, char **argv);
 void	position_init(int **position, int *size, char **envp, char **argv);
 void	check_unset_argv(char **argv, int *size);
-void	ft_unset(t_mini *mini, char **argv);
+void	ft_unset(t_mini *mini, t_argv *argv);
 
 // ft_env
 void	show_env(char **envp);
-void	ft_env(t_mini *mini, char **argv);
+void	ft_env(t_mini *mini, t_argv *argv);
 
 // ft_exit
 int		check_argv(char *argv);
 int		exit_exception(int argc, char **argv);
-void	ft_exit(char **argv);
+void	ft_exit(t_argv *argv);
 
 // ft_error
 void	error_symbol(char symbol, int exit_num);

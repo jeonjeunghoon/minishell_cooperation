@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:15:29 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:21:35 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,26 +99,40 @@ int	check_export_argv(char *argv)
 	return (0);
 }
 
-void	ft_export(t_mini *mini, char **argv)
+void	ft_export(t_mini *mini, t_argv *argv)
 {
 	int		i;
 	char	**new_envp;
 
-	if (ft_two_dimension_size(argv) > 1)
+	int		stat_loc;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid > 0)
 	{
-		i = 1;
-		while (argv[i])
-		{
-			if (check_export_argv(argv[i]) != ERROR)
-			{
-				new_envp = create_export_envp(mini->envp, argv[i]);
-				ft_two_dimension_free(&(mini->envp));
-				mini->envp = new_envp;
-			}
-			i++;
-		}
+		waitpid(pid, &stat_loc, WUNTRACED);
+		pipe_tmp_copy(argv);
+		exit_num_set(g_exit_state);
 	}
-	else
-		ft_env(mini, argv);
-	exit_num_set(g_exit_state);
+	else if (pid == 0)
+	{
+		when_there_is_pipe(argv);
+		if (ft_two_dimension_size(argv->argv) > 1)
+		{
+			i = 1;
+			while (argv->argv[i])
+			{
+				if (check_export_argv(argv->argv[i]) != ERROR)
+				{
+					new_envp = create_export_envp(mini->envp, argv->argv[i]);
+					ft_two_dimension_free(&(mini->envp));
+					mini->envp = new_envp;
+				}
+				i++;
+			}
+		}
+		else
+			ft_env(mini, argv);
+		exit(0);
+	}
 }

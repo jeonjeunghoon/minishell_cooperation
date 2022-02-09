@@ -6,13 +6,13 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 15:39:43 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:25:33 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	mini_command(t_mini *mini, char *cmd, char **argv)
+int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 {
 	if ((ft_strncmp(cmd, "echo", 5)) == 0)
 		ft_echo(mini, argv);
@@ -40,7 +40,7 @@ int	ft_command(t_mini *mini, t_argv *argv)
 	cmd_path = NULL;
 	// if (argv->argv[0][0] == '\0')
 	// 	return (0);
-	if (mini_command(mini, argv->argv[0], argv->argv) == FALSE)
+	if (mini_command(mini, argv->argv[0], argv) == FALSE)
 	{
 		if (check_cmd(mini, argv->argv[0], &cmd_path) == ERROR)
 			return (0);

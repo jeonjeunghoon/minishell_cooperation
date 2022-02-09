@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:16:39 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:22:30 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,27 +116,40 @@ void	check_unset_argv(char **argv, int *size)
 	}
 }
 
-void	ft_unset(t_mini *mini, char **argv)
+void	ft_unset(t_mini *mini, t_argv *argv)
 {
 	int		size;
 	int		*position;
 	char	**new;
+	int		stat_loc;
+	pid_t	pid;
 
-	size = ft_two_dimension_size(argv) - 1;
-	if (ft_two_dimension_size(argv) > 1)
+	pid = fork();
+	if (pid > 0)
 	{
-		check_unset_argv(argv, &size);
-		if (size != 0)
-		{
-			position_init(&position, &size, mini->envp, argv);
-			get_position(position, mini->envp, argv);
-			size = ft_two_dimension_size(mini->envp) - ft_numlen(position);
-			new = create_unset_envp(mini->envp, position, size);
-			ft_two_dimension_free(&(mini->envp));
-			mini->envp = new;
-			free(position);
-			position = NULL;
-		}
+		waitpid(pid, &stat_loc, WUNTRACED);
+		pipe_tmp_copy(argv);
+		exit_num_set(g_exit_state);
 	}
-	exit_num_set(g_exit_state);
+	else if (pid == 0)
+	{
+		when_there_is_pipe(argv);
+		size = ft_two_dimension_size(argv->argv) - 1;
+		if (ft_two_dimension_size(argv->argv) > 1)
+		{
+			check_unset_argv(argv->argv, &size);
+			if (size != 0)
+			{
+				position_init(&position, &size, mini->envp, argv->argv);
+				get_position(position, mini->envp, argv->argv);
+				size = ft_two_dimension_size(mini->envp) - ft_numlen(position);
+				new = create_unset_envp(mini->envp, position, size);
+				ft_two_dimension_free(&(mini->envp));
+				mini->envp = new;
+				free(position);
+				position = NULL;
+			}
+		}
+		exit(0);
+	}
 }

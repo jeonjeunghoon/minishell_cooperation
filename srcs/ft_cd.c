@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:14:04 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:20:49 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	set_env_cd(t_mini *mini, char *old_pwd)
 {
+	t_argv	argvt;
 	char	**argv;
 	char	*pwd;
 	int		i;
@@ -26,7 +27,10 @@ void	set_env_cd(t_mini *mini, char *old_pwd)
 	free(pwd);
 	pwd = NULL;
 	argv[2] = ft_strjoin("OLDPWD=", old_pwd);
-	ft_export(mini, argv);
+	argvt.argv = argv;
+	argvt.is_pipe = 0;
+	argvt.was_pipe = 0;
+	ft_export(mini, &argvt);
 	i = 0;
 	while (i < 4)
 	{
@@ -81,28 +85,41 @@ char	*get_path(char **envp, char *argv)
 	return (ptr);
 }
 
-void	ft_cd(t_mini *mini, char **argv)
+void	ft_cd(t_mini *mini, t_argv* argv)
 {
 	char	*path;
 	char	*old_pwd;
 	int		i;
+	int		stat_loc;
+	pid_t	pid;
 
-	path = NULL;
-	i = 1;
-	old_pwd = ft_getenv(mini->envp, "PWD");
-	while (argv[i])
+	pid = fork();
+	if (pid > 0)
 	{
-		path = get_path(mini->envp, argv[i]);
-		if (path != NULL)
-		{
-			if (check_path(path) == ERROR)
-				return ;
-			break ;
-		}
-		i++;
+		waitpid(pid, &stat_loc, WUNTRACED);
+		pipe_tmp_copy(argv);
+		exit_num_set(g_exit_state);
 	}
-	if (go_to_home(mini->envp, path) == ERROR)
-		return ;
-	set_env_cd(mini, old_pwd);
-	exit_num_set(g_exit_state);
+	else if (pid == 0)
+	{
+		when_there_is_pipe(argv);
+		path = NULL;
+		i = 1;
+		old_pwd = ft_getenv(mini->envp, "PWD");
+		while (argv->argv[i])
+		{
+			path = get_path(mini->envp, argv->argv[i]);
+			if (path != NULL)
+			{
+				if (check_path(path) == ERROR)
+					return;
+				break;
+			}
+			i++;
+		}
+		if (go_to_home(mini->envp, path) == ERROR)
+			return;
+		set_env_cd(mini, old_pwd);
+		exit(0);
+	}
 }
