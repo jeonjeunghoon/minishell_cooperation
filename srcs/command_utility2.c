@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_utility2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/08 18:16:38 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 13:41:28 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,8 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 	int		stat_loc;
 	int		fd;
 	int		fd2;
-	char	**new_argv;
-	int		size;
-	char	*buf;
+	int		len;
+	char	buf[3];
  
 	sig_flag = TRUE;
 	ft_signal(&sig_flag);
@@ -72,15 +71,18 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 		if (argv->is_pipe)
 		{
 			fd2 = open("pipe_tmp2", O_RDONLY, 0644);
-			fd = open("pipe_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			buf = malloc(sizeof(char) * 1025);
-			buf[1024] = '\0';
-			while (read(fd2, buf, sizeof(buf)))
-				write(fd, buf, ft_strlen(buf));
+			fd = open("pipe_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
+			while (1)
+			{
+				len = read(fd2, buf, sizeof(buf));
+				if (!len)
+					break;
+				//write(1, buf, len);
+				write(fd, buf, len);
+			}
 			close(fd);
 			close(fd2);
 			unlink("pipe_tmp2");
-			ft_free(&buf);
 		}
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
