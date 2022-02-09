@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 14:58:52 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:06:13 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,33 +120,33 @@ void	set_env_cd(t_mini *mini, char *old_pwd);
 int		go_to_home(char **envp, char *path);
 int		check_path(char *path);
 char	*get_path(char **envp, char *argv);
-void	ft_cd(t_mini *mini, char **argv);
+void	ft_cd(t_mini *mini, t_argv *argv);
 
 // ft_pwd
-void	ft_pwd(char **argv);
+void	ft_pwd(t_argv *argv);
 
 // ft_export
 char	*get_envname_export(char *argv);
 int		is_valid_export(char *argv, int i);
 char	**create_export_envp(char **envp, char *env);
 int		check_export_argv(char *argv);
-void	ft_export(t_mini *mini, char **argv);
+void	ft_export(t_mini *mini, t_argv *argv);
 
 // ft_unset
 char	**create_unset_envp(char **envp, int *position, int size);
 void	get_position(int *position, char **envp, char **argv);
 void	position_init(int **position, int *size, char **envp, char **argv);
 void	check_unset_argv(char **argv, int *size);
-void	ft_unset(t_mini *mini, char **argv);
+void	ft_unset(t_mini *mini, t_argv *argv);
 
 // ft_env
 void	show_env(char **envp);
-void	ft_env(t_mini *mini, char **argv);
+void	ft_env(t_mini *mini, t_argv *argv);
 
 // ft_exit
 int		check_argv(char *argv);
 int		exit_exception(int argc, char **argv);
-void	ft_exit(char **argv);
+void	ft_exit(t_argv *argv);
 
 // ft_error
 void	error_symbol(char symbol);

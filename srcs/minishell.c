@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 14:57:42 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:06:40 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 	if ((ft_strncmp(cmd, "echo", 5)) == 0)
 		ft_echo(mini, argv);
 	else if ((ft_strncmp(cmd, "cd", 3)) == 0)
-		ft_cd(mini, argv->argv);
+		ft_cd(mini, argv);
 	else if ((ft_strncmp(cmd, "pwd", 4)) == 0)
-		ft_pwd(argv->argv);
+		ft_pwd(argv);
 	else if ((ft_strncmp(cmd, "env", 4)) == 0)
-		ft_env(mini, argv->argv);
+		ft_env(mini, argv);
 	else if ((ft_strncmp(cmd, "export", 7)) == 0)
-		ft_export(mini, argv->argv);
+		ft_export(mini, argv);
 	else if ((ft_strncmp(cmd, "unset", 6)) == 0)
-		ft_unset(mini, argv->argv);
+		ft_unset(mini, argv);
 	else if ((ft_strncmp(cmd, "exit", 5)) == 0)
-		ft_exit(argv->argv);
+		ft_exit(argv);
 	else
 		return (FALSE);
 	return (TRUE);
