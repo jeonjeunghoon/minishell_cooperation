@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/08 17:59:02 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:21:18 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,4 +226,6 @@ t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag);
 
+void    when_there_is_pipe(t_argv *argv);
+void    pipe_tmp_copy(t_argv *argv);
 #endif
