@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:59 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:23:55 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:56:28 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	ft_env(t_mini *mini, t_argv *argv)
 		if (ft_two_dimension_size(argv->argv) != 1)
 		{
 			error_2(argv->argv[0], argv->argv[1], "With no options or arguments", 1);
-			return;
+			exit(g_exit_state);
 		}
 		show_env(mini->envp);
-		exit(0);
+		exit(g_exit_state);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:24:26 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:59:21 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int		minishell(t_mini *mini);
 // ft_echo
 void	print_msg(char **envp, char **argv, int start_ptr, int n_flag);
 int		n_option(char *argv, int *start_ptr);
-int		ft_echo(t_mini *mini, t_argv *argv);
+void	ft_echo(t_mini *mini, t_argv *argv);
 
 // ft_cd
 void	set_env_cd(t_mini *mini, char *old_pwd);

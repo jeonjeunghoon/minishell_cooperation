@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:28:20 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:59:26 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	n_option(char *argv, int *start_ptr)
 	return (TRUE);
 }
 
-int	ft_echo(t_mini *mini, t_argv *argv)
+void	ft_echo(t_mini *mini, t_argv *argv)
 {
 	int		start_ptr;
 	int		n_flag;
@@ -55,7 +55,6 @@ int	ft_echo(t_mini *mini, t_argv *argv)
 		waitpid(pid, &stat_loc, WUNTRACED);
 		pipe_tmp_copy(argv);
 		exit_num_set(g_exit_state);
-		return (1);
 	}
 	else if (pid == 0)
 	{
@@ -73,7 +72,6 @@ int	ft_echo(t_mini *mini, t_argv *argv)
 				start_ptr++;
 			}
 		}
-		exit(0);
+		exit(g_exit_state);
 	}
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 16:20:49 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/09 16:56:17 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,14 +112,14 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 			if (path != NULL)
 			{
 				if (check_path(path) == ERROR)
-					return;
+					exit(g_exit_state);
 				break;
 			}
 			i++;
 		}
 		if (go_to_home(mini->envp, path) == ERROR)
-			return;
+			exit(g_exit_state);
 		set_env_cd(mini, old_pwd);
-		exit(0);
+		exit(g_exit_state);
 	}
 }
