@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 13:41:28 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 13:44:42 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 	int		fd;
 	int		fd2;
 	int		len;
-	char	buf[3];
+	char	buf[1024];
  
 	sig_flag = TRUE;
 	ft_signal(&sig_flag);
