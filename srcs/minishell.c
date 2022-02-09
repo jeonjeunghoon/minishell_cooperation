@@ -6,28 +6,28 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/08 16:04:46 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:57:42 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	mini_command(t_mini *mini, char *cmd, char **argv)
+int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 {
 	if ((ft_strncmp(cmd, "echo", 5)) == 0)
 		ft_echo(mini, argv);
 	else if ((ft_strncmp(cmd, "cd", 3)) == 0)
-		ft_cd(mini, argv);
+		ft_cd(mini, argv->argv);
 	else if ((ft_strncmp(cmd, "pwd", 4)) == 0)
-		ft_pwd(argv);
+		ft_pwd(argv->argv);
 	else if ((ft_strncmp(cmd, "env", 4)) == 0)
-		ft_env(mini, argv);
+		ft_env(mini, argv->argv);
 	else if ((ft_strncmp(cmd, "export", 7)) == 0)
-		ft_export(mini, argv);
+		ft_export(mini, argv->argv);
 	else if ((ft_strncmp(cmd, "unset", 6)) == 0)
-		ft_unset(mini, argv);
+		ft_unset(mini, argv->argv);
 	else if ((ft_strncmp(cmd, "exit", 5)) == 0)
-		ft_exit(argv);
+		ft_exit(argv->argv);
 	else
 		return (FALSE);
 	return (TRUE);
@@ -40,7 +40,7 @@ int	ft_command(t_mini *mini, t_argv *argv)
 	cmd_path = NULL;
 	if (argv->argv[0][0] == '\0')
 		return (0);
-	if (mini_command(mini, argv->argv[0], argv->argv) == FALSE)
+	if (mini_command(mini, argv->argv[0], argv) == FALSE)
 	{
 		if (check_cmd(mini, argv->argv[0], &cmd_path) == ERROR)
 			return (0);

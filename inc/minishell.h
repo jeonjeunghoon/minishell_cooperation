@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 14:21:18 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:58:52 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	sig_func(int sig);
 void	ft_signal(t_bool *sig_flag);
 
 // minishell
-int		mini_command(t_mini *mini, char *cmd, char **argv);
+int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
 int		ft_command(t_mini *mini, t_argv *argv);
 int		set_stream(t_list *head);
 int		minishell(t_mini *mini);
@@ -113,7 +113,7 @@ int		minishell(t_mini *mini);
 // ft_echo
 void	print_msg(char **envp, char **argv, int start_ptr, int n_flag);
 int		n_option(char *argv, int *start_ptr);
-int		ft_echo(t_mini *mini, char **argv);
+int		ft_echo(t_mini *mini, t_argv *argv);
 
 // ft_cd
 void	set_env_cd(t_mini *mini, char *old_pwd);

@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 14:20:15 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:23:38 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_bool sig_flag)
 	if (pid > 0)
 	{
 		child = waitpid(pid, &stat_loc, 0x00000002); // WUNTRACED
-		//pipe_tmp는 입력, pipe_tmp2는 출력 파일로 고정
-		//이를 위한 복사
 		pipe_tmp_copy(argv);
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
