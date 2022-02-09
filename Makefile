@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/02/08 18:00:26 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/02/09 14:20:43 by seungcoh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,8 @@ SRCS_NAME			=	main.c \
 						stream_utility.c \
 						stream_utility2.c \
 						command_utility.c \
-						command_utility2.c
+						command_utility2.c\
+						ft_pipe.c
 
 SRCS_PATH			=	./srcs
 SRCS				=	$(addprefix $(SRCS_PATH)/, $(SRCS_NAME))
