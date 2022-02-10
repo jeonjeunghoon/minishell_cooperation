@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 16:37:25 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 17:40:59 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	set_redirect(t_argv *redirect, t_argv *file)
 		rtol(redirect, file);
 	else if (redirect->is_append)
 		append(redirect, file);
-	else if (redirect->is_heredoc)
-		heredoc(redirect, file);
 }
 
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_argv *file)
@@ -45,11 +43,19 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_argv
 	pid_t	pid;
 	int		stat_loc;
 
+	if (redirect->is_heredoc)
+		heredoc(redirect, file);
 	pid = fork();
 	if (pid > 0)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
+		if (redirect->is_heredoc)
+		{
+			dup2(0, STDIN_FILENO);
+			unlink(".heredoc_tmp");
+		}
 		pipe_tmp_copy(argv);
+		for(;;);
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
 	}
