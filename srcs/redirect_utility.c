@@ -6,13 +6,13 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:54:20 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 23:45:58 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 01:38:37 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	heredoc(t_argv *redirect, t_argv *delimiter, int *terminal_fd) // 명령어 실행 후 프로그램이 종료됩니다. 또한 시그널 처리를 위해 부모프로세스에서 실행합니다.
+void	heredoc(t_argv *redirect, t_argv *delimiter, int *terminal_fd) // 시그널 처리를 위해 부모프로세스에서 실행합니다.
 {
 	int		fd;
 	char	*input;
@@ -39,7 +39,7 @@ void	heredoc(t_argv *redirect, t_argv *delimiter, int *terminal_fd) // 명령어
 	close(fd);
 }
 
-void	append(t_argv *redirect, t_argv *file) // 여러 번 반복해서 append를 할 경우 출력스트림이 정상적으로 작동하지 않습니다.
+void	append(t_argv *redirect, t_argv *file)
 {
 	int fd;
 
