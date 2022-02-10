@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 16:28:15 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 23:05:08 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
 
 // redirect_utility
-void	heredoc(t_argv *redirect, t_argv *file);
+void	heredoc(t_argv *redirect, t_argv *file, int *terminal_fd);
 void	append(t_argv *redirect, t_argv *file);
 void	rtol(t_argv *redirect, t_argv *file);
 void	ltor(t_argv *redirect, t_argv *file);

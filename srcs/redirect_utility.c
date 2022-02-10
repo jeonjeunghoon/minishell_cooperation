@@ -6,17 +6,19 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:54:20 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 17:51:47 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 23:45:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	heredoc(t_argv *redirect, t_argv *delimiter) // 명령어 실행 후 프로그램이 종료됩니다. 또한 시그널 처리를 위해 부모프로세스에서 실행합니다.
+void	heredoc(t_argv *redirect, t_argv *delimiter, int *terminal_fd) // 명령어 실행 후 프로그램이 종료됩니다. 또한 시그널 처리를 위해 부모프로세스에서 실행합니다.
 {
 	int		fd;
 	char	*input;
 
+	if (redirect->is_heredoc == FALSE)
+		return ;
 	fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	input = NULL;
 	while (TRUE)
@@ -27,10 +29,12 @@ void	heredoc(t_argv *redirect, t_argv *delimiter) // 명령어 실행 후 프로
 			ft_free(&input);
 			break ;
 		}
-		write(fd, ft_strjoin(input, "\n"), ft_strlen(input) + 1);
+		write(fd, input, ft_strlen(input));
+		write(fd, "\n", 1);
 		ft_free(&input);
 	}
 	fd = open(".heredoc_tmp", O_RDONLY, 0644);
+	dup2(STDIN_FILENO, *terminal_fd);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }

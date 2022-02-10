@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/07 15:27:52 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 22:35:59 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	clear_resource(t_mini *mini)
 	ft_two_dimension_free(&(mini->path));
 	token_free(mini->input->token_lst);
 	argv_free(mini->input->argv_lst);
-	free(mini->input->user_input);
+	ft_free(&mini->input->user_input);
 }
 
 int	minishell_init(t_mini *mini)
