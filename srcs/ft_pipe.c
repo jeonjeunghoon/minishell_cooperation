@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:17:17 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/02/09 15:34:06 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/10 16:40:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void    pipe_tmp_copy(t_argv *argv)
 void    when_there_is_pipe(t_argv *argv)
 {
    	int fd[2];
-    printf("\n[%d %d %d %s]\n\n", argv->is_pipe, argv->was_pipe, argv->is_input, argv->argv[0]);
+    // printf("\n[%d %d %d %s]\n\n", argv->is_pipe, argv->was_pipe, argv->is_input, argv->argv[0]);
 	if (argv->was_pipe)// 명령어에 input이 없고 명령어 앞에 pipe가 있을 경우 이전 명령어가 만든 출력을 읽어와 argv에 넣어야함
 	{
 		fd[0] = open("pipe_tmp", O_RDONLY, 0644);

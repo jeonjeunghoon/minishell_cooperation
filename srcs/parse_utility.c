@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 18:57:10 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 16:04:33 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,18 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 	(*stream) = (t_argv *)malloc(sizeof(t_argv));
 	(*stream)->argv = (char **)malloc(sizeof(char *) * 2);
 	(*stream)->argv[0] = ft_strdup(token->token);
+	if (token->token[0] == '|' && token->token[1] == '|')
+		(*stream)->is_or = TRUE;
+	else if (token->token[0] == '>' && token->token[1] == '>')
+		(*stream)->is_append = TRUE;
+	else if (token->token[0] == '>')
+		(*stream)->is_ltor = TRUE;
+	else if (token->token[0] == '<' && token->token[1] == '<')
+		(*stream)->is_heredoc = TRUE;
+	else if (token->token[0] == '<')
+		(*stream)->is_rtol = TRUE;
+	else if (token->token[0] == '&' && token->token[1] == '&')
+		(*stream)->is_and = TRUE;
 	(*stream)->argv[1] = NULL;
 	(*stream)->is_stream = TRUE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
@@ -72,22 +84,8 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 
 void	check_stream(t_argv *argv, t_list *token_lst, char *str)
 {
-	if (str[0] == '|' && str[1] == '|')
-		argv->is_or = TRUE;
-	else if (str[0] == '|')
+	if (str[0] == '|')
 		argv->is_pipe = TRUE;
-	else if (str[0] == '>' && str[1] == '>')
-		argv->is_append = TRUE;
-	else if (str[0] == '>')
-		argv->is_ltor = TRUE;
-	else if (str[0] == '<' && str[1] == '<')
-		argv->is_heredoc = TRUE;
-	else if (str[0] == '<')
-		argv->is_rtol = TRUE;
-	else if (str[0] == '&' && str[1] == '&')
-		argv->is_and = TRUE;
-	printf("is in parse_utility.c check_stream_func\n[| = %d || = %d > = %d >> = %d < = %d << = %d && = %d]\n", \
-	argv->is_pipe, argv->is_or, argv->is_ltor, argv->is_append, argv->is_rtol, argv->is_heredoc, argv->is_and);
 }
 
 void	create_argv(t_argv **argv, t_list *token_lst, \

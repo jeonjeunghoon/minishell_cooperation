@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 19:13:54 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 16:28:15 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	ft_signal(t_bool *sig_flag);
 
 // minishell
 int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
-int		ft_command(t_mini *mini, t_argv *argv, t_argv *redirect);
+int		ft_command(t_mini *mini, t_argv *argv, t_argv *redirect, t_argv *file);
 int		set_stream(t_list *head);
 int		minishell(t_mini *mini);
 
@@ -230,7 +230,8 @@ int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
 // command_utility2
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
-void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_bool sig_flag);
+void	set_redirect(t_argv *redirect, t_argv *file);
+void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_argv *file);
 
 // ft_pipe
 void    when_there_is_pipe(t_argv *argv);
@@ -240,5 +241,11 @@ void    pipe_tmp_copy(t_argv *argv);
 int		ft_wexitstatus(int stat_loc);
 int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
+
+// redirect_utility
+void	heredoc(t_argv *redirect, t_argv *file);
+void	append(t_argv *redirect, t_argv *file);
+void	rtol(t_argv *redirect, t_argv *file);
+void	ltor(t_argv *redirect, t_argv *file);
 
 #endif

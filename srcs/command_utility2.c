@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 14:07:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 16:37:25 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,25 @@ t_bool	ft_s_isdir(int mode)
 	return (FALSE);
 }
 
-void	set_redirect(t_argv *redirect)
+void	set_redirect(t_argv *redirect, t_argv *file)
 {
-	// if (redirect == NULL)
-	// 	return ;
-	// if (redirect->is_ltor)
-	// 	// ltor();
-	// else if (redirect->is_rtol)
-	// 	// rtol();
-	// else if (redirect->is_append)
-	// 	// append();
-	// else if (redirect->is_heredoc)
-	// 	// heredoc();
+	if (redirect == NULL)
+		return ;
+	if (redirect->is_ltor)
+		ltor(redirect, file);
+	else if (redirect->is_rtol)
+		rtol(redirect, file);
+	else if (redirect->is_append)
+		append(redirect, file);
+	else if (redirect->is_heredoc)
+		heredoc(redirect, file);
 }
 
-void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_bool sig_flag)
+void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_argv *file)
 {
 	pid_t	pid;
 	int		stat_loc;
 
-	sig_flag = TRUE;
-	ft_signal(&sig_flag);
 	pid = fork();
 	if (pid > 0)
 	{
@@ -58,7 +56,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_bool
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
-		set_redirect(redirect);
+		set_redirect(redirect, file);
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
 			printf("%s\n", strerror(errno));

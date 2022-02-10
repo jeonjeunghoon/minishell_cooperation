@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/02/09 17:41:02 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/02/10 14:12:05 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ SRCS_NAME			=	main.c \
 						command_utility.c \
 						command_utility2.c\
 						w_utility.c \
-						ft_pipe.c
+						ft_pipe.c \
+						redirect_utility.c
 
 SRCS_PATH			=	./srcs
 SRCS				=	$(addprefix $(SRCS_PATH)/, $(SRCS_NAME))
