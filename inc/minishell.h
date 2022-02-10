@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 23:05:08 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 01:32:07 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,10 @@ int		is_valid_export(char *argv, int i);
 char	**create_export_envp(char **envp, char *env);
 int		check_export_argv(char *argv);
 void	ft_export(t_mini *mini, t_argv *argv);
+
+// export_utility.c
+void	set_envp(char ***envp);
+void	create_export_tmp(char **envp);
 
 // ft_unset
 char	**create_unset_envp(char **envp, int *position, int size);

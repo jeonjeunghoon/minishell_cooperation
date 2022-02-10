@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/02/10 14:12:05 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/02/11 01:32:39 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRCS_NAME			=	main.c \
 						ft_cd.c \
 						ft_pwd.c \
 						ft_export.c \
+						export_utility.c \
 						ft_unset.c \
 						ft_env.c \
 						ft_exit.c \

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:32:22 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 14:57:31 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 00:45:55 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # define FALSE 0
 # define SUCCESS 0
 # define ERROR -1
+# define OPEN_MAX 4096
+# define BUFFER_SIZE 1024
 
 typedef int			t_bool;
 
@@ -68,6 +70,7 @@ char				*ft_strjoin_bothside(const char *s1, const char *s2, \
 										const char *s3);
 t_bool				ft_isspace(char ch);
 void				ft_free(char **p);
+int	get_next_line(int fd, char **line);
 
 typedef struct s_list
 {

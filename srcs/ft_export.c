@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 17:48:25 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 01:32:14 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	ft_export(t_mini *mini, t_argv *argv)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
+		set_envp(&mini->envp);
 		exit_num_set(ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)
@@ -130,6 +131,7 @@ void	ft_export(t_mini *mini, t_argv *argv)
 				}
 				i++;
 			}
+			create_export_tmp(mini->envp);
 		}
 		else
 			ft_env(mini, argv);
