@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 19:14:49 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 11:39:28 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	minishell(t_mini *mini)
 			((t_argv *)(head->next->content))->is_append || ((t_argv *)(head->next->content))->is_heredoc))
 			{
 				redirect = head->next->content;
-				haed = head->next;
+				head = head->next;
 			}
 			ft_command(mini, argv, redirect);
 		}

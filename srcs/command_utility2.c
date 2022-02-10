@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 19:17:40 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/10 11:39:49 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ t_bool	ft_s_isdir(int mode)
 
 void	set_redirect(t_argv *redirect)
 {
-	if (redirect == NULL)
-		return ;
-	if (redirect->is_ltor)
-		// ltor();
-	else if (redirect->is_rtol)
-		// rtol();
-	else if (redirect->is_append)
-		// append();
-	else if (redirect->is_heredoc)
-		// heredoc();
+	// if (redirect == NULL)
+	// 	return ;
+	// if (redirect->is_ltor)
+	// 	// ltor();
+	// else if (redirect->is_rtol)
+	// 	// rtol();
+	// else if (redirect->is_append)
+	// 	// append();
+	// else if (redirect->is_heredoc)
+	// 	// heredoc();
 }
 
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_bool sig_flag)
