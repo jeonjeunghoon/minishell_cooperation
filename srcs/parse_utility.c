@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 22:23:49 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 18:07:03 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,14 @@ void	token_init(t_token *token)
 void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 {
 	(*stream) = (t_argv *)malloc(sizeof(t_argv));
+	argv_init(*stream);
 	(*stream)->argv = (char **)malloc(sizeof(char *) * 2);
 	(*stream)->argv[0] = ft_strdup(token->token);
-	argv_init(*stream);
+
 	if (token->token[0] == '|' && token->token[1] == '|')
 		(*stream)->is_or = TRUE;
+	if (token->token[0] == '|')
+		(*stream)->is_stream = TRUE;
 	else if (token->token[0] == '>' && token->token[1] == '>')
 		(*stream)->is_append = TRUE;
 	else if (token->token[0] == '>')
@@ -78,9 +81,15 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 		(*stream)->is_rtol = TRUE;
 	else if (token->token[0] == '&' && token->token[1] == '&')
 		(*stream)->is_and = TRUE;
+	(*stream)->is_redirect = TRUE;
 	(*stream)->argv[1] = NULL;
-	(*stream)->is_stream = TRUE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
+}
+
+void	check_stream(t_argv *argv, t_list *token_lst, char *str)
+{
+	if (str[0] == '|')
+		argv->is_pipe = TRUE;
 }
 
 void	create_argv(t_argv **argv, t_list *token_lst, \
@@ -102,8 +111,8 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 		i++;
 		token_lst = token_lst->next;
 	}
-	if (token_lst && ((t_token *)token_lst->content)->token[0] == '|')
-		(*argv)->is_pipe = TRUE;
+	if (token_lst != NULL)
+		check_stream(*argv, token_lst, ((t_token *)token_lst->content)->token);
 	(*argv)->is_stream = FALSE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*argv));
 }

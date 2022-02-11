@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 22:35:59 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:41:52 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	main(int argc, const char **argv, char **envp)
 			{
 				if (minishell(mini) == ERROR)
 					ft_error();
+				clear_resource(mini);
 			}
 		}
-		clear_resource(mini);
 	}
 	return (0);
 }

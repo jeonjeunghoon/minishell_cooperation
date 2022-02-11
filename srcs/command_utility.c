@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/10 14:06:53 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 16:06:15 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	check_filemode_cmdpath(char *cmd, struct stat **file_info, char *cmd_path)
 		error_1(cmd, "command not found", 127);
 		is_error = ERROR;
 	}
+	free(*file_info);
 	return (is_error);
 }
 
@@ -80,7 +81,6 @@ int	check_cmd(t_mini *mini, char *cmd, char **cmd_path)
 		set_relative_path(mini, cmd_path, cmd, file_info);
 	if (check_filemode_cmdpath(cmd, &file_info, *cmd_path) == ERROR)
 		return (ERROR);
-	free(file_info);
 	file_info = NULL;
 	return (0);
 }

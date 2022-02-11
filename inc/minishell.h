@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 01:32:07 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:29:35 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ typedef struct s_token
 typedef struct s_argv
 {
 	char	**argv;
+	char	*file;
+	t_bool	is_redirect;
 	t_bool	is_stream;
 	t_bool	was_pipe; //이전 argv에 pipe가 있는가? 
 	t_bool	is_pipe; //다음 argv에 pipe가 있는가? "du -h | sort -nr" 이면 du는 was = 0 is = 1, sort는 was = 1, is = 0
@@ -113,7 +115,7 @@ void	ft_signal(t_bool *sig_flag);
 
 // minishell
 int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
-int		ft_command(t_mini *mini, t_argv *argv, t_argv *redirect, t_argv *file);
+int		ft_command(t_mini *mini, t_argv *argv);
 int		set_stream(t_list *head);
 int		minishell(t_mini *mini);
 
@@ -234,8 +236,8 @@ int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
 // command_utility2
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
-void	set_redirect(t_argv *redirect, t_argv *file);
-void	exe_cmd(char *cmd_path, t_argv *argv, char **envp, t_argv *redirect, t_argv *file);
+void	set_redirect(t_argv *argv);
+void	exe_cmd(char *cmd_path, t_argv *argv, char **envp);
 
 // ft_pipe
 void    when_there_is_pipe(t_argv *argv);
@@ -247,9 +249,9 @@ int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
 
 // redirect_utility
-void	heredoc(t_argv *redirect, t_argv *file, int *terminal_fd);
-void	append(t_argv *redirect, t_argv *file);
-void	rtol(t_argv *redirect, t_argv *file);
-void	ltor(t_argv *redirect, t_argv *file);
+void	heredoc(t_argv *argv, char *delimiter, int *terminal_fd);
+void	append(char *file);
+void	rtol(char *file);
+void	ltor(char *file);
 
 #endif
