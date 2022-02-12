@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 18:42:13 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:45:17 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,12 @@ void	remove_redirection(t_argv *argv)
 	argv->argv = new_argv;
 }
 
-void	set_redirect(t_argv *argv)
+int	set_redirect(t_argv *argv)
 {
 	int		i;
 
-	if (argv->is_ltor == FALSE && argv->is_rtol == FALSE && \
-		argv->is_append == FALSE && argv->is_heredoc == FALSE)
-		return ;
+	if (argv->is_redirect == FALSE)
+		return (0);
 	i = 0;
 	while (argv->argv[i])
 	{
@@ -77,42 +76,42 @@ void	set_redirect(t_argv *argv)
 			ltor(argv->argv[i + 1]);
 			i++;
 		}
-		// else if (argv->argv[i][0] == '<' && argv->argv[i][1] == '<')
-		// 	heredoc();
+		else if (argv->argv[i][0] == '<' && argv->argv[i][1] == '<')
+		{
+			heredoc(argv->argv[i + 1]);
+			i++;
+		}
 		else if (argv->argv[i][0] == '<')
 		{
-			rtol(argv->argv[i + 1]);
+			if (rtol(argv->argv[i + 1]) == ERROR)
+				return (ERROR);
 			i++;
 		}
 		i++;
 	}
 	remove_redirection(argv);
+	return (0);
 }
 
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 {
 	pid_t	pid;
 	int		stat_loc;
-	int		terminal_fd;
 
-	heredoc(argv, argv->file, &terminal_fd);
 	pid = fork();
 	if (pid > 0)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
-		if (argv->is_heredoc == TRUE)
-		{
-			dup2(terminal_fd, STDIN_FILENO);
-			unlink(".heredoc_tmp");
-		}
 		pipe_tmp_copy(argv);
+		unlink(".heredoc_tmp");
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
 	}
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
-		set_redirect(argv);
+		if (set_redirect(argv) == ERROR)
+			exit(g_exit_state);
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
 			printf("%s\n", strerror(errno));

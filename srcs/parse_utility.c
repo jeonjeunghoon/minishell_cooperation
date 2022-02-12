@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 18:07:03 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:34:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,16 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 	argv_init(*stream);
 	(*stream)->argv = (char **)malloc(sizeof(char *) * 2);
 	(*stream)->argv[0] = ft_strdup(token->token);
-
-	if (token->token[0] == '|' && token->token[1] == '|')
-		(*stream)->is_or = TRUE;
-	if (token->token[0] == '|')
-		(*stream)->is_stream = TRUE;
-	else if (token->token[0] == '>' && token->token[1] == '>')
-		(*stream)->is_append = TRUE;
-	else if (token->token[0] == '>')
-		(*stream)->is_ltor = TRUE;
-	else if (token->token[0] == '<' && token->token[1] == '<')
-		(*stream)->is_heredoc = TRUE;
-	else if (token->token[0] == '<')
-		(*stream)->is_rtol = TRUE;
-	else if (token->token[0] == '&' && token->token[1] == '&')
-		(*stream)->is_and = TRUE;
 	(*stream)->is_redirect = TRUE;
+	if (token->token[0] == '&' && token->token[1] == '&')
+		(*stream)->is_and = TRUE;
+	else if (token->token[0] == '|' && token->token[1] == '|')
+		(*stream)->is_or = TRUE;
+	else if (token->token[0] == '|')
+	{
+		(*stream)->is_stream = TRUE;
+		(*stream)->is_redirect = FALSE;
+	}
 	(*stream)->argv[1] = NULL;
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
 }

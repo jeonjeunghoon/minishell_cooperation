@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 14:16:26 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 16:12:45 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:35:05 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,11 @@ void	argv_lst_init(t_argv **str, t_argv **stream, int *size)
 
 void	argv_init(t_argv *argv)
 {
+	argv->is_redirect = FALSE;
 	argv->is_stream = FALSE;
 	argv->was_pipe = FALSE;
 	argv->is_input = FALSE;
 	argv->is_pipe = FALSE;
-	argv->is_ltor = FALSE;
-	argv->is_append = FALSE;
-	argv->is_rtol = FALSE;
-	argv->is_heredoc = FALSE;
 	argv->is_and = FALSE;
 	argv->is_or = FALSE;
 	argv->is_wildcard = FALSE;

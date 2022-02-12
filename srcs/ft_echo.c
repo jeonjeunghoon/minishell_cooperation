@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 15:18:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:29:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	ft_echo(t_mini *mini, t_argv *argv)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
+		if (set_redirect(argv) == ERROR)
+			exit(g_exit_state);
 		n_flag = FALSE;
 		if (argv->argv[1] == NULL)
 			write(1, "\n", 1);

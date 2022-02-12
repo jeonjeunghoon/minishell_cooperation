@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 18:18:00 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:32:02 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,13 @@ void	add_argv_back(t_argv *argv, char *redirect)
 		i++;
 	}
 	new_argv[i] = ft_strdup(redirect);
+	if (new_argv[0][0] == '>' || new_argv[0][0] == '<')
+	{
+		ft_free(&new_argv[0]);
+		new_argv[0] = ft_strdup("1");
+	}
 	ft_two_dimension_free(&argv->argv);
 	argv->argv = new_argv;
-}
-
-void	copy_flag(t_argv *argv, t_argv *redirect)
-{
-	argv->is_ltor += redirect->is_ltor;
-	argv->is_rtol += redirect->is_rtol;
-	argv->is_append += redirect->is_append;
-	argv->is_heredoc += redirect->is_heredoc;
 }
 
 void	add_argv_back2(t_argv *argv, char **strs)
@@ -111,21 +108,17 @@ void	create_argv_set(t_list **head, t_argv **argv)
 {
 	t_argv	*redirect;
 	t_argv	*file;
-	t_argv	*tmp;
 
-	if ((*head)->next == NULL || ((t_argv *)(*head)->content)->is_stream == TRUE)
+	if ((*head)->next == NULL || ((t_argv *)(*head)->next->content)->is_stream == TRUE)
 		return ;
-	while ((*head) != NULL)
+	while ((*head)->next != NULL)
 	{
-		if (((t_argv *)(*head)->content)->is_pipe == TRUE || ((t_argv *)(*head)->content)->is_stream == TRUE)
-			break ;
 		if (((t_argv *)(*head)->content)->is_redirect == TRUE)
 		{
 			redirect = (*head)->content;
 			add_argv_back(*argv, redirect->argv[0]);
-			copy_flag(*argv, redirect);
-			*head = (*head)->next;
-			file = (*head)->content;
+			(*argv)->is_redirect = TRUE;
+			file = (*head)->next->content;
 			(*argv)->file = file->argv[0];
 			add_argv_back2(*argv, file->argv);
 		}
@@ -159,10 +152,9 @@ int	minishell(t_mini *mini)
 			create_argv_set(&head, &argv);
 			ft_command(mini, argv);
 		}
-		else if (head->next) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로
+		if (head->next) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로
 			((t_argv *)head->next->content)->was_pipe = 1;
-		if (head)
-			head = head->next;
+		head = head->next;
 		argv = NULL;
 	}
 	return (0);

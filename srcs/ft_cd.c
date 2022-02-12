@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 17:48:06 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:29:06 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
+		if (set_redirect(argv) == ERROR)
+			exit(g_exit_state);
 		path = NULL;
 		i = 1;
 		old_pwd = ft_getenv(mini->envp, "PWD");

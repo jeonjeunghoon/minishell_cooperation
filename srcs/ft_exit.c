@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 18:04:26 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:29:32 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	ft_exit(t_argv *argv)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
+		if (set_redirect(argv) == ERROR)
+			exit(g_exit_state);
 		argc = 0;
 		argc = ft_two_dimension_size(argv->argv);
 		if (exit_exception(argc, argv->argv) == ERROR)

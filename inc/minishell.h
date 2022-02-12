@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 17:29:35 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:31:16 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,6 @@ typedef struct s_argv
 	t_bool	was_pipe; //이전 argv에 pipe가 있는가? 
 	t_bool	is_pipe; //다음 argv에 pipe가 있는가? "du -h | sort -nr" 이면 du는 was = 0 is = 1, sort는 was = 1, is = 0
 	t_bool	is_input; //명령어의 input이 존재하는가? "ls -a | sort -nr a.txt"이면 ls 출력x, ls 내용과 무관하게 a.txt를 sort 이때 sort의 is_input은 1
-	t_bool	is_ltor; // >
-	t_bool	is_append; // >>
-	t_bool	is_rtol; // <
-	t_bool	is_heredoc; // <<
 	t_bool	is_and; // &&
 	t_bool	is_or; // ||
 	t_bool	is_wildcard; // *
@@ -236,7 +232,7 @@ int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
 // command_utility2
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
-void	set_redirect(t_argv *argv);
+int		set_redirect(t_argv *argv);
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp);
 
 // ft_pipe
@@ -249,9 +245,9 @@ int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
 
 // redirect_utility
-void	heredoc(t_argv *argv, char *delimiter, int *terminal_fd);
-void	append(char *file);
-void	rtol(char *file);
-void	ltor(char *file);
+int		heredoc(char *delimiter);
+int		append(char *file);
+int		rtol(char *file);
+int		ltor(char *file);
 
 #endif

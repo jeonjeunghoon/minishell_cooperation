@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 13:57:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 17:48:27 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/12 22:29:11 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	ft_pwd(t_argv *argv)
 	{
 		cwd = getcwd(NULL, 0);
 		when_there_is_pipe(argv);
+		if (set_redirect(argv) == ERROR)
+			exit(g_exit_state);
 		if (cwd)
 			printf("%s\n", cwd);
 		else if (cwd == NULL)
