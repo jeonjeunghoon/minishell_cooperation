@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/12 22:32:02 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/13 17:54:35 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,8 @@ int	ft_command(t_mini *mini, t_argv *argv)
 	cmd_path = NULL;
 	if (mini_command(mini, argv->argv[0], argv) == FALSE)
 	{
-		if (check_cmd(mini, argv->argv[0], &cmd_path) == ERROR)
-			return (0);
-		mini->sig_flag = TRUE;
-		ft_signal(&mini->sig_flag);
-		exe_cmd(cmd_path, argv, mini->path);
+		if (check_cmd(mini, argv->argv[0], &cmd_path) != ERROR)
+			exe_cmd(cmd_path, argv, mini->path);
 		ft_free(&cmd_path);
 	}
 	return (0);

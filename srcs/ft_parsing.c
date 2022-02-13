@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 15:31:14 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/13 14:48:09 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ int	check_stream_symbol(t_list *token_lst)
 		if (str[0] == '|' || str[0] == '>' || str[0] == '<' || str[0] == '&')
 		{
 			if (is_valid_symbol(str) == FALSE)
-			{
-				exit_num_set(1);
 				return (ERROR);
-			}
 		}
 		head = head->next;
 	}
@@ -93,14 +90,20 @@ int	exception_handling(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == ';' || input[i] == '\\')
+		if ((input[i] == ';' || input[i] == '\\') && sin == FALSE && dou == FALSE)
+		{
+			ft_error("unspecified special characters like \\ or ;", 1);
 			return (ERROR);
+		}
 		if (input[i] == '\'' || input[i] == '\"')
 			exception_utility(input[i], &sin, &dou);
 		i++;
 	}
 	if (sin == TRUE || dou == TRUE)
+	{
+		ft_error("unclosed quotes like \' or \"", 1);
 		return (ERROR);
+	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 17:41:52 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/13 18:19:41 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@ void	clear_resource(t_mini *mini)
 	ft_free(&mini->input->user_input);
 }
 
-int	minishell_init(t_mini *mini)
+void	minishell_init(t_mini *mini)
 {
 	mini->path = NULL;
 	mini->input->token_lst = NULL;
 	mini->input->argv_lst = NULL;
 	mini->input->user_input = NULL;
 	mini->sig_flag = FALSE;
-	return (0);
 }
 
 int	memory_allocation(t_mini **mini, char **envp)
@@ -60,23 +59,25 @@ int	main(int argc, const char **argv, char **envp)
 	if (argc != 1 || argv == NULL)
 		return (0);
 	if (memory_allocation(&mini, envp) == ERROR)
-		ft_error();
+	{
+		ft_error("allocation error", 1);
+		exit(g_exit_state);
+	}
 	while (TRUE)
 	{
-		if (minishell_init(mini) == ERROR)
-			ft_error();
-		ft_signal(&(mini->sig_flag));
+		minishell_init(mini);
+		ft_signal(BASIC);
 		if (ft_prompt(mini) == ERROR)
-			ft_error();
+		{
+			ft_error("prompt error", 1);
+			exit(g_exit_state);
+		}
 		if (mini->input->user_input[0] != '\0')
 		{
 			if (ft_parsing(mini) != ERROR)
-			{
-				if (minishell(mini) == ERROR)
-					ft_error();
-				clear_resource(mini);
-			}
+				minishell(mini);
 		}
+		clear_resource(mini);
 	}
 	return (0);
 }

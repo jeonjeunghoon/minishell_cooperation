@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/12 22:31:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/13 18:49:29 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@
 # include <term.h>
 # include <curses.h>
 
-# define STDIN
-# define STDOUT
+# define BASIC 0
+# define EXECVE 1
+# define HEREDOC 2
 
 int			g_exit_state;
 
@@ -88,7 +89,7 @@ typedef struct s_mini
 
 // main
 void	clear_resource(t_mini *mini);
-int		minishell_init(t_mini *mini);
+void	minishell_init(t_mini *mini);
 int		memory_allocation(t_mini **mini, char **envp);
 int		main(int argc, const char **argv, char **envp);
 
@@ -107,7 +108,7 @@ int		ft_parsing(t_mini *mini);
 // ft_signal
 void	sigint_func(int sig);
 void	sig_func(int sig);
-void	ft_signal(t_bool *sig_flag);
+void	ft_signal(int sig_flag);
 
 // minishell
 int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
@@ -159,9 +160,9 @@ void	ft_exit(t_argv *argv);
 
 // ft_error
 void	error_symbol(char symbol, int exit_num);
-void	error_1(char *cmd, char *msg, int exit_num);
 void	error_2(char *cmd, char *argv, char *msg, int exit_num);
-void	ft_error(void);
+void	error_1(char *cmd, char *msg, int exit_num);
+void	ft_error(char *msg, int exit_num);
 
 // utility
 char	*get_envname(char *name);
@@ -232,7 +233,7 @@ int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
 // command_utility2
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
-int		set_redirect(t_argv *argv);
+int		set_redirect(t_argv *argv, int *redirect_fd);
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp);
 
 // ft_pipe

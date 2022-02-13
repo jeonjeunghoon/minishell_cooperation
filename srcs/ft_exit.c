@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/12 22:29:32 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/13 18:41:33 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,23 @@ void	ft_exit(t_argv *argv)
 	int	argc;
 	int		stat_loc;
 	pid_t	pid;
+	int		redirect_fd[2];
 
 	exit_num_set(0);
+	if (set_redirect(argv, &(redirect_fd[0])) == ERROR)
+		exit(g_exit_state);
 	pid = fork();
 	if (pid > 0)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
+		if (argv->is_redirect == TRUE)
+		{
+			dup2(redirect_fd[0], STDIN_FILENO);
+			dup2(redirect_fd[1], STDOUT_FILENO);
+			close(redirect_fd[0]);
+			close(redirect_fd[1]);
+		}
 		exit_num_set(ft_wexitstatus(stat_loc));
 		if (!(argv->is_pipe || argv->was_pipe))
 			exit(g_exit_state);
@@ -65,8 +75,6 @@ void	ft_exit(t_argv *argv)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
-		if (set_redirect(argv) == ERROR)
-			exit(g_exit_state);
 		argc = 0;
 		argc = ft_two_dimension_size(argv->argv);
 		if (exit_exception(argc, argv->argv) == ERROR)

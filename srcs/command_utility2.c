@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/12 22:45:17 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/13 18:49:44 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ void	remove_redirection(t_argv *argv)
 	argv->argv = new_argv;
 }
 
-int	set_redirect(t_argv *argv)
+int	set_redirect(t_argv *argv, int *redirect_fd)
 {
 	int		i;
 
 	if (argv->is_redirect == FALSE)
 		return (0);
+	pipe(redirect_fd);
+	dup2(STDIN_FILENO, redirect_fd[0]);
+	dup2(STDOUT_FILENO, redirect_fd[1]);
 	i = 0;
 	while (argv->argv[i])
 	{
@@ -97,12 +100,24 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 {
 	pid_t	pid;
 	int		stat_loc;
+	int		redirect_fd[2];
+	t_bool	sig_flag;
 
+	if (set_redirect(argv, &(redirect_fd[0])) == ERROR)
+		exit(g_exit_state);
+	ft_signal(EXECVE);
 	pid = fork();
 	if (pid > 0)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
+		if (argv->is_redirect == TRUE)
+		{
+			dup2(redirect_fd[0], STDIN_FILENO);
+			dup2(redirect_fd[1], STDOUT_FILENO);
+			close(redirect_fd[0]);
+			close(redirect_fd[1]);
+		}
 		unlink(".heredoc_tmp");
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
@@ -110,8 +125,6 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
-		if (set_redirect(argv) == ERROR)
-			exit(g_exit_state);
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
 			printf("%s\n", strerror(errno));

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:54:20 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/12 22:57:29 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/13 18:48:25 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ int	heredoc(char *delimiter)
 	int		fd;
 	char	*input;
 	char	*line;
+	t_bool	sig;
 
-	fd = open(".heredoc_tmp", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	ft_signal(HEREDOC);
+	fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == ERROR)
 	{
 		error_1(".heredoc_tmp", "No such file or directory", 1);
@@ -37,8 +39,6 @@ int	heredoc(char *delimiter)
 		write(fd, "\n", 1);
 		ft_free(&input);
 	}
-	close(fd);
-	fd = open(".heredoc_tmp", O_RDONLY, 0644);
 	if (fd == ERROR)
 	{
 		error_1(".heredoc_tmp", "No such file or directory", 1);
