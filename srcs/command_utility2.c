@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/14 17:36:29 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/14 17:40:33 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 	t_bool	sig_flag;
 
 	if (set_redirect(argv, &(redirect_fd[0])) == ERROR)
-		exit(g_exit_state);
+		return ;
 	ft_signal(EXECVE);
 	pid = fork();
 	if (pid > 0)
