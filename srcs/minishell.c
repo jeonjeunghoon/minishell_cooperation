@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/13 17:54:35 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/14 17:36:15 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,78 +47,94 @@ int	ft_command(t_mini *mini, t_argv *argv)
 	return (0);
 }
 
-void	add_argv_back(t_argv *argv, char *redirect)
+void	remove_cmd_argvs(t_argv *file)
 {
 	char	**new_argv;
-	size_t	len;
-	int		i;
 
-	len = ft_two_dimension_size(argv->argv) + 1;
-	new_argv = (char **)malloc(sizeof(char *) * (len + 1));
-	new_argv[len] = NULL;
-	i = 0;
-	while (i < len - 1 && argv->argv[i])
-	{
-		new_argv[i] = ft_strdup(argv->argv[i]);
-		i++;
-	}
-	new_argv[i] = ft_strdup(redirect);
-	if (new_argv[0][0] == '>' || new_argv[0][0] == '<')
-	{
-		ft_free(&new_argv[0]);
-		new_argv[0] = ft_strdup("1");
-	}
-	ft_two_dimension_free(&argv->argv);
-	argv->argv = new_argv;
+	new_argv = (char **)malloc(sizeof(char *) * 2);
+	new_argv[1] = NULL;
+	new_argv[0] = ft_strdup(file->argv[0]);
+	ft_two_dimension_free(&file->argv);
+	file->argv = new_argv;
 }
 
-void	add_argv_back2(t_argv *argv, char **strs)
+char	**modify_file_argv(t_argv *file)
 {
-	char	**new_argv;
-	size_t	len1;
-	size_t	len2;
-	int		i;
-	int		j;
+	char	**cmd_argv;
+	size_t	len;
+	size_t	i;
+	size_t	j;
 
-	len1 = ft_two_dimension_size(argv->argv);
-	len2 = ft_two_dimension_size(strs);
-	new_argv = (char **)malloc(sizeof(char *) * (len1 + len2 + 1));
-	new_argv[len1 + len2] = NULL;
-	i = 0;
-	while (i < len1 && argv->argv[i])
-	{
-		new_argv[i] = ft_strdup(argv->argv[i]);
-		i++;
-	}
-	ft_two_dimension_free(&argv->argv);
+	len = ft_two_dimension_size(file->argv) - 1;
+	if (len == 0)
+		return (NULL);
+	cmd_argv = (char **)malloc(sizeof(char *) * (len + 1));
+	cmd_argv[len] = NULL;
+	i = 1;
 	j = 0;
-	while (i < len1 + len2 && strs[j])
+	while (j < len && file->argv[i] != NULL)
 	{
-		new_argv[i] = ft_strdup(strs[j]);
+		cmd_argv[j] = ft_strdup(file->argv[i]);
 		i++;
 		j++;
 	}
+	remove_cmd_argvs(file);
+	return (cmd_argv);
+}
+
+char	**create_cmd(t_argv *argv, t_argv *file)
+{
+	char	**cmd;
+	char	**cmd_argv;
+
+	cmd = NULL;
+	cmd_argv = modify_file_argv(file);
+	if (cmd_argv != NULL)
+	{
+		if (argv->is_redirect == TRUE) // > file cmd [...]
+			cmd = ft_strsdup(cmd_argv);
+		else // cmd [...] > file cmd_argv
+			cmd = ft_strsjoin(argv->argv, cmd_argv);
+		ft_two_dimension_free(&cmd_argv);
+	}
+	else
+	{
+		if (argv->is_redirect == TRUE) // > file
+		{
+			cmd = (char **)malloc(sizeof(char *) * 2);
+			cmd[1] = NULL;
+			cmd[0] = ft_strdup("");
+		}
+		else // cmd > file
+			cmd = ft_strsdup(argv->argv);
+	}
+	return (cmd);
+}
+
+void	combine_argvs(t_argv *argv, t_argv *redirect, t_argv *file)
+{
+	char	**cmd;
+	char	**new_argv;
+	char	**tmp;
+
+	cmd = create_cmd(argv, file);
+	tmp = ft_strsjoin(cmd, redirect->argv);
+	new_argv = ft_strsjoin(tmp, file->argv);
+	ft_two_dimension_free(&cmd);
+	ft_two_dimension_free(&tmp);
+	ft_two_dimension_free(&argv->argv);
 	argv->argv = new_argv;
+	argv->is_redirect = TRUE;
 }
 
 void	create_argv_set(t_list **head, t_argv **argv)
 {
-	t_argv	*redirect;
-	t_argv	*file;
-
 	if ((*head)->next == NULL || ((t_argv *)(*head)->next->content)->is_stream == TRUE)
 		return ;
 	while ((*head)->next != NULL)
 	{
 		if (((t_argv *)(*head)->content)->is_redirect == TRUE)
-		{
-			redirect = (*head)->content;
-			add_argv_back(*argv, redirect->argv[0]);
-			(*argv)->is_redirect = TRUE;
-			file = (*head)->next->content;
-			(*argv)->file = file->argv[0];
-			add_argv_back2(*argv, file->argv);
-		}
+			combine_argvs(*argv, (*head)->content, (*head)->next->content);
 		*head = (*head)->next;
 	}
 }

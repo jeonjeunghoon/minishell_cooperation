@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/13 18:49:29 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/14 17:27:49 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_token
 typedef struct s_argv
 {
 	char	**argv;
-	char	*file;
+	int		redirect_stream;
 	t_bool	is_redirect;
 	t_bool	is_stream;
 	t_bool	was_pipe; //이전 argv에 pipe가 있는가? 

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:32:22 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 00:45:55 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/14 17:09:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -70,7 +71,9 @@ char				*ft_strjoin_bothside(const char *s1, const char *s2, \
 										const char *s3);
 t_bool				ft_isspace(char ch);
 void				ft_free(char **p);
-int	get_next_line(int fd, char **line);
+int					get_next_line(int fd, char **line);
+char				**ft_strsjoin(char **strs1, char **strs2);
+char				**ft_strsdup(char **strs);
 
 typedef struct s_list
 {

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/13 18:49:44 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/14 17:36:29 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,11 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 	else if (pid == 0)
 	{
 		when_there_is_pipe(argv);
+		if (argv->argv[0][0] == '\0')
+		{
+			exit_num_set(0);
+			exit(g_exit_state);
+		}
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
 			printf("%s\n", strerror(errno));
