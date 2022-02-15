@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/15 18:23:55 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 00:45:54 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	ft_command(t_mini *mini, t_argv *argv)
 	cmd_path = NULL;
 	if (mini_command(mini, argv->argv[0], argv) == FALSE)
 	{
-		if (check_cmd(mini, argv->argv[0], &cmd_path) != ERROR)
-			exe_cmd(cmd_path, argv, mini->path);
+		create_cmdpath(mini, argv->argv[0], &cmd_path);
+		exe_cmd(cmd_path, argv, mini->path);
 		ft_free(&cmd_path);
 	}
 	return (0);
@@ -152,15 +152,15 @@ int	minishell(t_mini *mini)
 		if (argv->is_stream == FALSE)
 		{
 			// 이번 명령어의 인자들중 '-'가 아닌 인자, 즉 입력 파일 이름이 존재하는지 체크
-			i = 0;
-			while (argv->argv[++i])
-			{
-				if (argv->argv[i][0] != '-')
-				{
-					argv->is_input = 1;
-					break;
-				}
-			}
+			// i = 0;
+			// while (argv->argv[++i])
+			// {
+			// 	if (argv->argv[i][0] != '-')
+			// 	{
+			// 		argv->is_input = 1;
+			// 		break;
+			// 	}
+			// }
 			// 파이프를 기준으로 argv 세트를 만듭니다.
 			create_argv_set(&head, &argv);
 			ft_command(mini, argv);

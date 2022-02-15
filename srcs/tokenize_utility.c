@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 18:51:19 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/09 15:04:39 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 00:59:53 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ void	dollar_str(t_refine *refine)
 			if (refine->str[refine->i] != '\"' || \
 				refine->str[refine->i] != '\0')
 			{
-				refine->new_str[refine->j] = '$';
-				refine->j++;
+				// refine->new_str[refine->j] = '$';
+				// refine->j++;
+				return ;
 			}
 		}
 		else

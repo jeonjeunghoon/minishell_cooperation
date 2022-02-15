@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/15 18:10:12 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/15 21:58:09 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,19 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		}
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
-			printf("%s\n", strerror(errno));
-			exit_num_set(1);
+			if (argv->is_redirect == TRUE)
+			{
+				dup2(redirect_fd[0], STDIN_FILENO);
+				dup2(redirect_fd[1], STDOUT_FILENO);
+				close(redirect_fd[0]);
+				close(redirect_fd[1]);
+			}
+			if (errno == 2)
+				error_1(cmd_path, "command not found", 127);
+			else if (errno == 13)
+				error_1(cmd_path, "is a directory", 126);
+			else
+				ft_error(strerror(errno), 1);
 			exit(g_exit_state);
 		}
 	}

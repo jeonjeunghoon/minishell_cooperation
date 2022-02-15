@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/14 17:27:49 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 00:45:42 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_argv
 	t_bool	is_stream;
 	t_bool	was_pipe; //이전 argv에 pipe가 있는가? 
 	t_bool	is_pipe; //다음 argv에 pipe가 있는가? "du -h | sort -nr" 이면 du는 was = 0 is = 1, sort는 was = 1, is = 0
-	t_bool	is_input; //명령어의 input이 존재하는가? "ls -a | sort -nr a.txt"이면 ls 출력x, ls 내용과 무관하게 a.txt를 sort 이때 sort의 is_input은 1
+	// t_bool	is_input; //명령어의 input이 존재하는가? "ls -a | sort -nr a.txt"이면 ls 출력x, ls 내용과 무관하게 a.txt를 sort 이때 sort의 is_input은 1
 	t_bool	is_and; // &&
 	t_bool	is_or; // ||
 	t_bool	is_wildcard; // *
@@ -222,13 +222,9 @@ void	double_verticalbar(t_list *head, t_bool is_error);
 void	verticalbar(t_list *head, char *argv, t_bool is_error);
 
 // command_utility
-int		check_filemode_cmdpath(char *cmd, struct stat **file_info, \
-								char *cmd_path);
 void	create_path_bundle(t_mini *mini);
-void	set_relative_path(t_mini *mini, char **cmd_path, \
-						char *cmd, struct stat *cmd_info);
-void	set_absolute_path(char **file_path, char *cmd, struct stat *file_info);
-int		check_cmd(t_mini *mini, char *cmd, char **cmd_path);
+void	set_absolute_path(char **file_path, char *cmd);
+void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path);
 
 // command_utility2
 t_bool	ft_s_isreg(int mode);

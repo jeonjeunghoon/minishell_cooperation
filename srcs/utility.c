@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/16 21:37:12 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 17:43:24 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 00:53:28 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,27 @@
 
 char	*get_envname(char *name)
 {
-	char	*tmp;
 	char	*res;
 
-	tmp = ft_strdup("=");
-	res = ft_strjoin(name, tmp);
-	free(tmp);
+	res = ft_strjoin(name, "=");
 	return (res);
 }
 
 char	*ft_getenv(char **envp, char *name)
 {
-	int		i;
 	char	*envname;
+	size_t	env_len;
+	int		i;
 
 	envname = get_envname(name);
+	env_len = ft_strlen(envname);
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], envname, ft_strlen(envname)) == 0)
+		if (ft_strncmp(envp[i], envname, env_len) == 0)
 		{
 			free(envname);
-			return (&(envp[i][ft_strlen(envname)]));
+			return (&(envp[i][env_len]));
 		}
 		i++;
 	}
@@ -60,8 +59,7 @@ void	token_free(t_list *lst)
 		head = lst;
 		token = head->content;
 		lst = lst->next;
-		free(token->token);
-		token->token = NULL;
+		ft_free(&token->token);
 		free(token);
 		token = NULL;
 		free(head);

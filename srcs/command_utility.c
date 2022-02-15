@@ -6,30 +6,11 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/13 14:50:48 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/15 23:03:12 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-int	check_filemode_cmdpath(char *cmd, struct stat **file_info, char *cmd_path)
-{
-	t_bool	is_error;
-
-	is_error = 0;
-	if (ft_s_isdir((*file_info)->st_mode) == TRUE && cmd[0] != '\0')
-	{
-		error_1(cmd, "is a directory", 126);
-		is_error = ERROR;
-	}
-	else if (cmd_path == NULL)
-	{
-		error_1(cmd, "command not found", 127);
-		is_error = ERROR;
-	}
-	free(*file_info);
-	return (is_error);
-}
 
 void	create_path_bundle(t_mini *mini)
 {
@@ -42,10 +23,11 @@ void	create_path_bundle(t_mini *mini)
 		mini->path = ft_split(path_str, ':');
 }
 
-void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd, struct stat *file_info)
+void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd)
 {
 	char		*tmp;
 	int			i;
+	struct stat	file_info;
 
 	create_path_bundle(mini);
 	if (mini->path == NULL)
@@ -55,32 +37,22 @@ void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd, struct stat *fi
 	while (mini->path[i])
 	{
 		*cmd_path = ft_strjoin(mini->path[i], tmp);
-		if (stat(*cmd_path, file_info) == SUCCESS)
-			break ;
+		if (stat(*cmd_path, &file_info) == SUCCESS)
+		{
+			ft_free(&tmp);
+			return ;
+		}
 		ft_free(cmd_path);
 		i++;
 	}
 	ft_free(&tmp);
+	*cmd_path = ft_strdup(cmd);
 }
 
-void	set_absolute_path(char **cmd_path, char *cmd, struct stat *file_info)
+void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path)
 {
-	stat(cmd, file_info);
-	if (ft_s_isreg((*file_info).st_mode) == TRUE)
-		*cmd_path = ft_strdup(cmd);
-}
-
-int	check_cmd(t_mini *mini, char *cmd, char **cmd_path)
-{
-	struct stat	*file_info;
-
-	file_info = (struct stat *)malloc(sizeof(struct stat));
 	if (cmd[0] == '/')
-		set_absolute_path(cmd_path, cmd, file_info);
+		*cmd_path = ft_strdup(cmd);
 	else
-		set_relative_path(mini, cmd_path, cmd, file_info);
-	if (check_filemode_cmdpath(cmd, &file_info, *cmd_path) == ERROR)
-		return (ERROR);
-	file_info = NULL;
-	return (0);
+		set_relative_path(mini, cmd_path, cmd);
 }
