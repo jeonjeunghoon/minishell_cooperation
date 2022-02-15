@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/14 17:39:19 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/15 18:23:55 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	**create_cmd(t_argv *argv, t_argv *file)
 	cmd_argv = modify_file_argv(file);
 	if (cmd_argv != NULL)
 	{
-		if (argv->is_redirect == TRUE) // > file cmd [...]
+		if (argv->argv[0][0] == '>' || argv->argv[0][0] == '<') // > file cmd [...]
 			cmd = ft_strsdup(cmd_argv);
 		else // cmd [...] > file cmd_argv
 			cmd = ft_strsjoin(argv->argv, cmd_argv);
@@ -99,7 +99,7 @@ char	**create_cmd(t_argv *argv, t_argv *file)
 	}
 	else
 	{
-		if (argv->is_redirect == TRUE) // > file
+		if (argv->argv[0][0] == '>' || argv->argv[0][0] == '<') // > file
 		{
 			cmd = (char **)malloc(sizeof(char *) * 2);
 			cmd[1] = NULL;
