@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/13 18:40:08 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 13:53:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	set_env_cd(t_mini *mini, char *old_pwd)
 	argv[0] = ft_strdup("export");
 	pwd = getcwd(NULL, 0);
 	argv[1] = ft_strjoin("PWD=", pwd);
-	free(pwd);
+	ft_free(&pwd);
 	pwd = NULL;
 	argv[2] = ft_strjoin("OLDPWD=", old_pwd);
 	argvt.argv = argv;
@@ -34,7 +34,7 @@ void	set_env_cd(t_mini *mini, char *old_pwd)
 	i = 0;
 	while (i < 4)
 	{
-		free(argv[i]);
+		ft_free(&(argv[i]));
 		argv[i] = NULL;
 		i++;
 	}

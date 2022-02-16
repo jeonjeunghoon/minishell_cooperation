@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/13 18:42:00 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 14:20:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ void	ft_export(t_mini *mini, t_argv *argv)
 			close(redirect_fd[0]);
 			close(redirect_fd[1]);
 		}
-		set_envp(&mini->envp);
+		if (ft_two_dimension_size(argv->argv) > 1)
+			set_envp(&mini->envp);
 		exit_num_set(ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)

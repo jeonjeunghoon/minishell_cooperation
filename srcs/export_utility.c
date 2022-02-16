@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 01:28:25 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/11 01:35:44 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 14:35:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	set_envp(char ***envp)
 	int		i;
 
 	fd = open(".export_tmp", O_RDONLY, 0644);
+	if (fd == ERROR)
+		return ;
 	get_next_line(fd, &buf);
 	len = ft_atoi(buf);
 	ft_free(&buf);
@@ -31,7 +33,6 @@ void	set_envp(char ***envp)
 	{
 		get_next_line(fd, &buf);
 		(*envp)[i] = ft_strdup(buf);
-		printf("%s\n", (*envp)[i]);
 		ft_free(&buf);
 		i++;
 	}
