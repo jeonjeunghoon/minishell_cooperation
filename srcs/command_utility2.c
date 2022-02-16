@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_utility2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/15 21:58:09 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 13:58:39 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 	int		stat_loc;
 	int		redirect_fd[2];
 	t_bool	sig_flag;
+	int		error_fd;
 
 	if (set_redirect(argv, &(redirect_fd[0])) == ERROR)
 		return ;
@@ -124,6 +125,9 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 	}
 	else if (pid == 0)
 	{
+		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+		dup2(error_fd, 2);
+		close(error_fd);
 		when_there_is_pipe(argv);
 		if (argv->argv[0][0] == '\0')
 		{
