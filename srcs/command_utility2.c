@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 22:23:05 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/17 00:53:39 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		}
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
-			if (argv->is_redirect == TRUE)
-			{
-				dup2(original_fd[0], STDIN_FILENO);
-				dup2(original_fd[1], STDOUT_FILENO);
-				close(original_fd[0]);
-				close(original_fd[1]);
-			}
+			// close_original_fd(argv, original_fd);
 			if (errno == 2)
 				error_1(cmd_path, "command not found", 127);
 			else if (errno == 13)

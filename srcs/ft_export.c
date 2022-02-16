@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 22:35:38 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/17 01:41:54 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,16 +111,18 @@ void	ft_export(t_mini *mini, t_argv *argv)
 	exit_num_set(0);
 	set_original_fd(argv, original_fd);
 	when_there_is_pipe(argv);
+	pid = 0;
+	if (argv->is_pipe == TRUE || argv->was_pipe == TRUE)
+		pid = fork();
 	if (set_redirect(argv) == ERROR)
 		exit(g_exit_state);
-	pid = fork();
 	if (pid > 0)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
 		close_original_fd(argv, original_fd);
-		if (ft_two_dimension_size(argv->argv) > 1)
-			set_envp(&mini->envp);
+		// if (ft_two_dimension_size(argv->argv) > 1)
+		// 	set_envp(&mini->envp);
 		exit_num_set(ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)
@@ -141,10 +143,13 @@ void	ft_export(t_mini *mini, t_argv *argv)
 				}
 				i++;
 			}
-			create_export_tmp(mini->envp);
+			// create_export_tmp(mini->envp);
 		}
 		else
 			ft_env(mini, argv);
-		exit(g_exit_state);
+		if (argv->is_pipe == TRUE || argv->was_pipe == TRUE)
+			exit(g_exit_state);
+		else
+			close_original_fd(argv, original_fd);
 	}
 }
