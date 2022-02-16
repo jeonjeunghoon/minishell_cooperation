@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/02/16 17:33:44 by seungcoh         ###   ########.fr        #
+#    Updated: 2022/02/16 22:23:21 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ SRCS_NAME			=	main.c \
 						stream_utility.c \
 						stream_utility2.c \
 						command_utility.c \
-						command_utility2.c\
+						command_utility2.c \
+						command_utility3.c \
 						w_utility.c \
 						ft_pipe.c \
 						redirect_utility.c\

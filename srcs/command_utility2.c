@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 21:45:01 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 22:23:05 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,12 @@ void	remove_redirection(t_argv *argv)
 	argv->argv = new_argv;
 }
 
-int	set_redirect(t_argv *argv, int *redirect_fd)
+int	set_redirect(t_argv *argv)
 {
 	int		i;
 
 	if (argv->is_redirect == FALSE)
 		return (0);
-	pipe(redirect_fd);
-	dup2(STDIN_FILENO, redirect_fd[0]);
-	dup2(STDOUT_FILENO, redirect_fd[1]);
 	i = 0;
 	while (argv->argv[i])
 	{
@@ -100,11 +97,13 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 {
 	pid_t	pid;
 	int		stat_loc;
-	int		redirect_fd[2];
+	int		original_fd[2];
 	t_bool	sig_flag;
 	int		error_fd;
 
-	if (set_redirect(argv, &(redirect_fd[0])) == ERROR)
+	set_original_fd(argv, original_fd);
+	when_there_is_pipe(argv);
+	if (set_redirect(argv) == ERROR)
 		return ;
 	ft_signal(EXECVE);
 	pid = fork();
@@ -112,13 +111,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
 		pipe_tmp_copy(argv);
-		if (argv->is_redirect == TRUE)
-		{
-			dup2(redirect_fd[0], STDIN_FILENO);
-			dup2(redirect_fd[1], STDOUT_FILENO);
-			close(redirect_fd[0]);
-			close(redirect_fd[1]);
-		}
+		close_original_fd(argv, original_fd);
 		unlink(".heredoc_tmp");
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(ft_wstopsig(stat_loc));
@@ -134,7 +127,6 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		while(ptr[j])
 			printf("%s\n", ptr[j++]);
 		printf("\n");*/
-		when_there_is_pipe(argv);
 		if (argv->argv[0][0] == '\0')
 		{
 			exit_num_set(0);
@@ -144,10 +136,10 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		{
 			if (argv->is_redirect == TRUE)
 			{
-				dup2(redirect_fd[0], STDIN_FILENO);
-				dup2(redirect_fd[1], STDOUT_FILENO);
-				close(redirect_fd[0]);
-				close(redirect_fd[1]);
+				dup2(original_fd[0], STDIN_FILENO);
+				dup2(original_fd[1], STDOUT_FILENO);
+				close(original_fd[0]);
+				close(original_fd[1]);
 			}
 			if (errno == 2)
 				error_1(cmd_path, "command not found", 127);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 17:33:23 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/16 22:20:02 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,8 +229,12 @@ void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path);
 // command_utility2
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
-int		set_redirect(t_argv *argv, int *redirect_fd);
+int		set_redirect(t_argv *argv);
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp);
+
+// command_utility3
+void	set_original_fd(t_argv *argv, int *original_fd);
+void	close_original_fd(t_argv *argv, int *original_fd);
 
 // ft_pipe
 void    when_there_is_pipe(t_argv *argv);
