@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/13 18:41:33 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 14:43:00 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	ft_exit(t_argv *argv)
 	int		stat_loc;
 	pid_t	pid;
 	int		redirect_fd[2];
+	int		error_fd;
 
 	exit_num_set(0);
 	if (set_redirect(argv, &(redirect_fd[0])) == ERROR)
@@ -74,6 +75,9 @@ void	ft_exit(t_argv *argv)
 	}
 	else if (pid == 0)
 	{
+		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+		dup2(error_fd, 2);
+		close(error_fd);
 		when_there_is_pipe(argv);
 		argc = 0;
 		argc = ft_two_dimension_size(argv->argv);

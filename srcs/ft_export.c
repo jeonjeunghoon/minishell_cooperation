@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 14:20:58 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 15:40:54 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	ft_export(t_mini *mini, t_argv *argv)
 	int		stat_loc;
 	pid_t	pid;
 	int		redirect_fd[2];
+	int		error_fd;
 
 	exit_num_set(0);
 	if (set_redirect(argv, &(redirect_fd[0])) == ERROR)
@@ -128,6 +129,9 @@ void	ft_export(t_mini *mini, t_argv *argv)
 	}
 	else if (pid == 0)
 	{
+		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+		dup2(error_fd, 2);
+		close(error_fd);
 		when_there_is_pipe(argv);
 		if (ft_two_dimension_size(argv->argv) > 1)
 		{
