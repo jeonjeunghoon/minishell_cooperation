@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 15:40:40 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 21:45:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,12 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
 		dup2(error_fd, 2);
 		close(error_fd);
+		/*char **ptr = argv->argv;
+		int j = 0;
+		printf("[argv]\n");
+		while(ptr[j])
+			printf("%s\n", ptr[j++]);
+		printf("\n");*/
 		when_there_is_pipe(argv);
 		if (argv->argv[0][0] == '\0')
 		{

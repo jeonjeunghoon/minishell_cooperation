@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 00:45:42 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 17:33:23 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,5 +246,8 @@ int		heredoc(char *delimiter);
 int		append(char *file);
 int		rtol(char *file);
 int		ltor(char *file);
+
+//fd_copy
+void fd_copy(int fd, int fd2);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utility.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 00:53:44 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 19:17:30 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,16 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 	(*stream)->argv[0] = ft_strdup(token->token);
 	// (*stream)->argv[0] = token->token;
 	(*stream)->is_redirect = TRUE;
-	if (token->token[0] == '&' && token->token[1] == '&')
+	/*if (token->token[0] == '&' && token->token[1] == '&')
+	{
 		(*stream)->is_and = TRUE;
+	}
 	else if (token->token[0] == '|' && token->token[1] == '|')
 		(*stream)->is_or = TRUE;
-	else if (token->token[0] == '|')
+	else */
+	if ((token->token[0] == '|' && token->token[1] == '|') ||\
+	(token->token[0] == '|' && token->token[1] == 0) ||\
+	token->token[0] == '&' && token->token[1] == '&')
 	{
 		(*stream)->is_stream = TRUE;
 		(*stream)->is_redirect = FALSE;
@@ -83,8 +88,12 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 
 void	check_stream(t_argv *argv, t_list *token_lst, char *str)
 {
-	if (str[0] == '|')
+	if (str[0] == '|' && str[1] == 0)
 		argv->is_pipe = TRUE;
+	if (str[0] == '&' && str[1] == '&')
+		argv->is_and = TRUE;
+	if (str[0] == '|' && str[1] == '|')
+		argv->is_or = TRUE;
 }
 
 void	create_argv(t_argv **argv, t_list *token_lst, \

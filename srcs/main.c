@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 14:39:13 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/16 17:31:33 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,7 @@ int	main(int argc, const char **argv, char **envp)
 {
 	t_mini	*mini;
 	int		error_fd;
-	int		len;
-	char	buf[1024];
-
+	
 	if (argc != 1 || argv == NULL)
 		return (0);
 	if (memory_allocation(&mini, envp) == ERROR)
@@ -83,13 +81,7 @@ int	main(int argc, const char **argv, char **envp)
 				error_fd = open(".error_tmp", O_RDONLY, 0644);
 				if (error_fd != -1)
 				{
-					while (1)
-					{
-						len = read(error_fd, buf, sizeof(buf));
-						if (!len)
-							break;
-						write(2, buf, len);
-					}
+					fd_copy(error_fd, 2);
 					close(error_fd);
 					unlink(".error_tmp");
 				}
