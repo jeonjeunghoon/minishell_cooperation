@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 00:45:54 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/16 19:17:52 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,21 @@ void	create_argv_set(t_list **head, t_argv **argv)
 		return ;
 	while ((*head)->next != NULL)
 	{
+		if (((t_argv *)(*head)->content)->is_pipe == TRUE)
+		{
+			(*argv)->is_pipe = TRUE;
+			break;
+		}
+		if (((t_argv *)(*head)->content)->is_and == TRUE)
+		{
+			(*argv)->is_and = TRUE;
+			break;
+		}
+		if (((t_argv *)(*head)->content)->is_or == TRUE)
+		{
+			(*argv)->is_or = TRUE;
+			break;
+		}
 		if (((t_argv *)(*head)->content)->is_redirect == TRUE)
 			combine_argvs(*argv, (*head)->content, (*head)->next->content);
 		*head = (*head)->next;
@@ -146,27 +161,45 @@ int	minishell(t_mini *mini)
 	int		i;
 
 	head = mini->input->argv_lst;
+	/*printf("[argv_list]\n");
+	while(head!=NULL)
+	{
+		argv = head->content;
+		char **ptr = ((t_argv *)head->content)->argv;
+		int j = 0;
+		while(ptr[j])
+			printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);
+		printf("\n");
+		head = head->next;
+	}*/
+	head = mini->input->argv_lst;
 	while (head != NULL)
 	{
 		argv = head->content;
 		if (argv->is_stream == FALSE)
 		{
-			// 이번 명령어의 인자들중 '-'가 아닌 인자, 즉 입력 파일 이름이 존재하는지 체크
-			// i = 0;
-			// while (argv->argv[++i])
-			// {
-			// 	if (argv->argv[i][0] != '-')
-			// 	{
-			// 		argv->is_input = 1;
-			// 		break;
-			// 	}
-			// }
-			// 파이프를 기준으로 argv 세트를 만듭니다.
 			create_argv_set(&head, &argv);
+			/*printf("[after create_argv_set]\n");
+			char **ptr = argv->argv;
+			int j = 0;
+			while(ptr[j])
+				printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);*/
 			ft_command(mini, argv);
 		}
-		if (head->next) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로
+		if (((t_argv *)head->content)->is_pipe) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로
 			((t_argv *)head->next->content)->was_pipe = 1;
+		else if (((t_argv *)head->content)->is_and)
+		{
+			//printf("exit:%d\n", g_exit_state);
+			if (g_exit_state)
+				break;
+		}
+		else if (((t_argv *)head->content)->is_or)
+		{
+			//printf("exit:%d\n", g_exit_state);
+			if (!g_exit_state)
+				break;
+		}
 		head = head->next;
 		argv = NULL;
 	}
