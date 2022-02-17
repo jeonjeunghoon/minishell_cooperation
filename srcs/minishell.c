@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 19:17:52 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/17 11:47:44 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,8 +160,8 @@ int	minishell(t_mini *mini)
 	t_argv	*argv;
 	int		i;
 
-	head = mini->input->argv_lst;
-	/*printf("[argv_list]\n");
+	/*head = mini->input->argv_lst;
+	printf("[argv_list]\n");
 	while(head!=NULL)
 	{
 		argv = head->content;
@@ -183,7 +183,8 @@ int	minishell(t_mini *mini)
 			char **ptr = argv->argv;
 			int j = 0;
 			while(ptr[j])
-				printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);*/
+				printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);
+				*/
 			ft_command(mini, argv);
 		}
 		if (((t_argv *)head->content)->is_pipe) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로

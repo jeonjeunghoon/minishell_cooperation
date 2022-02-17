@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 13:57:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 22:35:34 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/17 11:23:23 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,12 @@ void	ft_pwd(t_argv *argv)
 	else if (pid == 0)
 	{
 		cwd = getcwd(NULL, 0);
-		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-		dup2(error_fd, 2);
-		close(error_fd);
+		if (!argv->is_or)
+		{
+			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+			dup2(error_fd, 2);
+			close(error_fd);
+		}
 		if (cwd)
 			printf("%s\n", cwd);
 		else if (cwd == NULL)

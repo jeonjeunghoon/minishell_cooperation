@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:59 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 22:35:44 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/17 11:23:22 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,12 @@ void	ft_env(t_mini *mini, t_argv *argv)
 	}
 	else if (pid == 0)
 	{	
-		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-		dup2(error_fd, 2);
-		close(error_fd);
+		if (!argv->is_or)
+		{
+			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+			dup2(error_fd, 2);
+			close(error_fd);
+		}
 		if (ft_two_dimension_size(argv->argv) != 1)
 		{
 			error_2(argv->argv[0], argv->argv[1], "With no options or arguments", 1);
