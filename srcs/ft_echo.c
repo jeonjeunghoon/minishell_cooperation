@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 22:35:47 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/17 11:23:24 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,12 @@ void	ft_echo(t_mini *mini, t_argv *argv)
 	}
 	else if (pid == 0)
 	{
-		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-		dup2(error_fd, 2);
-		close(error_fd);
+		if (!argv->is_or)
+		{
+			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+			dup2(error_fd, 2);
+			close(error_fd);
+		}
 		n_flag = FALSE;
 		if (argv->argv[1] == NULL)
 			write(1, "\n", 1);
