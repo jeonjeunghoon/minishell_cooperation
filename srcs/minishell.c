@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/17 11:47:44 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/18 17:36:22 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,8 @@ int	minishell(t_mini *mini)
 				*/
 			ft_command(mini, argv);
 		}
-		if (((t_argv *)head->content)->is_pipe) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로
-			((t_argv *)head->next->content)->was_pipe = 1;
+		if (argv->is_pipe && head->next->next) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로
+			((t_argv *)head->next->next->content)->was_pipe = 1;
 		else if (((t_argv *)head->content)->is_and)
 		{
 			//printf("exit:%d\n", g_exit_state);
