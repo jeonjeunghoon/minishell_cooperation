@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_utility2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/17 11:41:08 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/17 12:05:11 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,15 +118,15 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 	}
 	else if (pid == 0)
 	{
-		if (!argv->is_or)
-		{
-			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(error_fd, 2);
-			close(error_fd);
-		}
-		char **ptr = argv->argv;
+		// if (!argv->is_or)
+		// {
+		// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+		// 	dup2(error_fd, 2);
+		// 	close(error_fd);
+		// }
+		/*char **ptr = argv->argv;
 		int j = 0;
-		/*printf("[argv]\n");
+		printf("[argv]\n");
 		while(ptr[j])
 			printf("%s\n", ptr[j++]);
 		printf("\n");*/
@@ -137,7 +137,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		}
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
-			// close_original_fd(argv, original_fd);
+			close_original_fd(argv, original_fd);
 			if (errno == 2)
 				error_1(cmd_path, "command not found", 127);
 			else if (errno == 13)
