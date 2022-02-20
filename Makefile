@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/02/16 22:23:21 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/02/20 17:05:37 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +37,6 @@ SRCS_NAME			=	main.c \
 						tokenize_utility.c \
 						tokenize_utility2.c \
 						tokenize_utility3.c \
-						stream_utility.c \
-						stream_utility2.c \
 						command_utility.c \
 						command_utility2.c \
 						command_utility3.c \
