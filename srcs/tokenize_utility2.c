@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:37:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 00:28:50 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/21 15:22:25 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,15 @@ char	*get_envname_parse(char *str, int *i)
 
 	len = (*i);
 	while (str[len] && str[len] != '$' && \
-			str[len] != '\"' && str[len] != '\'')
+			str[len] != '\"' && str[len] != '\'' && \
+			str[len] != '/')
 		len++;
 	len = len - (*i);
 	name = (char *)malloc(sizeof(char) * (len + 1));
 	name[len] = '\0';
 	j = 0;
 	while (j < len && str[*i] && str[*i] != '$' && \
-			str[*i] != '\"' && str[len] != '\'')
+			str[*i] != '\"' && str[*i] != '\'')
 	{
 		name[j] = str[*i];
 		(*i)++;
@@ -62,6 +63,7 @@ char	*get_envname_parse(char *str, int *i)
 void	env_str(t_refine *refine)
 {
 	int		len;
+	int		i;
 	char	*tmp;
 
 	// refine->new_str[refine->j] = '\0';

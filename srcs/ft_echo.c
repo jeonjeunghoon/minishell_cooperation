@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/17 11:23:24 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/20 17:10:52 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,15 @@ void	print_msg(char **envp, char **argv, int start_ptr, int n_flag)
 		write(1, "\n", 1);
 }
 
-int	n_option(char *argv, int *start_ptr)
+int	n_option(char **argv, int *start_ptr)
 {
 	int	i;
 
 	i = 2;
-	if (ft_strncmp(argv, "-n", 2) == 0)
-	{
-		while (argv[i] == 'n' && argv[i])
-			i++;
-		if (argv[i] != '\0')
-			return (FALSE);
-	}
-	else
+	while (ft_strncmp(argv[*start_ptr], "-n", 3) == 0)
+		(*start_ptr)++;
+	if (*start_ptr == 1)
 		return (FALSE);
-	*start_ptr = 2;
 	return (TRUE);
 }
 
@@ -77,7 +71,7 @@ void	ft_echo(t_mini *mini, t_argv *argv)
 		else
 		{
 			start_ptr = 1;
-			n_flag = n_option(argv->argv[start_ptr], &start_ptr);
+			n_flag = n_option(argv->argv, &start_ptr);
 			while (argv->argv[start_ptr] != NULL)
 			{
 				print_msg(mini->envp, argv->argv, start_ptr, n_flag);
