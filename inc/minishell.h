@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 13:24:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 14:32:12 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_argv
 	t_bool	is_and; // &&
 	t_bool	is_or; // ||
 	t_bool	is_wildcard; // *
+	t_bool	hav_cmd;
 }	t_argv;
 
 typedef struct s_input
@@ -160,6 +161,7 @@ void	ft_exit(t_argv *argv);
 
 // ft_error
 void	error_symbol(char symbol, int exit_num);
+void	error_symbol2(char *symbol, int exit_num);
 void	error_2(char *cmd, char *argv, char *msg, int exit_num);
 void	error_1(char *cmd, char *msg, int exit_num);
 void	ft_error(char *msg, int exit_num);
