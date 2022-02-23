@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 13:26:03 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:14:28 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,42 @@ int	check_stream_symbol(t_list *token_lst)
 	return (0);
 }
 
-void	create_argv_lst(t_list **argv_lst, t_list *token_lst)
+int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
 {
 	int		size;
+	int		is_or;
 	t_argv	*str;
 	t_argv	*stream;
 	t_list	*head;
 
 	argv_lst_init(&str, &stream, &size);
 	head = token_lst;
+	is_or = 0;
 	while (token_lst != NULL)
 	{
 		if (stream_flag_str(token_lst->content) == FALSE)
+		{
 			size++;
+			is_or = 0;
+		}
 		if (stream_flag_str(token_lst->content) == TRUE || \
 							token_lst->next == NULL)
 		{
+			if (is_or)
+			{
+				error_symbol2("||", 2);
+				return (ERROR);
+			}
 			if (size != 0)
 				create_argv(&str, head, argv_lst, size);
 			if (stream_flag_str(token_lst->content) == TRUE)
-				create_stream(&stream, token_lst->content, argv_lst);
+				is_or = create_stream(&stream, token_lst->content, argv_lst);
 			argv_lst_init(&str, &stream, &size);
 			head = token_lst->next;
 		}
 		token_lst = token_lst->next;
 	}
+	return 0;
 }
 
 void	create_token_lst(t_list **lst, char *input, char **envp)
@@ -116,7 +127,8 @@ int	ft_parsing(t_mini *mini)
 	add_history(mini->input->user_input);
 	create_token_lst(&(mini->input->token_lst), \
 					mini->input->user_input, mini->envp);
-	create_argv_lst(&(mini->input->argv_lst), mini->input->token_lst);
+	if (create_argv_lst(&(mini->input->argv_lst), mini->input->token_lst) == ERROR)
+		return (ERROR);
 	if (check_stream_symbol(mini->input->token_lst) == ERROR)
 		return (ERROR);
 	return (0);
