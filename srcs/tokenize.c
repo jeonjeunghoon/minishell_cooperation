@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 00:32:13 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 13:24:06 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,25 @@ void	refine_init(t_refine *refine)
 	refine->is_double = FALSE;
 }
 
-void	refine_str(t_token *token, char **envp)
+int	refine_str(t_token *token, char **envp)
 {
 	t_refine	*refine;
+	int			ret;
 
+	ret = 0;
 	refine = (t_refine *)malloc(sizeof(t_refine));
 	refine_init(refine);
 	refine->envp = envp;
 	refine->str = token->token;
-	create_refined_str(refine);
+	ret = create_refined_str(refine);
 	ft_free(&token->token);
-	token->token = ft_strdup(refine->new_str);
+	if (ret != ERROR)
+		token->token = ft_strdup(refine->new_str);
 	ft_free(&refine->new_str);
 	refine_init(refine);
 	free(refine);
 	refine = NULL;
+	return (ret);
 }
 
 int	stream_parse(t_token *token, char *input, int *pos)
@@ -89,7 +93,7 @@ int	str_parse(t_token *token, char *input, int *pos)
 	return (0);
 }
 
-void	tokenize(t_token *token, char *input, int *start, char **envp)
+int	tokenize(t_token *token, char *input, int *start, char **envp)
 {
 	if (input[*start] == '|' || input[*start] == '>' || \
 		input[*start] == '<' || input[*start] == '&')
@@ -107,6 +111,8 @@ void	tokenize(t_token *token, char *input, int *start, char **envp)
 			ft_error("tokenize error", 1);
 			exit(g_exit_state);
 		}
-		refine_str(token, envp);
+		if (refine_str(token, envp) == ERROR)
+			return (ERROR);
 	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 18:51:19 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/22 16:47:31 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 13:31:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 void	basic_str(t_refine *refine)
 {
-	char	*tmp;
+	char	*ptr;
 	int		len;
 	int		i;
 
 	len = ft_strlen(refine->new_str) + 1;
-	tmp = (char *)malloc(sizeof(char) * (len + 1));
-	tmp[len] = '\0';
+	ptr = (char *)malloc(sizeof(char) * (len + 1));
+	ptr[len] = '\0';
 	i = 0;
 	while (i < len - 1)
 	{
-		tmp[i] = refine->new_str[i];
+		ptr[i] = refine->new_str[i];
 		i++;
 	}
-	tmp[i] = refine->str[refine->i];
+	ptr[i] = refine->str[refine->i];
 	ft_free(&refine->new_str);
-	refine->new_str = tmp;
+	refine->new_str = ptr;
 	refine->j = i + 1;
 	refine->i++;
 }
@@ -43,6 +43,19 @@ void	dollar_str(t_refine *refine)
 		refine->i++;
 	else if (refine->str[refine->i + 1] == '?')
 		exitnum_str(refine);
+	else if (refine->str[refine->i + 1] >= '0' && refine->str[refine->i + 1] <= '9')
+	{
+		if (refine->str[refine->i + 1] == '0')
+		{
+			char *ptr;
+
+			ptr = ft_strjoin(refine->new_str, "-minishell");
+			ft_free(&refine->new_str);
+			refine->new_str = ptr;
+			refine->j = ft_strlen(refine->new_str);
+		}
+		refine->i += 2;
+	}
 	else
 	{
 		refine->i++;
@@ -117,13 +130,14 @@ void	swung_dash_str(t_refine *refine)
 		basic_str(refine);
 }
 
-void	create_refined_str(t_refine *refine)
+int	create_refined_str(t_refine *refine)
 {
 	int	len;
 	int	i;
 
 	len = ft_strlen(refine->str);
 	refine->new_str = (char *)malloc(sizeof(char) * (len + 1));
+	refine->new_str[len] = '\0';
 	i = 0;
 	while (i < len)
 		refine->new_str[i++] = '\0';
@@ -140,6 +154,7 @@ void	create_refined_str(t_refine *refine)
 		else
 			basic_str(refine);
 	}
-	if (refine->str[refine->i] == '\0')
-		refine->new_str[refine->j] = '\0';
+	if (refine->new_str[0] == '\0')
+		return (ERROR);
+	return (0);
 }

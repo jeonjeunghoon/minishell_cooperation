@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/20 17:11:09 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 13:24:16 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,17 +186,17 @@ void	argv_init(t_argv *argv);
 
 // tokenize
 void	refine_init(t_refine *refine);
-void	refine_str(t_token *token, char **envp);
+int		refine_str(t_token *token, char **envp);
 int		stream_parse(t_token *token, char *input, int *end);
 int		str_parse(t_token *token, char *input, int *end);
-void	tokenize(t_token *token, char *input, int *start, char **envp);
+int		tokenize(t_token *token, char *input, int *start, char **envp);
 
 // tokenize_utility
 void	basic_str(t_refine *refine);
 void	dollar_str(t_refine *refine);
 void	double_quote_str(t_refine *refine);
 void	single_quote_str(t_refine *refine);
-void	create_refined_str(t_refine *refine);
+int		create_refined_str(t_refine *refine);
 
 // tokenize_utility2
 char	*get_envname_parse(char *str, int *i);

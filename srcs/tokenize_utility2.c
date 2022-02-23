@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:37:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/22 16:28:14 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 13:31:26 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ char	*get_envname_parse(char *str, int *i)
 	len = (*i);
 	while (str[len] && str[len] != '$' && \
 			str[len] != '\"' && str[len] != '\'' && \
-			str[len] != '/' && str[len] != '=')
+			str[len] != '/' && str[len] != '=' && \
+			str[len] != ' ')
 		len++;
 	len = len - (*i);
 	name = (char *)malloc(sizeof(char) * (len + 1));
@@ -29,7 +30,7 @@ char	*get_envname_parse(char *str, int *i)
 	j = 0;
 	while (j < len && str[*i] && str[*i] != '$' && \
 			str[*i] != '\"' && str[*i] != '\'' && \
-			str[len] != '=')
+			str[len] != '=' && str[len] != ' ')
 	{
 		name[j] = str[*i];
 		(*i)++;
@@ -44,7 +45,6 @@ void	env_str(t_refine *refine)
 	int		i;
 	char	*tmp;
 
-	refine->new_str[refine->j] = '\0';
 	tmp = ft_strjoin(refine->new_str, refine->env);
 	ft_free(&refine->new_str);
 	refine->new_str = tmp;

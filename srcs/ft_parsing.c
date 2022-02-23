@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 00:12:15 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 13:26:03 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ void	create_token_lst(t_list **lst, char *input, char **envp)
 		{
 			token = (t_token *)malloc(sizeof(t_token));
 			token_init(token);
-			tokenize(token, input, &i, envp);
-			ft_lstadd_back(lst, ft_lstnew(token));
+			if (tokenize(token, input, &i, envp) != ERROR)
+				ft_lstadd_back(lst, ft_lstnew(token));
+			else
+				free(token);
 			token = NULL;
 		}
 		else
