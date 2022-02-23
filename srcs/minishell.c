@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/18 17:36:22 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:32:03 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,13 +162,14 @@ int	minishell(t_mini *mini)
 
 	/*head = mini->input->argv_lst;
 	printf("[argv_list]\n");
+	printf("head:%p\n", head);
 	while(head!=NULL)
-	{
+	{	
 		argv = head->content;
 		char **ptr = ((t_argv *)head->content)->argv;
 		int j = 0;
 		while(ptr[j])
-			printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);
+			printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_or);
 		printf("\n");
 		head = head->next;
 	}*/
@@ -184,23 +185,37 @@ int	minishell(t_mini *mini)
 			int j = 0;
 			while(ptr[j])
 				printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);
-				*/
+			*/	
 			ft_command(mini, argv);
+			if (head->next)
+				((t_argv *)head->next->content)->hav_cmd = 1;
 		}
-		if (argv->is_pipe && head->next->next) // is_stream이 true이면 | 이므로 다음 argv가 존재할때 was_pipe=1로
-			((t_argv *)head->next->next->content)->was_pipe = 1;
-		else if (((t_argv *)head->content)->is_and)
+		else if(!argv->hav_cmd)
 		{
-			//printf("exit:%d\n", g_exit_state);
+			error_symbol2(argv->argv[0], 2);
+			break;
+		}
+		if (argv->is_pipe && head->next->next)
+			((t_argv *)head->next->next->content)->was_pipe = 1;
+		else if (argv->is_and)
+		{
 			if (g_exit_state)
 				break;
 		}
-		else if (((t_argv *)head->content)->is_or)
+		else if (argv->is_or)
 		{
-			//printf("exit:%d\n", g_exit_state);
 			if (!g_exit_state)
 				break;
 		}
+		/*if (argv->is_pipe && !head->next->next)
+		{
+			//에러메세지 무언가 필요할듯
+			printf("aaaa\n");
+		}
+		if (argv->is_and && !head->next->next)
+			//에러메세지 무언가 필요할듯
+		if (argv->is_or && !head->next->next)
+			//에러메세지 무언가 필요할듯*/
 		head = head->next;
 		argv = NULL;
 	}

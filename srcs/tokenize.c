@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 13:24:06 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:09:42 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,19 @@ int	refine_str(t_token *token, char **envp)
 int	stream_parse(t_token *token, char *input, int *pos)
 {
 	int	i;
+	int	j;
 	int	len;
 
 	len = *pos;
-	while (stream_condition(input[len]) == TRUE && input[len])
+	j = -1;
+	while (stream_condition(input[len]) == TRUE && input[len] && ++j != 2)
 		len++;
 	len = len - *pos;
 	token->token = (char *)malloc(sizeof(char) * (len + 1));
 	token->token[len] = '\0';
 	i = 0;
-	while (stream_condition(input[*pos]) == TRUE && input[*pos])
+	j = -1;
+	while (stream_condition(input[*pos]) == TRUE && input[*pos] && ++j != 2)
 	{
 		token->token[i] = input[*pos];
 		i++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_utility2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/17 12:05:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 14:26:39 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	set_redirect(t_argv *argv)
 	i = 0;
 	while (argv->argv[i])
 	{
+		
 		if (argv->argv[i][0] == '>' && argv->argv[i][1] == '>')
 		{
 			append(argv->argv[i + 1]);
@@ -73,6 +74,11 @@ int	set_redirect(t_argv *argv)
 		}
 		else if (argv->argv[i][0] == '>')
 		{
+			if (!argv->argv[i+1])
+			{
+				error_symbol('\n', 2);
+				return (ERROR);
+			}
 			ltor(argv->argv[i + 1]);
 			i++;
 		}

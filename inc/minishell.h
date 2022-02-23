@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 13:24:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:04:33 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_argv
 	t_bool	is_and; // &&
 	t_bool	is_or; // ||
 	t_bool	is_wildcard; // *
+	t_bool	hav_cmd;
 }	t_argv;
 
 typedef struct s_input
@@ -100,7 +101,7 @@ int		ft_prompt(t_mini *mini);
 
 // ft_parsing
 int		check_stream_symbol(t_list *token_lst);
-void	create_argv_lst(t_list **argv_lst, t_list *token_lst);
+int		create_argv_lst(t_list **argv_lst, t_list *token_lst);
 void	create_token_lst(t_list **lst, char *input, char **envp);
 int		exception_handling(char *input);
 int		ft_parsing(t_mini *mini);
@@ -160,6 +161,7 @@ void	ft_exit(t_argv *argv);
 
 // ft_error
 void	error_symbol(char symbol, int exit_num);
+void	error_symbol2(char *symbol, int exit_num);
 void	error_2(char *cmd, char *argv, char *msg, int exit_num);
 void	error_1(char *cmd, char *msg, int exit_num);
 void	ft_error(char *msg, int exit_num);
@@ -175,7 +177,7 @@ void	argv_free(t_list *lst);
 t_bool	is_valid_symbol(char *str);
 int		stream_flag_str(t_token *token);
 void	token_init(t_token *token);
-void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst);
+int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst);
 void	create_argv(t_argv **argv, t_list *token_lst, \
 					t_list **argv_lst, int size);
 

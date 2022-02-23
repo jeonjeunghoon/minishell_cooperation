@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 10:42:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/17 11:46:32 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 14:31:31 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@ void	error_symbol(char symbol, int exit_num)
 	//printf("minishell: syntax error near unexpected token `%c'\n", symbol);
 	write(2, "minishell: syntax error near unexpected token `", 48);
 	write(2, &symbol, ft_strlen(&symbol));
+	write(2, "'\n", 3);
+	exit_num_set(exit_num);
+}
+
+void	error_symbol2(char *symbol, int exit_num)
+{
+	//printf("minishell: syntax error near unexpected token `%c'\n", symbol);
+	write(2, "minishell: syntax error near unexpected token `", 48);
+	write(2, symbol, ft_strlen(symbol));
 	write(2, "'\n", 3);
 	exit_num_set(exit_num);
 }

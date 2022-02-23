@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utility2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 14:16:26 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 00:46:10 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 14:28:27 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,5 @@ void	argv_init(t_argv *argv)
 	argv->is_and = FALSE;
 	argv->is_or = FALSE;
 	argv->is_wildcard = FALSE;
+	argv->hav_cmd = FALSE;
 }

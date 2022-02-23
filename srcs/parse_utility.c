@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/16 19:17:30 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:09:40 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_bool	is_valid_symbol(char *str)
 {
 	int		len;
+	char	str2[3];
 
 	len = ft_strlen(str);
 	if (len == 1 && str[0] == '&')
@@ -29,7 +30,16 @@ t_bool	is_valid_symbol(char *str)
 	}
 	if (len > 2 || (len == 2 && str[0] != str[1]))
 	{
-		error_symbol(str[len - 1], 258);
+		printf("aaa\n");
+		if(str[0] == str[1] && str[0] == '|')
+		{
+			str[0] = '|';
+			str[1] = '|';
+			str[2] = 0;
+			error_symbol2(str, 258);
+		}
+		else
+			error_symbol(str[len - 1], 258);
 		return (FALSE);
 	}
 	return (TRUE);
@@ -60,7 +70,7 @@ void	token_init(t_token *token)
 	token->double_quote = FALSE;
 }
 
-void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
+int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 {
 	(*stream) = (t_argv *)malloc(sizeof(t_argv));
 	argv_init(*stream);
@@ -84,6 +94,9 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 		(*stream)->is_redirect = FALSE;
 	}
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
+	if (token->token[0] == '|' && token->token[1] == '|')
+		return 1;
+	return 0;
 }
 
 void	check_stream(t_argv *argv, t_list *token_lst, char *str)
