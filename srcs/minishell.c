@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 15:30:01 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:32:03 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,12 +180,12 @@ int	minishell(t_mini *mini)
 		if (argv->is_stream == FALSE)
 		{
 			create_argv_set(&head, &argv);
-			printf("[after create_argv_set]\n");
+			/*printf("[after create_argv_set]\n");
 			char **ptr = argv->argv;
 			int j = 0;
 			while(ptr[j])
 				printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);
-				
+			*/	
 			ft_command(mini, argv);
 			if (head->next)
 				((t_argv *)head->next->content)->hav_cmd = 1;
