@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 15:09:42 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:23:57 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,16 @@ int	refine_str(t_token *token, char **envp)
 int	stream_parse(t_token *token, char *input, int *pos)
 {
 	int	i;
-	int	j;
 	int	len;
 
 	len = *pos;
-	j = -1;
-	while (stream_condition(input[len]) == TRUE && input[len] && ++j != 2)
+	while (is_stream(input[len]) == TRUE && input[len])
 		len++;
 	len = len - *pos;
 	token->token = (char *)malloc(sizeof(char) * (len + 1));
 	token->token[len] = '\0';
 	i = 0;
-	j = -1;
-	while (stream_condition(input[*pos]) == TRUE && input[*pos] && ++j != 2)
+	while (is_stream(input[*pos]) == TRUE && input[*pos])
 	{
 		token->token[i] = input[*pos];
 		i++;
@@ -70,6 +67,7 @@ int	stream_parse(t_token *token, char *input, int *pos)
 	}
 	if (i < len)
 		return (ERROR);
+	token->is_stream = TRUE;
 	return (0);
 }
 
@@ -93,6 +91,7 @@ int	str_parse(t_token *token, char *input, int *pos)
 	}
 	if (i < len)
 		return (ERROR);
+	token->is_stream = FALSE;
 	return (0);
 }
 

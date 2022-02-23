@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 15:32:03 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:35:05 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	combine_argvs(t_argv *argv, t_argv *redirect, t_argv *file)
 
 void	create_argv_set(t_list **head, t_argv **argv)
 {
-	if ((*head)->next == NULL || ((t_argv *)(*head)->next->content)->is_stream == TRUE)
+	if ((*head)->next == NULL)
 		return ;
 	while ((*head)->next != NULL)
 	{
@@ -192,7 +192,7 @@ int	minishell(t_mini *mini)
 		}
 		else if(!argv->hav_cmd)
 		{
-			error_symbol2(argv->argv[0], 2);
+			error_symbol(argv->argv[0], 2);
 			break;
 		}
 		if (argv->is_pipe && head->next->next)

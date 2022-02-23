@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utility2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 14:16:26 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 14:28:27 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:19:26 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

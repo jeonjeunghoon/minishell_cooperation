@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 15:04:33 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:22:42 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,19 @@
 # define BASIC 0
 # define EXECVE 1
 # define HEREDOC 2
+# define LTOR1 1 // >
+# define LTOR2 2 // >>
+# define RTOL1 3 // <
+# define RTOL2 4 // <<
+# define RTOL3 5 // <<<
+# define RL 6 // <>
+# define V1 7 // |
+# define V2 8 // ||
+# define E1 9 // &
+# define E2 10 // &&
+# define LV 11 // >|
+# define LE 12 // >&
+# define RE 13 // <&
 
 int			g_exit_state;
 
@@ -55,6 +68,7 @@ typedef struct s_token
 	char	*token;
 	t_bool	single_quote;
 	t_bool	double_quote;
+	t_bool	is_stream;
 }	t_token;
 
 typedef struct s_argv
@@ -160,8 +174,7 @@ int		exit_exception(int argc, char **argv);
 void	ft_exit(t_argv *argv);
 
 // ft_error
-void	error_symbol(char symbol, int exit_num);
-void	error_symbol2(char *symbol, int exit_num);
+void	error_symbol(char *symbol, int exit_num);
 void	error_2(char *cmd, char *argv, char *msg, int exit_num);
 void	error_1(char *cmd, char *msg, int exit_num);
 void	ft_error(char *msg, int exit_num);
@@ -174,7 +187,7 @@ void	token_free(t_list *lst);
 void	argv_free(t_list *lst);
 
 // parse_utility
-t_bool	is_valid_symbol(char *str);
+t_bool	is_valid_symbol(char *str, char *prev_str, char *next_str);
 int		stream_flag_str(t_token *token);
 void	token_init(t_token *token);
 int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst);
@@ -204,7 +217,7 @@ int		create_refined_str(t_refine *refine);
 char	*get_envname_parse(char *str, int *i);
 void	create_new_str(t_refine *refine, int env_len, char *tmp);
 void	env_str(t_refine *refine);
-t_bool	stream_condition(char c);
+t_bool	is_stream(char ch);
 t_bool	str_condition(char c, t_token *token);
 
 // tokenize_utility3

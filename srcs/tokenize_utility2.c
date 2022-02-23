@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:37:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 13:31:26 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:19:24 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,15 @@ void	env_str(t_refine *refine)
 	refine->j = ft_strlen(refine->new_str);
 }
 
-t_bool	stream_condition(char c)
+t_bool	is_stream(char ch)
 {
-	if (c != '|' && c != '>' && c != '<' && c != '&')
-		return (FALSE);
-	return (TRUE);
+	if (ch == '>' || ch == '<' || ch == '|' || ch == '&')
+		return (TRUE);
+	return (FALSE);
 }
 
 t_bool	str_condition(char c, t_token *token)
 {
-	if (c == '|' || c == '>' || c == '<' || c == '&')
-		return (FALSE);
 	exception_utility(c, &(token->single_quote), &(token->double_quote));
 	if (token->single_quote == FALSE && token->double_quote == FALSE && \
 		c == ' ')

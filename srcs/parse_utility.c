@@ -3,55 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utility.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 15:09:40 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:36:49 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-t_bool	is_valid_symbol(char *str)
-{
-	int		len;
-	char	str2[3];
-
-	len = ft_strlen(str);
-	if (len == 1 && str[0] == '&')
-	{
-		error_1(str, "invalid symbol", 258);
-		return (FALSE);
-	}
-	if (len == 2 && str[0] != str[1])
-	{
-		error_symbol(str[1], 258);
-		return (FALSE);
-	}
-	if (len > 2 || (len == 2 && str[0] != str[1]))
-	{
-		printf("aaa\n");
-		if(str[0] == str[1] && str[0] == '|')
-		{
-			str[0] = '|';
-			str[1] = '|';
-			str[2] = 0;
-			error_symbol2(str, 258);
-		}
-		else
-			error_symbol(str[len - 1], 258);
-		return (FALSE);
-	}
-	return (TRUE);
-}
 
 int	stream_flag_str(t_token *token)
 {
 	int		i;
 	char	*str;
 
-	if (token->single_quote == TRUE || token->double_quote == TRUE)
-		return (0);
+	if (token->single_quote == TRUE || token->double_quote == TRUE || \
+		token->is_stream == FALSE)
+		return (FALSE);
 	i = 0;
 	str = token->token;
 	while (str[i] != '\0')
@@ -60,7 +28,7 @@ int	stream_flag_str(t_token *token)
 			return (TRUE);
 		i++;
 	}
-	return (0);
+	return (FALSE);
 }
 
 void	token_init(t_token *token)
@@ -68,6 +36,7 @@ void	token_init(t_token *token)
 	token->token = NULL;
 	token->single_quote = FALSE;
 	token->double_quote = FALSE;
+	token->is_stream = FALSE;
 }
 
 int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst)

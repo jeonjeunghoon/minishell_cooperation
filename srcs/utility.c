@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utility.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/16 21:37:12 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 13:50:34 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 20:05:53 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	token_free(t_list *lst)
 	t_list	*head;
 	t_token	*token;
 
+	if (lst == NULL)
+		return ;
 	while (lst != NULL)
 	{
 		head = NULL;
@@ -71,6 +73,8 @@ void	argv_free(t_list *lst)
 	t_list	*head;
 	t_argv	*argv;
 
+	if (lst == NULL)
+		return ;
 	while (lst != NULL)
 	{
 		head = NULL;

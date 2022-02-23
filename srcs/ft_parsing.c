@@ -3,30 +3,159 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 15:21:09 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:27:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+int	valid_symbol_list(char *str, int i)
+{
+	// if (str[i] == '<' && str[i + 1] == '<' && str[i + 2] == '<')
+	// 	return (RTOL3);
+	if (str[i] == '>' && str[i + 1] == '>')
+		return (LTOR2);
+	else if (str[i] == '<' && str[i + 1] == '<')
+		return (RTOL2);
+	else if (str[i] == '<' && str[i + 1] == '>')
+		return (RL);
+	else if (str[i] == '|' && str[i + 1] == '|')
+		return (V2);
+	else if (str[i] == '&' && str[i + 1] == '&')
+		return (E2);
+	else if (str[i] == '>' && str[i + 1] == '|')
+		return (LV);
+	else if (str[i] == '>' && str[i + 1] == '&')
+		return (LE);
+	else if (str[i] == '<' && str[i + 1] == '&')
+		return (RE);
+	else if (str[i] == '>')
+		return (LTOR1);
+	else if (str[i] == '<')
+		return (RTOL1);
+	else if (str[i] == '|')
+		return (V1);
+	else if (str[i] == '&')
+		return (E1);
+	return (0);
+}
+
+t_bool	is_valid_symbol(char *str, char *prev_str, char *next_str)
+{
+	int	i;
+	int	symbol;
+	int	near_symbol;
+
+	near_symbol = 0;
+	symbol = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (symbol != 0)
+		{
+			near_symbol = valid_symbol_list(str, i);
+			break ;
+		}
+		symbol = valid_symbol_list(str, i);
+		if (symbol == RTOL3)
+			i += 2;
+		else if (symbol == LTOR2 || symbol == RTOL2 || symbol == RL || \
+				symbol == V2 || symbol == E2 || symbol == LV || \
+				symbol == LE || symbol == RE)
+			i += 1;
+		i++;
+	}
+	if (prev_str == NULL && \
+		(symbol == V1 || symbol == V2 || symbol == E1 || symbol == E2))
+	{
+		if (symbol == V1)
+			error_symbol("|", 258);
+		else if (symbol == V2)
+			error_symbol("||", 258);
+		else if (symbol == E1)
+			error_symbol("&", 258);
+		else if (symbol == E2)
+			error_symbol("&&", 258);
+		return (FALSE);
+	}
+	else if (next_str == NULL)
+	{
+		if (symbol == V1)
+			error_symbol("|", 258);
+		else if (symbol == V2)
+			error_symbol("||", 258);
+		else if (symbol == E1)
+			error_symbol("&", 258);
+		else if (symbol == E2)
+			error_symbol("&&", 258);
+		else
+			error_symbol("newline", 258);
+		return (FALSE);
+	}
+	else if (near_symbol != 0)
+	{
+		if (near_symbol == LTOR1)
+			error_symbol(">", 258);
+		else if (near_symbol == LTOR2)
+			error_symbol(">>", 258);
+		else if (near_symbol == RTOL1)
+			error_symbol("<", 258);
+		else if (near_symbol == RTOL2)
+			error_symbol("<<", 258);
+		else if (near_symbol == RTOL3)
+			error_symbol("<<<", 258);
+		else if (near_symbol == RL)
+			error_symbol("<>", 258);
+		else if (near_symbol == V1)
+			error_symbol("|", 258);
+		else if (near_symbol == V2)
+			error_symbol("||", 258);
+		else if (near_symbol == E1)
+			error_symbol("&", 258);
+		else if (near_symbol == E2)
+			error_symbol("&&", 258);
+		else if (near_symbol == LV)
+			error_symbol(">|", 258);
+		else if (near_symbol == LE)
+			error_symbol(">&", 258);
+		else if (near_symbol == RE)
+			error_symbol("<&", 258);
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
 int	check_stream_symbol(t_list *token_lst)
 {
 	t_list	*head;
 	char	*str;
+	char	*prev_str;
+	char	*next_str;
 
 	head = token_lst;
+	str = NULL;
+	prev_str = ((t_token *)head->content)->token;
+	next_str = NULL;
 	while (head != NULL)
 	{
 		str = ((t_token *)head->content)->token;
-		if (str[0] == '|' || str[0] == '>' || str[0] == '<' || str[0] == '&')
+		if (str == NULL)
+			return (ERROR);
+		if (is_stream(str[0]) && ((t_token *)head->content)->is_stream == TRUE)
 		{
-			if (is_valid_symbol(str) == FALSE)
+			if (prev_str == str)
+				prev_str = NULL;
+			if (head->next != NULL)
+				next_str = ((t_token *)head->next->content)->token;
+			if (is_valid_symbol(str, prev_str, next_str) == FALSE)
 				return (ERROR);
 		}
 		head = head->next;
+		str = NULL;
+		next_str = NULL;
 	}
 	return (0);
 }
@@ -59,9 +188,9 @@ int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
 				while(((t_token *)token_lst->content)->token[i] == '|' && i !=2)
 					i++;
 				if (i == 2)
-					error_symbol2("||", 2);
+					error_symbol("||", 2);
 				else
-					error_symbol2("|", 2);
+					error_symbol("|", 2);
 				return (ERROR);
 			}
 			if (size != 0)

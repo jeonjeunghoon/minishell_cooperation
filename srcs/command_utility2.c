@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_utility2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 14:26:39 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 21:44:19 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	set_redirect(t_argv *argv)
 		{
 			if (!argv->argv[i+1])
 			{
-				error_symbol('\n', 2);
+				error_symbol("\n", 2);
 				return (ERROR);
 			}
 			ltor(argv->argv[i + 1]);
@@ -144,7 +144,9 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
 			close_original_fd(argv, original_fd);
-			if (errno == 2)
+			if (cmd_path[0] == '/')
+				error_1(cmd_path, "No such file or directory", 127);
+			else if (errno == 2)
 				error_1(cmd_path, "command not found", 127);
 			else if (errno == 13)
 				error_1(cmd_path, "is a directory", 126);
