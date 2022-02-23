@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 21:35:05 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/24 04:35:17 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,51 @@ int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 	return (TRUE);
 }
 
-int	ft_command(t_mini *mini, t_argv *argv)
+int	ft_command(t_mini *mini, t_argv *argv, t_bool next)
 {
-	char		*cmd_path;
+	char	*cmd_path;
+	pid_t	pid;
+	int		stat_loc;
 
 	cmd_path = NULL;
-	if (mini_command(mini, argv->argv[0], argv) == FALSE)
+	if (argv->is_pipe == TRUE || argv->was_pipe == TRUE)
 	{
-		create_cmdpath(mini, argv->argv[0], &cmd_path);
-		exe_cmd(cmd_path, argv, mini->path);
-		ft_free(&cmd_path);
+		if (pipe(argv->stream_fd) == ERROR)
+			return (ERROR);
+	}
+	pid = fork();
+	if (pid > 0)
+	{
+		waitpid(pid, &stat_loc, 0x00000002);
+		if (argv->is_pipe == TRUE)
+		{
+			close(argv->stream_fd[1]);
+			if (next == FALSE)
+				close(argv->stream_fd[0]);
+		}
+		else if (argv->was_pipe == TRUE)
+			close(argv->stream_fd[0]);
+		exit_num_set(ft_wexitstatus(stat_loc));
+	}
+	else if (pid == 0)
+	{
+		if (argv->is_pipe == TRUE)
+		{
+			dup2(argv->stream_fd[1], STDOUT_FILENO);
+		}
+		else if (argv->was_pipe == TRUE)
+		{
+			dup2(argv->stream_fd[0], STDIN_FILENO);
+		}
+		if (set_redirect(argv) == ERROR)
+			return (ERROR);
+		if (mini_command(mini, argv->argv[0], argv) == FALSE)
+		{
+			create_cmdpath(mini, argv->argv[0], &cmd_path);
+			exe_cmd(cmd_path, argv, mini->path);
+			ft_free(&cmd_path);
+		}
+		exit(g_exit_state);
 	}
 	return (0);
 }
@@ -173,6 +208,7 @@ int	minishell(t_mini *mini)
 		printf("\n");
 		head = head->next;
 	}*/
+	set_original_fd(mini, argv);
 	head = mini->input->argv_lst;
 	while (head != NULL)
 	{
@@ -185,8 +221,12 @@ int	minishell(t_mini *mini)
 			int j = 0;
 			while(ptr[j])
 				printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);
-			*/	
-			ft_command(mini, argv);
+			*/
+			t_bool next;
+			next = TRUE;
+			if (head->next == NULL)
+				next = FALSE;
+			ft_command(mini, argv, next);
 			if (head->next)
 				((t_argv *)head->next->content)->hav_cmd = 1;
 		}
@@ -219,5 +259,6 @@ int	minishell(t_mini *mini)
 		head = head->next;
 		argv = NULL;
 	}
+	close_original_fd(mini, argv);
 	return (0);
 }

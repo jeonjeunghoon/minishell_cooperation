@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/17 11:10:14 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/24 04:03:02 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,49 +90,30 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 	char	*path;
 	char	*old_pwd;
 	int		i;
-	int		stat_loc;
-	pid_t	pid;
-	int		original_fd[2];
 	int		error_fd;
 
 	exit_num_set(0);
-	set_original_fd(argv, original_fd);
-	when_there_is_pipe(argv);
-	if (set_redirect(argv) == ERROR)
-		exit(g_exit_state);
-	pid = fork();
-	if (pid > 0)
+	if(!argv->is_or)
 	{
-		waitpid(pid, &stat_loc, 0x00000002);
-		pipe_tmp_copy(argv);
-		close_original_fd(argv, original_fd);
-		exit_num_set(ft_wexitstatus(stat_loc));
+		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+		dup2(error_fd, 2);
+		close(error_fd);
 	}
-	else if (pid == 0)
+	path = NULL;
+	i = 1;
+	old_pwd = ft_getenv(mini->envp, "PWD");
+	while (argv->argv[i])
 	{
-		if(!argv->is_or)
+		path = get_path(mini->envp, argv->argv[i]);
+		if (path != NULL)
 		{
-			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(error_fd, 2);
-			close(error_fd);
+			if (check_path(path) == ERROR)
+				exit(g_exit_state);
+			break;
 		}
-		path = NULL;
-		i = 1;
-		old_pwd = ft_getenv(mini->envp, "PWD");
-		while (argv->argv[i])
-		{
-			path = get_path(mini->envp, argv->argv[i]);
-			if (path != NULL)
-			{
-				if (check_path(path) == ERROR)
-					exit(g_exit_state);
-				break;
-			}
-			i++;
-		}
-		if (go_to_home(mini->envp, path) == ERROR)
-			exit(g_exit_state);
-		set_env_cd(mini, old_pwd);
-		exit(g_exit_state);
+		i++;
 	}
+	if (go_to_home(mini->envp, path) == ERROR)
+		exit(g_exit_state);
+	set_env_cd(mini, old_pwd);
 }

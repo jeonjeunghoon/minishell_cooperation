@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 21:44:19 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/24 04:26:51 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,9 @@ int	set_redirect(t_argv *argv)
 	i = 0;
 	while (argv->argv[i])
 	{
-		
 		if (argv->argv[i][0] == '>' && argv->argv[i][1] == '>')
 		{
-			append(argv->argv[i + 1]);
+			append(argv, argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '>')
@@ -79,17 +78,17 @@ int	set_redirect(t_argv *argv)
 				error_symbol("\n", 2);
 				return (ERROR);
 			}
-			ltor(argv->argv[i + 1]);
+			ltor(argv, argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '<' && argv->argv[i][1] == '<')
 		{
-			heredoc(argv->argv[i + 1]);
+			heredoc(argv, argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '<')
 		{
-			if (rtol(argv->argv[i + 1]) == ERROR)
+			if (rtol(argv, argv->argv[i + 1]) == ERROR)
 				return (ERROR);
 			i++;
 		}
@@ -103,27 +102,21 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 {
 	pid_t	pid;
 	int		stat_loc;
-	int		original_fd[2];
 	t_bool	sig_flag;
 	int		error_fd;
 
-	set_original_fd(argv, original_fd);
-	when_there_is_pipe(argv);
-	if (set_redirect(argv) == ERROR)
-		return ;
 	ft_signal(EXECVE);
-	pid = fork();
-	if (pid > 0)
-	{
-		waitpid(pid, &stat_loc, 0x00000002);
-		pipe_tmp_copy(argv);
-		close_original_fd(argv, original_fd);
-		unlink(".heredoc_tmp");
-		if (ft_wifexited(stat_loc) == TRUE)
-			exit_num_set(ft_wstopsig(stat_loc));
-	}
-	else if (pid == 0)
-	{
+	// pid = fork();
+	// if (pid > 0)
+	// {
+		// waitpid(pid, &stat_loc, 0x00000002);
+		// pipe_tmp_copy(argv);
+	// 	unlink(".heredoc_tmp");
+	// 	if (ft_wifexited(stat_loc) == TRUE)
+	// 		exit_num_set(ft_wstopsig(stat_loc));
+	// }
+	// else if (pid == 0)
+	// {
 		// if (!argv->is_or)
 		// {
 		// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -143,7 +136,6 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 		}
 		if (execve(cmd_path, argv->argv, envp) == -1)
 		{
-			close_original_fd(argv, original_fd);
 			if (cmd_path[0] == '/')
 				error_1(cmd_path, "No such file or directory", 127);
 			else if (errno == 2)
@@ -152,7 +144,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 				error_1(cmd_path, "is a directory", 126);
 			else
 				ft_error(strerror(errno), 1);
-			exit(g_exit_state);
+			// exit(g_exit_state);
 		}
-	}
+	// }
 }

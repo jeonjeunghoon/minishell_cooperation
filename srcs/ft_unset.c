@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/17 11:11:22 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/24 04:06:41 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,26 +122,23 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	int		size;
 	int		*position;
 	char	**new;
-	int		stat_loc;
-	pid_t	pid;
-	int		original_fd[2];
 	int		error_fd;
 
 	exit_num_set(0);
-	set_original_fd(argv, original_fd);
-	when_there_is_pipe(argv);
-	if (set_redirect(argv) == ERROR)
-		exit(g_exit_state);
-	pid = fork();
-	if (pid > 0)
-	{
-		waitpid(pid, &stat_loc, 0x00000002);
-		pipe_tmp_copy(argv);
-		close_original_fd(argv, original_fd);
-		exit_num_set(ft_wexitstatus(stat_loc));
-	}
-	else if (pid == 0)
-	{
+	// // set_original_fd(argv, original_fd);
+	// // when_there_is_pipe(argv);
+	// // if (set_redirect(argv) == ERROR)
+	// // 	exit(g_exit_state);
+	// pid = fork();
+	// if (pid > 0)
+	// {
+	// 	waitpid(pid, &stat_loc, 0x00000002);
+	// 	// pipe_tmp_copy(argv);
+	// 	// close_original_fd(argv, original_fd);
+	// 	exit_num_set(ft_wexitstatus(stat_loc));
+	// }
+	// else if (pid == 0)
+	// {
 		if (!argv->is_or)
 		{
 			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -165,6 +162,6 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 				position = NULL;
 			}
 		}
-		exit(g_exit_state);
-	}
+	// 	exit(g_exit_state);
+	// }
 }
