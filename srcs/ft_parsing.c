@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 15:14:28 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:21:09 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
 	t_argv	*str;
 	t_argv	*stream;
 	t_list	*head;
+	int		i;
 
 	argv_lst_init(&str, &stream, &size);
 	head = token_lst;
@@ -54,7 +55,13 @@ int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
 		{
 			if (is_or)
 			{
-				error_symbol2("||", 2);
+				i = 0;
+				while(((t_token *)token_lst->content)->token[i] == '|' && i !=2)
+					i++;
+				if (i == 2)
+					error_symbol2("||", 2);
+				else
+					error_symbol2("|", 2);
 				return (ERROR);
 			}
 			if (size != 0)
