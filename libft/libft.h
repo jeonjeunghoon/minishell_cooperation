@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:32:22 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/14 17:09:45 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/24 13:55:50 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char				**ft_strsdup(char **strs);
 typedef struct s_list
 {
 	void			*content;
+	struct s_list	*pre;
 	struct s_list	*next;
 }	t_list;
 
