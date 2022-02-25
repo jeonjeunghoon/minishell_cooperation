@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 04:26:51 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 00:21:53 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	remove_redirection(t_argv *argv)
 	argv->argv = new_argv;
 }
 
-int	set_redirect(t_argv *argv)
+int	set_redirect(t_mini *mini, t_argv *argv)
 {
 	int		i;
 
@@ -68,27 +68,27 @@ int	set_redirect(t_argv *argv)
 	{
 		if (argv->argv[i][0] == '>' && argv->argv[i][1] == '>')
 		{
-			append(argv, argv->argv[i + 1]);
+			append(mini, argv, argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '>')
 		{
-			if (!argv->argv[i+1])
-			{
-				error_symbol("\n", 2);
-				return (ERROR);
-			}
-			ltor(argv, argv->argv[i + 1]);
+			// if (!argv->argv[i+1])
+			// {
+			// 	error_symbol("\n", 2);
+			// 	return (ERROR);
+			// }
+			ltor(mini, argv, argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '<' && argv->argv[i][1] == '<')
 		{
-			heredoc(argv, argv->argv[i + 1]);
+			heredoc(mini, argv, argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '<')
 		{
-			if (rtol(argv, argv->argv[i + 1]) == ERROR)
+			if (rtol(mini, argv, argv->argv[i + 1]) == ERROR)
 				return (ERROR);
 			i++;
 		}

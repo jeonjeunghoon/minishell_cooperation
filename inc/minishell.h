@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 04:27:26 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 00:21:49 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@
 # define LV 11 // >|
 # define LE 12 // >&
 # define RE 13 // <&
+# define WRITE 1
+# define READ 0
 
 int			g_exit_state;
 
@@ -74,7 +76,6 @@ typedef struct s_token
 typedef struct s_argv
 {
 	char	**argv;
-	int		stream_fd[2];
 	int		redirect_stream;
 	t_bool	is_redirect;
 	t_bool	is_stream;
@@ -102,6 +103,7 @@ typedef struct s_mini
 	struct termios	term;
 	t_bool			sig_flag;
 	int				origin_fd[2];
+	int				stream_fd[2];
 }	t_mini;
 
 // main
@@ -129,7 +131,7 @@ void	ft_signal(int sig_flag);
 
 // minishell
 int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
-int		ft_command(t_mini *mini, t_argv *argv, t_bool next);
+int		ft_command(t_mini *mini, t_argv *argv);
 int		set_stream(t_list *head);
 int		minishell(t_mini *mini);
 
@@ -246,12 +248,12 @@ void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path);
 // command_utility2
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
-int		set_redirect(t_argv *argv);
+int		set_redirect(t_mini *mini, t_argv *argv);
 void	exe_cmd(char *cmd_path, t_argv *argv, char **envp);
 
 // command_utility3
-void	set_original_fd(t_mini *mini, t_argv *argv);
-void	close_original_fd(t_mini *mini, t_argv *argv);
+void	set_original_fd(t_mini *mini);
+void	close_original_fd(t_mini *mini);
 
 // ft_pipe
 t_bool	when_there_is_pipe(t_mini *mini, t_argv *argv);
@@ -263,10 +265,10 @@ int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
 
 // redirect_utility
-int		heredoc(t_argv *argv, char *delimiter);
-int		append(t_argv *argv, char *file);
-int		rtol(t_argv *argv, char *file);
-int		ltor(t_argv *argv, char *file);
+int		heredoc(t_mini *mini, t_argv *argv, char *delimiter);
+int		append(t_mini *mini, t_argv *argv, char *file);
+int		rtol(t_mini *mini, t_argv *argv, char *file);
+int		ltor(t_mini *mini, t_argv *argv, char *file);
 
 //fd_copy
 void fd_copy(int fd, int fd2);

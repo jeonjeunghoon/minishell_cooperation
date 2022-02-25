@@ -6,13 +6,13 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:54:20 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 04:26:07 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 00:13:16 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	heredoc(t_argv *argv, char *delimiter)
+int	heredoc(t_mini *mini, t_argv *argv, char *delimiter)
 {
 	int		fd;
 	char	*input;
@@ -44,27 +44,27 @@ int	heredoc(t_argv *argv, char *delimiter)
 		error_1(".heredoc_tmp", "No such file or directory", 1);
 		return (ERROR);
 	}
-	dup2(fd, argv->stream_fd[0]);
+	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (0);
 }
 
-int	append(t_argv *argv, char *file)
+int	append(t_mini *mini, t_argv *argv, char *file)
 {
 	int 	fd;
-	
+
 	fd = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (fd == ERROR)
 	{
 		error_1(file, "No such file or directory", 1);
 		return (ERROR);
 	}
-	dup2(fd, argv->stream_fd[1]);
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (0);
 }
 
-int	rtol(t_argv *argv, char *file)
+int	rtol(t_mini *mini, t_argv *argv, char *file)
 {
 	int 	fd;
 
@@ -74,12 +74,12 @@ int	rtol(t_argv *argv, char *file)
 		error_1(file, "No such file or directory", 1);
 		return (ERROR);
 	}
-	dup2(fd, argv->stream_fd[0]);
+	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (0);
 }
 
-int	ltor(t_argv *argv, char *file)
+int	ltor(t_mini *mini, t_argv *argv, char *file)
 {
 	int 	fd;
 
@@ -89,7 +89,7 @@ int	ltor(t_argv *argv, char *file)
 		error_1(file, "No such file or directory", 1);
 		return (ERROR);
 	}
-	dup2(fd, argv->stream_fd[1]);
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 16:04:51 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 14:06:26 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/24 22:28:13 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		*lst = new;
 		new->next = NULL;
 		new->pre = NULL;
-		//return ;
 	}
 	else
 	{
@@ -33,5 +32,4 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		new->pre = tail;
 		new->next = NULL;
 	}
-	printf("pre:%p new:%p\n", new->pre, new);
 }
