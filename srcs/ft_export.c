@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 04:05:33 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 20:04:30 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,6 @@ char	*get_envname_export(char *argv)
 		i++;
 	}
 	return (res);
-}
-
-int	is_valid_export(char *argv, int i)
-{
-	if ((argv[i] != '_' && argv[0] == '=' \
-		&& !(argv[i] >= 'a' && argv[i] <= 'z') \
-		&& !(argv[i] >= 'A' && argv[i] <= 'Z') \
-		&& !(argv[i] >= '0' && argv[i] <= '9')) \
-		|| (argv[0] >= '0' && argv[0] <= '9'))
-		return (ERROR);
-	return (0);
 }
 
 char	**create_export_envp(char **envp, char *env)
@@ -73,18 +62,28 @@ char	**create_export_envp(char **envp, char *env)
 	return (new);
 }
 
+int	is_valid_export(char *argv, int i)
+{
+	if (argv[0] == '=' || (argv[0] >= '0' && argv[0] <= '9'))
+		return (ERROR);
+	if (argv[i] == '_' || argv[i] == '='\
+		|| (argv[i] >= 'a' && argv[i] <= 'z') \
+		|| (argv[i] >= 'A' && argv[i] <= 'Z') \
+		|| (argv[i] >= '0' && argv[i] <= '9'))
+		return (0);
+	return (ERROR);
+}
+
 int	check_export_argv(char *argv)
 {
 	int		i;
 	t_bool	is_env;
 	char	*error_msg;
 
-	i = 0;
 	is_env = FALSE;
-	while (argv[i])
+	i = 0;
+	while (argv[i] && is_env == FALSE)
 	{
-		if (argv[i] == '=')
-			is_env++;
 		if (is_valid_export(argv, i) == ERROR)
 		{
 			error_msg = ft_strjoin_bothside("`", argv, "'");
@@ -92,6 +91,8 @@ int	check_export_argv(char *argv)
 			free(error_msg);
 			return (ERROR);
 		}
+		if (argv[i] == '=')
+			is_env = TRUE;
 		i++;
 	}
 	if (is_env == FALSE)
@@ -106,34 +107,26 @@ void	ft_export(t_mini *mini, t_argv *argv)
 	int		error_fd;
 
 	exit_num_set(0);
-
-	// 	// if (ft_two_dimension_size(argv->argv) > 1)
-	// 	// 	set_envp(&mini->envp);
-		if (!argv->is_or)
+	// if (!argv->is_or)
+	// {
+	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	// 	dup2(error_fd, 2);
+	// 	close(error_fd);
+	// }
+	if (ft_two_dimension_size(argv->argv) > 1)
+	{
+		i = 1;
+		while (argv->argv[i])
 		{
-			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(error_fd, 2);
-			close(error_fd);
-		}
-		if (ft_two_dimension_size(argv->argv) > 1)
-		{
-			i = 1;
-			while (argv->argv[i])
+			if (check_export_argv(argv->argv[i]) != ERROR)
 			{
-				if (check_export_argv(argv->argv[i]) != ERROR)
-				{
-					new_envp = create_export_envp(mini->envp, argv->argv[i]);
-					ft_two_dimension_free(&(mini->envp));
-					mini->envp = new_envp;
-				}
-				i++;
+				new_envp = create_export_envp(mini->envp, argv->argv[i]);
+				ft_two_dimension_free(&(mini->envp));
+				mini->envp = new_envp;
 			}
-			// create_export_tmp(mini->envp);
+			i++;
 		}
-		else
-			ft_env(mini, argv);
-		// if (argv->is_pipe == TRUE || argv->was_pipe == TRUE)
-		// 	exit(g_exit_state);
-		// else
-		// 	close_original_fd(argv, original_fd);
+	}
+	else
+		ft_env(mini, argv);
 }

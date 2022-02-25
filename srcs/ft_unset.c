@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 04:06:41 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 18:15:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,8 @@ int	check_unset_argv(char **argv, int *size)
 		j = -1;
 		while (argv[i][++j])
 		{
-			if ((argv[i][j] != '_' && !(argv[i][j] >= 'a' && argv[i][j] <= 'z') \
+			if ((argv[i][j] != '_' \
+				&& !(argv[i][j] >= 'a' && argv[i][j] <= 'z') \
 				&& !(argv[i][j] >= 'A' && argv[i][j] <= 'Z') \
 				&& !(argv[i][j] >= '0' && argv[i][j] <= '9')) \
 				|| (argv[i][0] >= '0' && argv[i][0] <= '9'))
@@ -125,43 +126,27 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	int		error_fd;
 
 	exit_num_set(0);
-	// // set_original_fd(argv, original_fd);
-	// // when_there_is_pipe(argv);
-	// // if (set_redirect(argv) == ERROR)
-	// // 	exit(g_exit_state);
-	// pid = fork();
-	// if (pid > 0)
+	// if (!argv->is_or)
 	// {
-	// 	waitpid(pid, &stat_loc, 0x00000002);
-	// 	// pipe_tmp_copy(argv);
-	// 	// close_original_fd(argv, original_fd);
-	// 	exit_num_set(ft_wexitstatus(stat_loc));
+	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	// 	dup2(error_fd, 2);
+	// 	close(error_fd);
 	// }
-	// else if (pid == 0)
-	// {
-		if (!argv->is_or)
+	size = ft_two_dimension_size(argv->argv) - 1;
+	if (ft_two_dimension_size(argv->argv) > 1)
+	{
+		if (check_unset_argv(argv->argv, &size) == ERROR)
+			exit(g_exit_state);
+		if (size != 0)
 		{
-			error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(error_fd, 2);
-			close(error_fd);
+			position_init(&position, &size, mini->envp, argv->argv);
+			get_position(position, mini->envp, argv->argv);
+			size = ft_two_dimension_size(mini->envp) - ft_numlen(position);
+			new = create_unset_envp(mini->envp, position, size);
+			ft_two_dimension_free(&(mini->envp));
+			mini->envp = new;
+			free(position);
+			position = NULL;
 		}
-		size = ft_two_dimension_size(argv->argv) - 1;
-		if (ft_two_dimension_size(argv->argv) > 1)
-		{
-			if (check_unset_argv(argv->argv, &size) == ERROR)
-				exit(g_exit_state);
-			if (size != 0)
-			{
-				position_init(&position, &size, mini->envp, argv->argv);
-				get_position(position, mini->envp, argv->argv);
-				size = ft_two_dimension_size(mini->envp) - ft_numlen(position);
-				new = create_unset_envp(mini->envp, position, size);
-				ft_two_dimension_free(&(mini->envp));
-				mini->envp = new;
-				free(position);
-				position = NULL;
-			}
-		}
-	// 	exit(g_exit_state);
-	// }
+	}
 }

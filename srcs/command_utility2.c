@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 00:21:53 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 20:44:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,25 +98,25 @@ int	set_redirect(t_mini *mini, t_argv *argv)
 	return (0);
 }
 
-void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
+void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, char **envp, t_bool is_child)
 {
 	pid_t	pid;
 	int		stat_loc;
 	t_bool	sig_flag;
 	int		error_fd;
 
-	ft_signal(EXECVE);
-	// pid = fork();
-	// if (pid > 0)
-	// {
-		// waitpid(pid, &stat_loc, 0x00000002);
-		// pipe_tmp_copy(argv);
-	// 	unlink(".heredoc_tmp");
-	// 	if (ft_wifexited(stat_loc) == TRUE)
-	// 		exit_num_set(ft_wstopsig(stat_loc));
-	// }
-	// else if (pid == 0)
-	// {
+	pid = 0;
+	if (is_child == FALSE)
+		pid = fork();
+	if (pid > 0)
+	{
+		waitpid(pid, &stat_loc, 0x00000002);
+		unlink(".heredoc_tmp");
+		if (ft_wifexited(stat_loc) == TRUE)
+			exit_num_set(ft_wstopsig(stat_loc));
+	}
+	else if (pid == 0)
+	{
 		// if (!argv->is_or)
 		// {
 		// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -134,7 +134,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 			exit_num_set(0);
 			exit(g_exit_state);
 		}
-		if (execve(cmd_path, argv->argv, envp) == -1)
+		if (execve(cmd_path, argv->argv, envp) == ERROR)
 		{
 			if (cmd_path[0] == '/')
 				error_1(cmd_path, "No such file or directory", 127);
@@ -144,7 +144,7 @@ void	exe_cmd(char *cmd_path, t_argv *argv, char **envp)
 				error_1(cmd_path, "is a directory", 126);
 			else
 				ft_error(strerror(errno), 1);
-			// exit(g_exit_state);
+			exit(g_exit_state);
 		}
-	// }
+	}
 }

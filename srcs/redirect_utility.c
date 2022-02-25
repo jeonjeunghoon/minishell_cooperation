@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:54:20 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 00:13:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 20:38:05 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	append(t_mini *mini, t_argv *argv, char *file)
 {
 	int 	fd;
 
-	fd = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
+	fd = open(file, O_RDWR | O_APPEND, 0644);
 	if (fd == ERROR)
 	{
 		error_1(file, "No such file or directory", 1);
@@ -83,7 +83,7 @@ int	ltor(t_mini *mini, t_argv *argv, char *file)
 {
 	int 	fd;
 
-	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(file, O_WRONLY | O_TRUNC, 0644);
 	if (fd == ERROR)
 	{
 		error_1(file, "No such file or directory", 1);

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 13:57:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 04:05:52 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 20:07:27 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ void	ft_pwd(t_argv *argv)
 	if (cwd)
 		printf("%s\n", cwd);
 	else if (cwd == NULL)
-	{
 		error_2(argv->argv[0], argv->argv[1], strerror(errno), 1);
-		free(cwd);
-	}
 	free(cwd);
 	cwd = NULL;
 }

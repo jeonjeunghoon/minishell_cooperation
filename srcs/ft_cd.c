@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 04:03:02 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 20:06:30 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,12 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 	int		error_fd;
 
 	exit_num_set(0);
-	if(!argv->is_or)
-	{
-		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-		dup2(error_fd, 2);
-		close(error_fd);
-	}
+	// if(!argv->is_or)
+	// {
+	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	// 	dup2(error_fd, 2);
+	// 	close(error_fd);
+	// }
 	path = NULL;
 	i = 1;
 	old_pwd = ft_getenv(mini->envp, "PWD");

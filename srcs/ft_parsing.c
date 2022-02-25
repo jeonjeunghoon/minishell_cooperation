@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 14:05:01 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/02/25 20:38:19 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,18 @@ t_bool	is_valid_symbol(char *str, char *prev_str, char *next_str)
 		else if (near_symbol == RE)
 			error_symbol("<&", 258);
 		return (FALSE);
+	}
+	if ((symbol == LTOR1 || symbol == LTOR2 || symbol == RL || symbol == LV || symbol == LE) && next_str != NULL)
+	{
+		int	fd;
+
+		fd = open(next_str, O_CREAT | O_TRUNC, 0644);
+		if (fd == ERROR)
+		{
+			error_1(next_str, "Create file error!", 1);
+			exit(g_exit_state);	
+		}
+		close(fd);
 	}
 	return (TRUE);
 }

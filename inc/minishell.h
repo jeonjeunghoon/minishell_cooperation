@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 00:21:49 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 20:42:23 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ typedef struct s_mini
 	struct termios	term;
 	t_bool			sig_flag;
 	int				origin_fd[2];
-	int				stream_fd[2];
+	int				pipe_fd[2];
 }	t_mini;
 
 // main
@@ -152,14 +152,10 @@ void	ft_pwd(t_argv *argv);
 
 // ft_export
 char	*get_envname_export(char *argv);
-int		is_valid_export(char *argv, int i);
 char	**create_export_envp(char **envp, char *env);
+int		is_valid_export(char *argv, int i);
 int		check_export_argv(char *argv);
 void	ft_export(t_mini *mini, t_argv *argv);
-
-// export_utility.c
-void	set_envp(char ***envp);
-void	create_export_tmp(char **envp);
 
 // ft_unset
 char	**create_unset_envp(char **envp, int *position, int size);
@@ -249,7 +245,7 @@ void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path);
 t_bool	ft_s_isreg(int mode);
 t_bool	ft_s_isdir(int mode);
 int		set_redirect(t_mini *mini, t_argv *argv);
-void	exe_cmd(char *cmd_path, t_argv *argv, char **envp);
+void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, char **envp, t_bool is_child);
 
 // command_utility3
 void	set_original_fd(t_mini *mini);
