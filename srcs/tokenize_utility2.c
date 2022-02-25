@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:37:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 21:19:24 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/25 21:00:21 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ t_bool	str_condition(char c, t_token *token)
 	exception_utility(c, &(token->single_quote), &(token->double_quote));
 	if (token->single_quote == FALSE && token->double_quote == FALSE && \
 		c == ' ')
+		return (FALSE);
+	if (is_stream(c) == TRUE)
 		return (FALSE);
 	return (TRUE);
 }

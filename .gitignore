@@ -4,3 +4,4 @@ pipe_tmp*
 .vscode
 *.pdf
 *.a
+minishell-tester
