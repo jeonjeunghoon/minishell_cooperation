@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 18:36:45 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 20:20:06 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	clear_resource(t_mini *mini)
 	ft_free(&mini->input->user_input);
 	g_sig->signum = 0;
 	g_sig->type = BASIC;
+	unlink(".heredoc_tmp");
+	unlink(".error_tmp");
 }
 
 void	minishell_init(t_mini *mini)
@@ -30,6 +32,8 @@ void	minishell_init(t_mini *mini)
 	mini->input->user_input = NULL;
 	g_sig->signum = 0;
 	g_sig->type = BASIC;
+	unlink(".heredoc_tmp");
+	unlink(".error_tmp");
 }
 
 int	terminal_setting(t_mini *mini)
