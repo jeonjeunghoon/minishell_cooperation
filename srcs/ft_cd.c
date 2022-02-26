@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 20:06:30 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 14:52:19 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ void	set_env_cd(t_mini *mini, char *old_pwd)
 	argv = NULL;
 }
 
-int	go_to_home(char **envp, char *path)
+int	go_to_home(t_mini *mini, char **envp, char *path)
 {
 	if (path == NULL)
 	{
 		path = ft_getenv(envp, "HOME");
 		if (path == NULL)
 		{
-			error_2("cd", "HOME", "not set", 1);
+			error_2(mini, "cd", "HOME", "not set", 1);
 			return (ERROR);
 		}
 		else
@@ -58,11 +58,11 @@ int	go_to_home(char **envp, char *path)
 	return (0);
 }
 
-int	check_path(char *path)
+int	check_path(t_mini *mini, char *path)
 {
 	if (chdir(path) == ERROR)
 	{
-		error_2("cd", path, strerror(errno), 1);
+		error_2(mini, "cd", path, strerror(errno), 1);
 		return (ERROR);
 	}
 	return (0);
@@ -92,7 +92,7 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 	int		i;
 	int		error_fd;
 
-	exit_num_set(0);
+	exit_num_set(mini, 0);
 	// if(!argv->is_or)
 	// {
 	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -107,13 +107,13 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 		path = get_path(mini->envp, argv->argv[i]);
 		if (path != NULL)
 		{
-			if (check_path(path) == ERROR)
-				exit(g_exit_state);
+			if (check_path(mini, path) == ERROR)
+				exit(mini->sig->exitnum);
 			break;
 		}
 		i++;
 	}
-	if (go_to_home(mini->envp, path) == ERROR)
-		exit(g_exit_state);
+	if (go_to_home(mini, mini->envp, path) == ERROR)
+		exit(mini->sig->exitnum);
 	set_env_cd(mini, old_pwd);
 }

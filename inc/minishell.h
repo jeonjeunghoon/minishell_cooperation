@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 20:42:23 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 18:35:30 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include <readline/readline.h>
+# include </opt/homebrew/opt/readline/include/readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
@@ -30,9 +30,9 @@
 # include <term.h>
 # include <curses.h>
 
-# define BASIC 0
-# define EXECVE 1
-# define HEREDOC 2
+# define BASIC 1
+# define EXECVE 2
+# define HEREDOC 3
 # define LTOR1 1 // >
 # define LTOR2 2 // >>
 # define RTOL1 3 // <
@@ -49,7 +49,14 @@
 # define WRITE 1
 # define READ 0
 
-int			g_exit_state;
+typedef struct s_sig
+{
+	int		type;
+	int		signum;
+	int		exitnum;
+}	t_sig;
+
+t_sig	*g_sig;
 
 typedef struct s_refine
 {
@@ -78,6 +85,7 @@ typedef struct s_argv
 	char	**argv;
 	int		redirect_stream;
 	t_bool	is_redirect;
+	t_bool	is_heredoc;
 	t_bool	is_stream;
 	t_bool	was_pipe; //이전 argv에 pipe가 있는가? 
 	t_bool	is_pipe; //다음 argv에 pipe가 있는가? "du -h | sort -nr" 이면 du는 was = 0 is = 1, sort는 was = 1, is = 0
@@ -101,9 +109,9 @@ typedef struct s_mini
 	char			**path;
 	t_input			*input;
 	struct termios	term;
-	t_bool			sig_flag;
 	int				origin_fd[2];
 	int				pipe_fd[2];
+	t_sig			*sig;
 }	t_mini;
 
 // main
@@ -118,16 +126,18 @@ char	*get_locate(void);
 int		ft_prompt(t_mini *mini);
 
 // ft_parsing
-int		check_stream_symbol(t_list *token_lst);
-int		create_argv_lst(t_list **argv_lst, t_list *token_lst);
-void	create_token_lst(t_list **lst, char *input, char **envp);
-int		exception_handling(char *input);
+void	refine_heredoc(t_mini *mini, char **input, char **envp);
+int		valid_symbol_list(char *str, int i);
+t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, char **envp);
+int		check_stream_symbol(t_mini *mini, t_list *token_lst, char **envp);
+int		create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst);
+void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp);
+int		exception_handling(t_mini *mini, char *input);
 int		ft_parsing(t_mini *mini);
 
 // ft_signal
-void	sigint_func(int sig);
-void	sig_func(int sig);
-void	ft_signal(int sig_flag);
+void	sig_func(int signum);
+void	ft_signal(void);
 
 // minishell
 int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
@@ -142,26 +152,26 @@ void	ft_echo(t_mini *mini, t_argv *argv);
 
 // ft_cd
 void	set_env_cd(t_mini *mini, char *old_pwd);
-int		go_to_home(char **envp, char *path);
-int		check_path(char *path);
+int		go_to_home(t_mini *mini, char **envp, char *path);
+int		check_path(t_mini *mini, char *path);
 char	*get_path(char **envp, char *argv);
 void	ft_cd(t_mini *mini, t_argv *argv);
 
 // ft_pwd
-void	ft_pwd(t_argv *argv);
+void	ft_pwd(t_mini *mini, t_argv *argv);
 
 // ft_export
 char	*get_envname_export(char *argv);
 char	**create_export_envp(char **envp, char *env);
 int		is_valid_export(char *argv, int i);
-int		check_export_argv(char *argv);
+int		check_export_argv(t_mini *mini, char *argv);
 void	ft_export(t_mini *mini, t_argv *argv);
 
 // ft_unset
 char	**create_unset_envp(char **envp, int *position, int size);
 void	get_position(int *position, char **envp, char **argv);
 void	position_init(int **position, int *size, char **envp, char **argv);
-int		check_unset_argv(char **argv, int *size);
+int		check_unset_argv(t_mini *mini, char **argv, int *size);
 void	ft_unset(t_mini *mini, t_argv *argv);
 
 // ft_env
@@ -170,24 +180,23 @@ void	ft_env(t_mini *mini, t_argv *argv);
 
 // ft_exit
 int		check_argv(char *argv);
-int		exit_exception(int argc, char **argv);
-void	ft_exit(t_argv *argv);
+int		exit_exception(t_mini *mini, int argc, char **argv);
+void	ft_exit(t_mini *mini, t_argv *argv);
 
 // ft_error
-void	error_symbol(char *symbol, int exit_num);
-void	error_2(char *cmd, char *argv, char *msg, int exit_num);
-void	error_1(char *cmd, char *msg, int exit_num);
-void	ft_error(char *msg, int exit_num);
+void	error_symbol(t_mini *mini, char *symbol, int exit_num);
+void	error_2(t_mini *mini, char *cmd, char *argv, char *msg, int exit_num);
+void	error_1(t_mini *mini, char *cmd, char *msg, int exit_num);
+void	ft_error(t_mini *mini, char *msg, int exit_num);
 
 // utility
 char	*get_envname(char *name);
 char	*ft_getenv(char **envp, char *name);
-void	exit_num_set(int num);
+void	exit_num_set(t_mini *mini, int num);
 void	token_free(t_list *lst);
 void	argv_free(t_list *lst);
 
 // parse_utility
-t_bool	is_valid_symbol(char *str, char *prev_str, char *next_str);
 int		stream_flag_str(t_token *token);
 void	token_init(t_token *token);
 int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst);
@@ -201,17 +210,17 @@ void	argv_init(t_argv *argv);
 
 // tokenize
 void	refine_init(t_refine *refine);
-int		refine_str(t_token *token, char **envp);
+int		refine_str(t_mini *mini, t_token *token, char **envp);
 int		stream_parse(t_token *token, char *input, int *end);
 int		str_parse(t_token *token, char *input, int *end);
-int		tokenize(t_token *token, char *input, int *start, char **envp);
+int		tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp);
 
 // tokenize_utility
 void	basic_str(t_refine *refine);
-void	dollar_str(t_refine *refine);
-void	double_quote_str(t_refine *refine);
-void	single_quote_str(t_refine *refine);
-int		create_refined_str(t_refine *refine);
+void	dollar_str(t_mini *mini, t_refine *refine);
+void	double_quote_str(t_mini *mini, t_refine *refine);
+void	single_quote_str(t_mini *mini, t_refine *refine);
+int		create_refined_str(t_mini *mini, t_refine *refine);
 
 // tokenize_utility2
 char	*get_envname_parse(char *str, int *i);
@@ -223,7 +232,7 @@ t_bool	str_condition(char c, t_token *token);
 // tokenize_utility3
 void	create_exitnum_str(t_refine *refine, char *tmp, \
 							char *exit_num, int tmp_len);
-void	exitnum_str(t_refine *refine);
+void	exitnum_str(t_mini *mini, t_refine *refine);
 
 // stream_utility
 void	heredoc_redirect(t_list *head, t_bool is_error);
@@ -261,10 +270,10 @@ int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
 
 // redirect_utility
-int		heredoc(t_mini *mini, t_argv *argv, char *delimiter);
-int		append(t_mini *mini, t_argv *argv, char *file);
-int		rtol(t_mini *mini, t_argv *argv, char *file);
-int		ltor(t_mini *mini, t_argv *argv, char *file);
+int		heredoc(t_mini *mini);
+int		append(t_mini *mini, char *file);
+int		rtol(t_mini *mini, char *file);
+int		ltor(t_mini *mini, char *file);
 
 //fd_copy
 void fd_copy(int fd, int fd2);

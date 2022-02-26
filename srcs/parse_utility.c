@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 21:36:49 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 11:15:07 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 		(*stream)->is_stream = TRUE;
 		(*stream)->is_redirect = FALSE;
 	}
+	if (token->token[0] == '<' && token->token[1] == '<')
+		(*stream)->is_heredoc = TRUE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
 	if (token->token[0] == '|' && token->token[1] == '|')
 		return 1;
@@ -92,7 +94,6 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 			stream_flag_str(token_lst->content) == FALSE)
 	{
 		(*argv)->argv[i] = ft_strdup(((t_token *)token_lst->content)->token);
-		// (*argv)->argv[i] = ((t_token *)token_lst->content)->token;
 		if ((*argv)->argv[i][0] == '*')
 			(*argv)->is_wildcard = TRUE;
 		i++;

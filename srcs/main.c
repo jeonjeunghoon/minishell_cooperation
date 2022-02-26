@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/24 02:27:17 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 18:36:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	clear_resource(t_mini *mini)
 	token_free(mini->input->token_lst);
 	argv_free(mini->input->argv_lst);
 	ft_free(&mini->input->user_input);
+	g_sig->signum = 0;
+	g_sig->type = BASIC;
 }
 
 void	minishell_init(t_mini *mini)
@@ -26,7 +28,20 @@ void	minishell_init(t_mini *mini)
 	mini->input->token_lst = NULL;
 	mini->input->argv_lst = NULL;
 	mini->input->user_input = NULL;
-	mini->sig_flag = FALSE;
+	g_sig->signum = 0;
+	g_sig->type = BASIC;
+}
+
+int	terminal_setting(t_mini *mini)
+{
+	// if (tcgetattr(STDIN_FILENO, &(mini->term)) == -1)
+	// 	return (ERROR);
+	// (mini->term).c_lflag &= ~(ECHOCTL);
+	// (mini->term).c_cc[VMIN] = 1;
+	// (mini->term).c_cc[VTIME] = 0;
+	// if (tcsetattr(STDIN_FILENO, TCSANOW, &(mini->term)) == -1)
+	// 	return (ERROR);
+	return (0);
 }
 
 int	memory_allocation(t_mini **mini, char **envp)
@@ -42,12 +57,10 @@ int	memory_allocation(t_mini **mini, char **envp)
 	while (envp[++i])
 		(*mini)->envp[i] = ft_strdup(envp[i]);
 	(*mini)->input = (t_input *)malloc(sizeof(t_input));
-	if (tcgetattr(STDIN_FILENO, &((*mini)->term)) == -1)
-		return (ERROR);
-	((*mini)->term).c_lflag &= ~(ECHOCTL);
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &((*mini)->term)) == -1)
-		return (ERROR);
-	if ((*mini) == NULL || (*mini)->input == NULL)
+	(*mini)->sig = (t_sig *)malloc(sizeof(t_sig));
+	g_sig = (*mini)->sig;
+	g_sig->exitnum = 0;
+	if ((*mini) == NULL || (*mini)->input == NULL || (*mini)->sig == NULL)
 		return (ERROR);
 	return (0);
 }
@@ -61,17 +74,22 @@ int	main(int argc, const char **argv, char **envp)
 		return (0);
 	if (memory_allocation(&mini, envp) == ERROR)
 	{
-		ft_error("allocation error", 1);
-		exit(g_exit_state);
+		printf("Allocation error\n");
+		exit(1);
+	}
+	if (terminal_setting(mini) == ERROR)
+	{
+		printf("Terminal set error\n");
+		exit(1);
 	}
 	while (TRUE)
 	{
 		minishell_init(mini);
-		ft_signal(BASIC);
+		ft_signal();
 		if (ft_prompt(mini) == ERROR)
 		{
-			ft_error("prompt error", 1);
-			exit(g_exit_state);
+			printf("Prompt error\n");
+			exit(1);
 		}
 		if (mini->input->user_input[0] != '\0')
 		{

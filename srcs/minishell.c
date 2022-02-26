@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 20:41:59 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 19:57:02 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 	else if ((ft_strncmp(cmd, "cd", 3)) == 0)
 		ft_cd(mini, argv);
 	else if ((ft_strncmp(cmd, "pwd", 4)) == 0)
-		ft_pwd(argv);
+		ft_pwd(mini, argv);
 	else if ((ft_strncmp(cmd, "env", 4)) == 0)
 		ft_env(mini, argv);
 	else if ((ft_strncmp(cmd, "export", 7)) == 0)
@@ -27,7 +27,7 @@ int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 	else if ((ft_strncmp(cmd, "unset", 6)) == 0)
 		ft_unset(mini, argv);
 	else if ((ft_strncmp(cmd, "exit", 5)) == 0)
-		ft_exit(argv);
+		ft_exit(mini, argv);
 	else
 		return (FALSE);
 	return (TRUE);
@@ -43,6 +43,8 @@ int	ft_command(t_mini *mini, t_argv *argv)
 	cmd_path = NULL;
 	pid = 0;
 	is_child = FALSE;
+	g_sig->type = EXECVE;
+	ft_signal();
 	if (argv->is_pipe == TRUE)
 	{
 		if (pipe(mini->pipe_fd) == ERROR)
@@ -61,8 +63,9 @@ int	ft_command(t_mini *mini, t_argv *argv)
 			close(mini->pipe_fd[WRITE]);
 			dup2(mini->pipe_fd[READ], STDIN_FILENO);
 		}
-		unlink(".heredoc_tmp");
-		exit_num_set(ft_wexitstatus(stat_loc));
+		if (argv->is_heredoc == TRUE)
+			unlink(".heredoc_tmp");
+		exit_num_set(mini, ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)
 	{
@@ -80,7 +83,7 @@ int	ft_command(t_mini *mini, t_argv *argv)
 			ft_free(&cmd_path);
 		}
 		if (is_child == TRUE)
-			exit(g_exit_state);
+			exit(mini->sig->exitnum);
 	}
 	return (0);
 }
@@ -155,7 +158,6 @@ void	combine_argvs(t_argv *argv, t_argv *redirect, t_argv *file)
 	char	**new_argv;
 	char	**tmp;
 
-	cmd = create_cmd(argv, file);
 	tmp = ft_strsjoin(cmd, redirect->argv);
 	new_argv = ft_strsjoin(tmp, file->argv);
 	ft_two_dimension_free(&cmd);
@@ -227,24 +229,24 @@ int	minishell(t_mini *mini)
 			// 	printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_and);
 			
 			ft_command(mini, argv);
-			if (head->next)
-				((t_argv *)head->next->content)->hav_cmd = 1;
+			// if (head->next)
+			// 	((t_argv *)head->next->content)->hav_cmd = 1;
 		}
-		else if(!argv->hav_cmd)
-		{
-			error_symbol(argv->argv[0], 2);
-			break;
-		}
+		// else if(!argv->hav_cmd)
+		// {
+		// 	error_symbol(mini, argv->argv[0], 2);
+		// 	break;
+		// }
 		if (argv->is_pipe && head->next->next)
 			((t_argv *)head->next->next->content)->was_pipe = 1;
 		else if (argv->is_and)
 		{
-			if (g_exit_state)
+			if (mini->sig->exitnum)
 				break;
 		}
 		else if (argv->is_or)
 		{
-			if (!g_exit_state)
+			if (!mini->sig->exitnum)
 				break;
 		}
 		/*if (argv->is_pipe && !head->next->next)

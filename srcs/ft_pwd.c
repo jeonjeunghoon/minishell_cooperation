@@ -6,19 +6,19 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 13:57:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 20:07:27 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 14:37:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../inc/minishell.h"
 
-void	ft_pwd(t_argv *argv)
+void	ft_pwd(t_mini *mini, t_argv *argv)
 {
 	char	*cwd;
 	int		error_fd;
 
-	exit_num_set(0);
+	exit_num_set(mini, 0);
 	cwd = getcwd(NULL, 0);
 	if (!argv->is_or)
 	{
@@ -29,7 +29,7 @@ void	ft_pwd(t_argv *argv)
 	if (cwd)
 		printf("%s\n", cwd);
 	else if (cwd == NULL)
-		error_2(argv->argv[0], argv->argv[1], strerror(errno), 1);
+		error_2(mini, argv->argv[0], argv->argv[1], strerror(errno), 1);
 	free(cwd);
 	cwd = NULL;
 }

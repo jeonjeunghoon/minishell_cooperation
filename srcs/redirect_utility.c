@@ -6,42 +6,20 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 13:54:20 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 20:38:05 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 19:25:12 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	heredoc(t_mini *mini, t_argv *argv, char *delimiter)
+int	heredoc(t_mini *mini)
 {
 	int		fd;
-	char	*input;
-	char	*line;
-	t_bool	sig;
 
-	ft_signal(HEREDOC);
-	fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(".heredoc_tmp", O_RDONLY, 0644);
 	if (fd == ERROR)
 	{
-		error_1(".heredoc_tmp", "No such file or directory", 1);
-		return (ERROR);
-	}
-	input = NULL;
-	while (TRUE)
-	{
-		input = readline("heredoc> ");
-		if (ft_strncmp(input, delimiter, ft_strlen(delimiter) + 1) == 0)
-		{
-			ft_free(&input);
-			break ;
-		}
-		write(fd, input, ft_strlen(input));
-		write(fd, "\n", 1);
-		ft_free(&input);
-	}
-	if (fd == ERROR)
-	{
-		error_1(".heredoc_tmp", "No such file or directory", 1);
+		error_1(mini, ".heredoc_tmp", "No such file or directory", 1);
 		return (ERROR);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -49,14 +27,14 @@ int	heredoc(t_mini *mini, t_argv *argv, char *delimiter)
 	return (0);
 }
 
-int	append(t_mini *mini, t_argv *argv, char *file)
+int	append(t_mini *mini, char *file)
 {
 	int 	fd;
 
 	fd = open(file, O_RDWR | O_APPEND, 0644);
 	if (fd == ERROR)
 	{
-		error_1(file, "No such file or directory", 1);
+		error_1(mini, file, "No such file or directory", 1);
 		return (ERROR);
 	}
 	dup2(fd, STDOUT_FILENO);
@@ -64,14 +42,14 @@ int	append(t_mini *mini, t_argv *argv, char *file)
 	return (0);
 }
 
-int	rtol(t_mini *mini, t_argv *argv, char *file)
+int	rtol(t_mini *mini, char *file)
 {
 	int 	fd;
 
 	fd = open(file, O_RDONLY, 0644);
 	if (fd == ERROR)
 	{
-		error_1(file, "No such file or directory", 1);
+		error_1(mini, file, "No such file or directory", 1);
 		return (ERROR);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -79,14 +57,14 @@ int	rtol(t_mini *mini, t_argv *argv, char *file)
 	return (0);
 }
 
-int	ltor(t_mini *mini, t_argv *argv, char *file)
+int	ltor(t_mini *mini, char *file)
 {
 	int 	fd;
 
 	fd = open(file, O_WRONLY | O_TRUNC, 0644);
 	if (fd == ERROR)
 	{
-		error_1(file, "No such file or directory", 1);
+		error_1(mini, file, "No such file or directory", 1);
 		return (ERROR);
 	}
 	dup2(fd, STDOUT_FILENO);

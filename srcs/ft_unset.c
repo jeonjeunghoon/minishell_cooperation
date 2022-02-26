@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 18:15:58 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 14:52:41 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	position_init(int **position, int *size, char **envp, char **argv)
 	(*size) = 0;
 }
 
-int	check_unset_argv(char **argv, int *size)
+int	check_unset_argv(t_mini *mini, char **argv, int *size)
 {
 	int		i;
 	int		j;
@@ -108,7 +108,7 @@ int	check_unset_argv(char **argv, int *size)
 				|| (argv[i][0] >= '0' && argv[i][0] <= '9'))
 			{
 				msg_argv = ft_strjoin_bothside("`", argv[i], "'");
-				error_2(argv[0], msg_argv, "not a valid identifier", 1);
+				error_2(mini, argv[0], msg_argv, "not a valid identifier", 1);
 				free(msg_argv);
 				(*size)--;
 				return (ERROR);
@@ -125,7 +125,7 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	char	**new;
 	int		error_fd;
 
-	exit_num_set(0);
+	exit_num_set(mini, 0);
 	// if (!argv->is_or)
 	// {
 	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -135,8 +135,8 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	size = ft_two_dimension_size(argv->argv) - 1;
 	if (ft_two_dimension_size(argv->argv) > 1)
 	{
-		if (check_unset_argv(argv->argv, &size) == ERROR)
-			exit(g_exit_state);
+		if (check_unset_argv(mini, argv->argv, &size) == ERROR)
+			exit(mini->sig->exitnum);
 		if (size != 0)
 		{
 			position_init(&position, &size, mini->envp, argv->argv);

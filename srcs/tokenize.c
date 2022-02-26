@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/23 21:23:57 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 19:42:03 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	refine_init(t_refine *refine)
 	refine->is_double = FALSE;
 }
 
-int	refine_str(t_token *token, char **envp)
+int	refine_str(t_mini *mini, t_token *token, char **envp)
 {
 	t_refine	*refine;
 	int			ret;
@@ -36,7 +36,7 @@ int	refine_str(t_token *token, char **envp)
 	refine_init(refine);
 	refine->envp = envp;
 	refine->str = token->token;
-	ret = create_refined_str(refine);
+	ret = create_refined_str(mini, refine);
 	ft_free(&token->token);
 	if (ret != ERROR)
 		token->token = ft_strdup(refine->new_str);
@@ -95,25 +95,25 @@ int	str_parse(t_token *token, char *input, int *pos)
 	return (0);
 }
 
-int	tokenize(t_token *token, char *input, int *start, char **envp)
+int	tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp)
 {
 	if (input[*start] == '|' || input[*start] == '>' || \
 		input[*start] == '<' || input[*start] == '&')
 	{
 		if (stream_parse(token, input, start) == ERROR)
 		{
-			ft_error("tokenize error", 1);
-			exit(g_exit_state);
+			ft_error(mini, "tokenize error", 1);
+			exit(mini->sig->exitnum);
 		}
 	}
 	else
 	{
 		if (str_parse(token, input, start) == ERROR)
 		{
-			ft_error("tokenize error", 1);
-			exit(g_exit_state);
+			ft_error(mini, "tokenize error", 1);
+			exit(mini->sig->exitnum);
 		}
-		if (refine_str(token, envp) == ERROR)
+		if (refine_str(mini, token, envp) == ERROR)
 			return (ERROR);
 	}
 	return (0);

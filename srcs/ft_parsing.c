@@ -6,11 +6,28 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 21:01:02 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 19:51:13 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	refine_heredoc(t_mini *mini, char **input, char **envp)
+{
+	t_refine	*refine;
+
+	refine = (t_refine *)malloc(sizeof(t_refine));
+	refine_init(refine);
+	refine->envp = envp;
+	refine->str = *input;
+	create_refined_str(mini, refine);
+	ft_free(input);
+	*input = ft_strdup(refine->new_str);
+	ft_free(&refine->new_str);
+	refine_init(refine);
+	free(refine);
+	refine = NULL;
+}
 
 int	valid_symbol_list(char *str, int i)
 {
@@ -43,7 +60,7 @@ int	valid_symbol_list(char *str, int i)
 	return (0);
 }
 
-t_bool	is_valid_symbol(char *str, char *prev_str, char *next_str)
+t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, char **envp)
 {
 	int	i;
 	int	symbol;
@@ -68,79 +85,124 @@ t_bool	is_valid_symbol(char *str, char *prev_str, char *next_str)
 			i += 1;
 		i++;
 	}
-	if (prev_str == NULL && \
+	if ((prev_str == NULL || next_str == NULL) && \
 		(symbol == V1 || symbol == V2 || symbol == E1 || symbol == E2))
 	{
 		if (symbol == V1)
-			error_symbol("|", 258);
+			error_symbol(mini, "|", 258);
 		else if (symbol == V2)
-			error_symbol("||", 258);
+			error_symbol(mini, "||", 258);
 		else if (symbol == E1)
-			error_symbol("&", 258);
+			error_symbol(mini, "&", 258);
 		else if (symbol == E2)
-			error_symbol("&&", 258);
-		return (FALSE);
-	}
-	else if (next_str == NULL)
-	{
-		if (symbol == V1)
-			error_symbol("|", 258);
-		else if (symbol == V2)
-			error_symbol("||", 258);
-		else if (symbol == E1)
-			error_symbol("&", 258);
-		else if (symbol == E2)
-			error_symbol("&&", 258);
-		else
-			error_symbol("newline", 258);
+			error_symbol(mini, "&&", 258);
 		return (FALSE);
 	}
 	else if (near_symbol != 0)
 	{
 		if (near_symbol == LTOR1)
-			error_symbol(">", 258);
+			error_symbol(mini, ">", 258);
 		else if (near_symbol == LTOR2)
-			error_symbol(">>", 258);
+			error_symbol(mini, ">>", 258);
 		else if (near_symbol == RTOL1)
-			error_symbol("<", 258);
+			error_symbol(mini, "<", 258);
 		else if (near_symbol == RTOL2)
-			error_symbol("<<", 258);
+			error_symbol(mini, "<<", 258);
 		else if (near_symbol == RTOL3)
-			error_symbol("<<<", 258);
+			error_symbol(mini, "<<<", 258);
 		else if (near_symbol == RL)
-			error_symbol("<>", 258);
+			error_symbol(mini, "<>", 258);
 		else if (near_symbol == V1)
-			error_symbol("|", 258);
+			error_symbol(mini, "|", 258);
 		else if (near_symbol == V2)
-			error_symbol("||", 258);
+			error_symbol(mini, "||", 258);
 		else if (near_symbol == E1)
-			error_symbol("&", 258);
+			error_symbol(mini, "&", 258);
 		else if (near_symbol == E2)
-			error_symbol("&&", 258);
+			error_symbol(mini, "&&", 258);
 		else if (near_symbol == LV)
-			error_symbol(">|", 258);
+			error_symbol(mini, ">|", 258);
 		else if (near_symbol == LE)
-			error_symbol(">&", 258);
+			error_symbol(mini, ">&", 258);
 		else if (near_symbol == RE)
-			error_symbol("<&", 258);
+			error_symbol(mini, "<&", 258);
 		return (FALSE);
 	}
-	if ((symbol == LTOR1 || symbol == LTOR2 || symbol == RL || symbol == LV || symbol == LE) && next_str != NULL)
+	else if (next_str == NULL)
+	{
+		error_symbol(mini, "newline", 258);
+		return (FALSE);
+	}
+	if (symbol == LTOR1 || symbol == RL || symbol == LV || symbol == LE)
 	{
 		int	fd;
 
-		fd = open(next_str, O_CREAT | O_TRUNC, 0644);
+		if (symbol == LTOR2)
+			fd = open(next_str, O_CREAT | O_TRUNC | O_APPEND, 0644);
+		else
+			fd = open(next_str, O_CREAT | O_TRUNC, 0644);
 		if (fd == ERROR)
 		{
-			error_1(next_str, "Create file error!", 1);
-			exit(g_exit_state);	
+			error_1(mini, next_str, "Create file error!", 1);
+			exit(1);
 		}
 		close(fd);
+	}
+	if (symbol == RTOL1)
+	{
+		int fd;
+
+		fd = open(next_str, O_RDONLY, 0644);
+		if (fd == ERROR)
+		{
+			error_1(mini, next_str, "No such file or directory", 1);
+			return (FALSE);
+		}
+		close(fd);
+	}
+
+	if (symbol == RTOL2 && next_str != NULL)
+	{
+		int		fd;
+		char	*input;
+	
+		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		g_sig->type = HEREDOC;
+		ft_signal();
+		if (fd == ERROR)
+		{
+			error_1(mini, ".heredoc_tmp", "No such file or directory", 1);
+			return (ERROR);
+		}
+		input = NULL;
+		rl_catch_signals = 0;
+		while (TRUE)
+		{
+			input = readline("> ");
+			if (g_sig->signum == SIGINT || input == NULL)
+			{
+				ft_free(&input);
+				return (0);
+			}
+			if (ft_strncmp(input, next_str, ft_strlen(next_str) + 1) == 0)
+			{
+				ft_free(&input);
+				break ;
+			}
+			if (input != NULL)
+				refine_heredoc(mini, &input, envp);
+			write(fd, input, ft_strlen(input));
+			write(fd, "\n", 1);
+			ft_free(&input);
+		}
+		close(fd);
+		g_sig->type = BASIC;
+		ft_signal();
 	}
 	return (TRUE);
 }
 
-int	check_stream_symbol(t_list *token_lst)
+int	check_stream_symbol(t_mini *mini, t_list *token_lst, char **envp)
 {
 	t_list	*head;
 	char	*str;
@@ -148,8 +210,8 @@ int	check_stream_symbol(t_list *token_lst)
 	char	*next_str;
 
 	head = token_lst;
+	prev_str = NULL;
 	str = NULL;
-	prev_str = ((t_token *)head->content)->token;
 	next_str = NULL;
 	while (head != NULL)
 	{
@@ -158,21 +220,22 @@ int	check_stream_symbol(t_list *token_lst)
 			return (ERROR);
 		if (is_stream(str[0]) && ((t_token *)head->content)->is_stream == TRUE)
 		{
-			if (prev_str == str)
-				prev_str = NULL;
+			if (head->pre != NULL)
+				prev_str = ((t_token *)head->pre->content)->token;
 			if (head->next != NULL)
 				next_str = ((t_token *)head->next->content)->token;
-			if (is_valid_symbol(str, prev_str, next_str) == FALSE)
+			if (is_valid_symbol(mini, str, prev_str, next_str, envp) == FALSE)
 				return (ERROR);
 		}
 		head = head->next;
+		prev_str = NULL;
 		str = NULL;
 		next_str = NULL;
 	}
 	return (0);
 }
 
-int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
+int	create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst)
 {
 	int		size;
 	int		is_or;
@@ -200,9 +263,9 @@ int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
 				while(((t_token *)token_lst->content)->token[i] == '|' && i !=2)
 					i++;
 				if (i == 2)
-					error_symbol("||", 2);
+					error_symbol(mini, "||", 2);
 				else
-					error_symbol("|", 2);
+					error_symbol(mini, "|", 2);
 				return (ERROR);
 			}
 			if (size != 0)
@@ -217,7 +280,7 @@ int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
 	return 0;
 }
 
-void	create_token_lst(t_list **lst, char *input, char **envp)
+void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp)
 {
 	t_token	*token;
 	int		i;
@@ -229,7 +292,7 @@ void	create_token_lst(t_list **lst, char *input, char **envp)
 		{
 			token = (t_token *)malloc(sizeof(t_token));
 			token_init(token);
-			if (tokenize(token, input, &i, envp) != ERROR)
+			if (tokenize(mini, token, input, &i, envp) != ERROR)
 				ft_lstadd_back(lst, ft_lstnew(token));
 			else
 				free(token);
@@ -240,7 +303,7 @@ void	create_token_lst(t_list **lst, char *input, char **envp)
 	}
 }
 
-int	exception_handling(char *input)
+int	exception_handling(t_mini *mini, char *input)
 {
 	int		i;
 	t_bool	sin;
@@ -253,7 +316,7 @@ int	exception_handling(char *input)
 	{
 		if ((input[i] == ';' || input[i] == '\\') && sin == FALSE && dou == FALSE)
 		{
-			ft_error("unspecified special characters like \\ or ;", 1);
+			ft_error(mini, "unspecified special characters like \\ or ;", 1);
 			return (ERROR);
 		}
 		if (input[i] == '\'' || input[i] == '\"')
@@ -262,7 +325,7 @@ int	exception_handling(char *input)
 	}
 	if (sin == TRUE || dou == TRUE)
 	{
-		ft_error("unclosed quotes like \' or \"", 1);
+		ft_error(mini, "unclosed quotes like \' or \"", 1);
 		return (ERROR);
 	}
 	return (0);
@@ -270,14 +333,14 @@ int	exception_handling(char *input)
 
 int	ft_parsing(t_mini *mini)
 {
-	if (exception_handling(mini->input->user_input) == ERROR)
+	if (exception_handling(mini, mini->input->user_input) == ERROR)
 		return (ERROR);
 	add_history(mini->input->user_input);
-	create_token_lst(&(mini->input->token_lst), \
+	create_token_lst(mini, &(mini->input->token_lst), \
 					mini->input->user_input, mini->envp);
-	if (create_argv_lst(&(mini->input->argv_lst), mini->input->token_lst) == ERROR)
+	if (create_argv_lst(mini, &(mini->input->argv_lst), mini->input->token_lst) == ERROR)
 		return (ERROR);
-	if (check_stream_symbol(mini->input->token_lst) == ERROR)
+	if (check_stream_symbol(mini, mini->input->token_lst, mini->envp) == ERROR)
 		return (ERROR);
 	return (0);
 }

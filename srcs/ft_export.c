@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/25 20:04:30 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/26 14:38:18 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	is_valid_export(char *argv, int i)
 	return (ERROR);
 }
 
-int	check_export_argv(char *argv)
+int	check_export_argv(t_mini *mini, char *argv)
 {
 	int		i;
 	t_bool	is_env;
@@ -87,7 +87,7 @@ int	check_export_argv(char *argv)
 		if (is_valid_export(argv, i) == ERROR)
 		{
 			error_msg = ft_strjoin_bothside("`", argv, "'");
-			error_2("export", error_msg, "not a valid identifier", 1);
+			error_2(mini, "export", error_msg, "not a valid identifier", 1);
 			free(error_msg);
 			return (ERROR);
 		}
@@ -106,7 +106,7 @@ void	ft_export(t_mini *mini, t_argv *argv)
 	char	**new_envp;
 	int		error_fd;
 
-	exit_num_set(0);
+	exit_num_set(mini, 0);
 	// if (!argv->is_or)
 	// {
 	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -118,7 +118,7 @@ void	ft_export(t_mini *mini, t_argv *argv)
 		i = 1;
 		while (argv->argv[i])
 		{
-			if (check_export_argv(argv->argv[i]) != ERROR)
+			if (check_export_argv(mini, argv->argv[i]) != ERROR)
 			{
 				new_envp = create_export_envp(mini->envp, argv->argv[i]);
 				ft_two_dimension_free(&(mini->envp));
