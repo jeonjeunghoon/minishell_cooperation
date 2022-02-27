@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 18:55:36 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 19:13:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,6 @@ int	set_redirect(t_mini *mini, t_argv *argv)
 		}
 		else if (argv->argv[i][0] == '>')
 		{
-			// if (!argv->argv[i+1])
-			// {
-			// 	error_symbol("\n", 2);
-			// 	return (ERROR);
-			// }
 			ltor(mini, argv->argv[i + 1]);
 			i++;
 		}
