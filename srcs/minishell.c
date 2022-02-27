@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 20:40:07 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 20:42:51 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,24 +130,6 @@ char	**create_cmd(t_list **head, t_argv *argv, t_argv *file)
 
 	cmd = NULL;
 	cmd_argv = modify_file_argv(file);
-	// if (cmd_argv != NULL)
-	// {
-	// 	if (argv->argv[0][0] == '>' || argv->argv[0][0] == '<') // > file cmd [...]
-	// 		cmd = ft_strsdup(cmd_argv);
-	// 	else // cmd [...] > file cmd_argv
-	// 		cmd = ft_strsjoin(argv->argv, cmd_argv);
-	// }
-	// else if (cmd_argv == NULL)
-	// {
-	// 	if (argv->argv[0][0] == '>' || argv->argv[0][0] == '<') // > file
-	// 	{
-	// 		cmd = (char **)malloc(sizeof(char *) * 2);
-	// 		cmd[1] = NULL;
-	// 		cmd[0] = ft_strdup("");
-	// 	}
-	// 	else // cmd > file
-	// 		cmd = ft_strsdup(argv->argv);
-	// }
 
 	if (argv->argv[0][0] == '>' || argv->argv[0][0] == '<') // (>) (file [cmd ...])
 	{
@@ -320,15 +302,6 @@ int	minishell(t_mini *mini)
 			if (!mini->sig->exitnum)
 				break;
 		}
-		/*if (argv->is_pipe && !head->next->next)
-		{
-			//에러메세지 무언가 필요할듯
-			printf("aaaa\n");
-		}
-		if (argv->is_and && !head->next->next)
-			//에러메세지 무언가 필요할듯
-		if (argv->is_or && !head->next->next)
-			//에러메세지 무언가 필요할듯*/
 		head = head->next;
 		argv = NULL;
 	}
