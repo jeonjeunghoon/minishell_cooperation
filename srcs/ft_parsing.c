@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 20:19:26 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 19:06:14 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,18 +133,21 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, 
 		error_symbol(mini, "newline", 258);
 		return (FALSE);
 	}
-	if (symbol == LTOR1 || symbol == RL || symbol == LV || symbol == LE)
+	if (symbol == LTOR1 || symbol == LTOR2 || symbol == RL || symbol == LV || symbol == LE)
 	{
 		int	fd;
 
 		if (symbol == LTOR2)
-			fd = open(next_str, O_CREAT | O_TRUNC | O_APPEND, 0644);
+		{
+			if ((fd = open(next_str, O_CREAT | O_TRUNC | O_APPEND | O_EXCL, 0644)) == ERROR)
+				return (TRUE);
+		}
 		else
 			fd = open(next_str, O_CREAT | O_TRUNC, 0644);
 		if (fd == ERROR)
 		{
-			error_1(mini, next_str, "Create file error!", 1);
-			exit(1);
+			error_1(mini, next_str, "Create directory error", 1);
+			exit (1);
 		}
 		close(fd);
 	}
@@ -172,7 +175,7 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, 
 		if (fd == ERROR)
 		{
 			error_1(mini, ".heredoc_tmp", "No such file or directory", 1);
-			return (ERROR);
+			exit (1);
 		}
 		input = NULL;
 		rl_catch_signals = 0;
@@ -238,7 +241,7 @@ int	check_stream_symbol(t_mini *mini, t_list *token_lst, char **envp)
 int	create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst)
 {
 	int		size;
-	int		is_or;
+	// int		is_or;
 	t_argv	*str;
 	t_argv	*stream;
 	t_list	*head;
@@ -246,32 +249,32 @@ int	create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst)
 
 	argv_lst_init(&str, &stream, &size);
 	head = token_lst;
-	is_or = 0;
+	// is_or = 0;
 	while (token_lst != NULL)
 	{
 		if (stream_flag_str(token_lst->content) == FALSE)
 		{
 			size++;
-			is_or = 0;
+			// is_or = 0;
 		}
 		if (stream_flag_str(token_lst->content) == TRUE || \
 							token_lst->next == NULL)
 		{
-			if (is_or)
-			{
-				i = 0;
-				while(((t_token *)token_lst->content)->token[i] == '|' && i !=2)
-					i++;
-				if (i == 2)
-					error_symbol(mini, "||", 2);
-				else
-					error_symbol(mini, "|", 2);
-				return (ERROR);
-			}
+			// if (is_or)
+			// {
+			// 	i = 0;
+			// 	while(((t_token *)token_lst->content)->token[i] == '|' && i !=2)
+			// 		i++;
+			// 	if (i == 2)
+			// 		error_symbol(mini, "||", 2);
+			// 	else
+			// 		error_symbol(mini, "|", 2);
+			// 	return (ERROR);
+			// }
 			if (size != 0)
 				create_argv(&str, head, argv_lst, size);
 			if (stream_flag_str(token_lst->content) == TRUE)
-				is_or = create_stream(&stream, token_lst->content, argv_lst);
+				/*is_or = */create_stream(&stream, token_lst->content, argv_lst);
 			argv_lst_init(&str, &stream, &size);
 			head = token_lst->next;
 		}

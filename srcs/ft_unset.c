@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 14:52:41 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 19:11:44 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	if (ft_two_dimension_size(argv->argv) > 1)
 	{
 		if (check_unset_argv(mini, argv->argv, &size) == ERROR)
-			exit(mini->sig->exitnum);
+			return ;
 		if (size != 0)
 		{
 			position_init(&position, &size, mini->envp, argv->argv);

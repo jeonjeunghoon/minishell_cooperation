@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 11:15:07 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 19:00:31 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,16 @@ int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 	(*stream)->argv = (char **)malloc(sizeof(char *) * 2);
 	(*stream)->argv[1] = NULL;
 	(*stream)->argv[0] = ft_strdup(token->token);
-	// (*stream)->argv[0] = token->token;
-	(*stream)->is_redirect = TRUE;
-	/*if (token->token[0] == '&' && token->token[1] == '&')
-	{
+	if (token->token[0] == '>' || token->token[0] == '<')
+		(*stream)->is_redirect = TRUE;
+	else if (token->token[0] == '&' && token->token[1] == '&')
 		(*stream)->is_and = TRUE;
-	}
 	else if (token->token[0] == '|' && token->token[1] == '|')
 		(*stream)->is_or = TRUE;
-	else */
 	if ((token->token[0] == '|' && token->token[1] == '|') ||\
 	(token->token[0] == '|' && token->token[1] == 0) ||\
 	token->token[0] == '&' && token->token[1] == '&')
-	{
 		(*stream)->is_stream = TRUE;
-		(*stream)->is_redirect = FALSE;
-	}
 	if (token->token[0] == '<' && token->token[1] == '<')
 		(*stream)->is_heredoc = TRUE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
