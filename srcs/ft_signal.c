@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:52:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 18:40:45 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 20:56:26 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	sig_func(int signum)
 		}
 		else
 		{
-			printf("^C\n");
+			printf("\n");
 			g_sig->exitnum = 130;
 		}
 	}
@@ -40,7 +40,7 @@ void	sig_func(int signum)
 	{
 		if (g_sig->type == EXECVE)
 		{
-			printf("^\\Quit: 3\n");
+			printf("Quit: 3\n");
 			g_sig->exitnum = 131;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 19:00:31 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 21:04:00 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 			stream_flag_str(token_lst->content) == FALSE)
 	{
 		(*argv)->argv[i] = ft_strdup(((t_token *)token_lst->content)->token);
-		if ((*argv)->argv[i][0] == '*')
-			(*argv)->is_wildcard = TRUE;
 		i++;
 		token_lst = token_lst->next;
 	}

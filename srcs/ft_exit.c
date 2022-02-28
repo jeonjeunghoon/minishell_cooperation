@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 20:37:21 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/27 20:50:06 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ int	check_argv(char *argv)
 	i = 0;
 	while (argv[i])
 	{
+		if (argv[0] == '-')
+		{
+			i++;
+			continue ;
+		}
 		if (argv[i] < '0' || argv[i] > '9')
 			return (ERROR);
 		i++;
