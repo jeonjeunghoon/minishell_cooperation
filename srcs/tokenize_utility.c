@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 18:51:19 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/28 09:31:15 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/28 09:34:48 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	wildcard_str(t_mini *mini, t_refine *refine)
 			// {
 				/*
 
-				[...]* 로 생성 가능한 모든 문자열을 strs이중 문자열로 만듬
+				[...]* 로 생성 가능한 모든 문자열을 strs이중 문자열로 만듬 (함수)
 				// join_len = refine->i - 1;
 				// join_str = (char *)malloc(sizeof(char) * (join_len + 1));
 				// join_str[join_len] = '\0';
@@ -168,7 +168,7 @@ int	wildcard_str(t_mini *mini, t_refine *refine)
 				*/
 
 				/*
-				join_str로 시작되는 모든 파일 목록 문자열을 strs에 할당함
+				join_str로 시작되는 모든 파일 목록 문자열을 strs에 할당함 (함수)
 
 			
 				*/
@@ -178,7 +178,7 @@ int	wildcard_str(t_mini *mini, t_refine *refine)
 			// {
 				/*
 
-				아래에서 수정된 strs의 문자열 중 제거할 건 제거하고 새로 할당한다.
+				아래에서 수정된 strs의 문자열 중 제거할 건 제거하고 새로 할당한다. (함수)
 				// new_len = 0;
 				// i = 0;
 				// while (strs[i] != NULL) // 새로운 2중포인터를 만들기 위해 유효한 문자열의 개수를 센다.
@@ -221,7 +221,7 @@ int	wildcard_str(t_mini *mini, t_refine *refine)
 		{
 			/*
 			
-			와일드카드가 나오기 전까지 혹은 널문자 전까지의 join문자열을 생성
+			와일드카드가 나오기 전까지 혹은 널문자 전까지의 join문자열을 생성 (함수)
 			// i = refine->i;
 			// while (strs[i] != '*' && strs[i] != '\0')
 				// i++;
@@ -240,7 +240,7 @@ int	wildcard_str(t_mini *mini, t_refine *refine)
 			*/
 			/*
 			
-			와일드카드로 생성된 모든 문자열들과 join문자열을 ft_strjoin으로 붙임
+			와일드카드로 생성된 모든 문자열들과 join문자열을 ft_strjoin으로 붙임 (함수)
 			// i = 0;
 			// while (strs[i] != NULL)
 			// {
