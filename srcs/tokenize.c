@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 19:42:03 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 14:51:21 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,12 @@ int	str_parse(t_token *token, char *input, int *pos)
 	return (0);
 }
 
-int	tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp)
+t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp)
 {
+	t_list	*wild_str;
+	//t_list	*curr;
+
+	wild_str = 0;
 	if (input[*start] == '|' || input[*start] == '>' || \
 		input[*start] == '<' || input[*start] == '&')
 	{
@@ -113,8 +117,18 @@ int	tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp)
 			ft_error(mini, "tokenize error", 1);
 			exit(mini->sig->exitnum);
 		}
-		if (refine_str(mini, token, envp) == ERROR)
-			return (ERROR);
+		wild_str = get_wild_str(mini, token, envp);
+		
+		/*curr = wild_str;
+		while(curr)
+		{
+			printf("%s\n", (char *)curr->content);
+			curr = curr->next;
+		}*/
+
+		if (!wild_str)
+			if (refine_str(mini, token, envp) == ERROR)
+				return ((t_list*)ERROR);
 	}
-	return (0);
+	return (wild_str);
 }

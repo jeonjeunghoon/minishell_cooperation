@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/02/26 17:42:17 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/02/28 16:36:27 by seungcoh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ SRCS_NAME			=	main.c \
 						w_utility.c \
 						ft_pipe.c \
 						redirect_utility.c\
-						fd_copy.c
+						fd_copy.c\
+						ft_wildcard.c
 
 SRCS_PATH			=	./srcs
 SRCS				=	$(addprefix $(SRCS_PATH)/, $(SRCS_NAME))
