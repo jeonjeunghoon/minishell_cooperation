@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 19:36:25 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 14:27:20 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,5 +277,9 @@ int		ltor(t_mini *mini, char *file);
 
 //fd_copy
 void fd_copy(int fd, int fd2);
+
+// terminal_setting
+int		terminal_setting_on(t_mini *mini);
+int		terminal_setting_off(t_mini *mini);
 
 #endif

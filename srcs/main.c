@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 20:20:06 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 14:28:16 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,6 @@ void	minishell_init(t_mini *mini)
 	g_sig->type = BASIC;
 	unlink(".heredoc_tmp");
 	unlink(".error_tmp");
-}
-
-int	terminal_setting(t_mini *mini)
-{
-	// if (tcgetattr(STDIN_FILENO, &(mini->term)) == -1)
-	// 	return (ERROR);
-	// (mini->term).c_lflag &= ~(ECHOCTL);
-	// (mini->term).c_cc[VMIN] = 1;
-	// (mini->term).c_cc[VTIME] = 0;
-	// if (tcsetattr(STDIN_FILENO, TCSANOW, &(mini->term)) == -1)
-	// 	return (ERROR);
-	return (0);
 }
 
 int	memory_allocation(t_mini **mini, char **envp)
@@ -81,7 +69,7 @@ int	main(int argc, const char **argv, char **envp)
 		printf("Allocation error\n");
 		exit(1);
 	}
-	if (terminal_setting(mini) == ERROR)
+	if (terminal_setting_on(mini) == ERROR)
 	{
 		printf("Terminal set error\n");
 		exit(1);
