@@ -6,32 +6,32 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 14:27:05 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 14:38:17 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:02:59 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+void	terminal_setting_save(t_mini *mini)
+{
+	tcgetattr(STDIN_FILENO, &(mini->org_term));
+	tcgetattr(STDOUT_FILENO, &(mini->org_term));
+}
+
 int	terminal_setting_on(t_mini *mini)
 {
-	if (tcgetattr(STDIN_FILENO, &(mini->term)) == -1)
+	if (tcgetattr(STDOUT_FILENO, &(mini->new_term)) == -1)
 		return (ERROR);
-	(mini->term).c_lflag &= ~(ECHOCTL);
-	(mini->term).c_cc[VMIN] = 1;
-	(mini->term).c_cc[VTIME] = 0;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &(mini->term)) == -1)
+	(mini->new_term).c_lflag &= ~(ECHOCTL);
+	(mini->new_term).c_cc[VMIN] = 1;
+	(mini->new_term).c_cc[VTIME] = 0;
+	if (tcsetattr(STDOUT_FILENO, TCSANOW, &(mini->new_term)) == -1)
 		return (ERROR);
 	return (0);
 }
 
-int	terminal_setting_off(t_mini *mini)
+void	terminal_setting_reset(t_mini *mini)
 {
-	// if (tcgetattr(STDIN_FILENO, &(mini->term)) == -1)
-	// 	return (ERROR);
-	// (mini->term).c_lflag = 0;
-	// (mini->term).c_cc[VMIN] = 1;
-	// (mini->term).c_cc[VTIME] = 0;
-	// if (tcsetattr(STDIN_FILENO, TCSANOW, &(mini->term)) == -1)
-	// 	return (ERROR);
-	return (0);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(mini->org_term));
+	tcsetattr(STDOUT_FILENO, TCSANOW, &(mini->org_term));
 }

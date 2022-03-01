@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/03/01 14:53:54 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/03/01 15:04:44 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ SRCS_NAME			=	main.c \
 						ft_pipe.c \
 						redirect_utility.c \
 						fd_copy.c \
-						terminal_setting.c
+						terminal_setting.c \
+						ft_wildcard.c
 
 SRCS_PATH			=	./srcs
 SRCS				=	$(addprefix $(SRCS_PATH)/, $(SRCS_NAME))

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 14:27:20 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 15:40:38 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include </opt/homebrew/opt/readline/include/readline/readline.h>
+# include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
@@ -105,10 +105,11 @@ typedef struct s_input
 
 typedef struct s_mini
 {
+	struct termios	org_term;
+	struct termios	new_term;
 	char			**envp;
 	char			**path;
 	t_input			*input;
-	struct termios	term;
 	int				origin_fd[2];
 	int				pipe_fd[2];
 	t_sig			*sig;
@@ -213,7 +214,7 @@ void	refine_init(t_refine *refine);
 int		refine_str(t_mini *mini, t_token *token, char **envp);
 int		stream_parse(t_token *token, char *input, int *end);
 int		str_parse(t_token *token, char *input, int *end);
-int		tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp);
+t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp);
 
 // tokenize_utility
 void	basic_str(t_refine *refine);
@@ -233,17 +234,6 @@ t_bool	str_condition(char c, t_token *token);
 void	create_exitnum_str(t_refine *refine, char *tmp, \
 							char *exit_num, int tmp_len);
 void	exitnum_str(t_mini *mini, t_refine *refine);
-
-// stream_utility
-void	heredoc_redirect(t_list *head, t_bool is_error);
-void	r_to_l_redirect(t_list *head, char *argv, t_bool is_error);
-void	append_redirect(t_list *head, t_bool is_error);
-void	l_to_r_redirect(t_list *head, char *argv, t_bool is_error);
-
-// stream_utility2
-void	double_ampersand(t_list *head, t_bool is_error);
-void	double_verticalbar(t_list *head, t_bool is_error);
-void	verticalbar(t_list *head, char *argv, t_bool is_error);
 
 // command_utility
 void	create_path_bundle(t_mini *mini);
@@ -279,7 +269,11 @@ int		ltor(t_mini *mini, char *file);
 void fd_copy(int fd, int fd2);
 
 // terminal_setting
+void	terminal_setting_save(t_mini *mini);
 int		terminal_setting_on(t_mini *mini);
-int		terminal_setting_off(t_mini *mini);
+void	terminal_setting_reset(t_mini *mini);
+
+//ft_wildcard
+t_list	*get_wild_str(t_mini *mini, t_token *token, char ** envp);
 
 #endif

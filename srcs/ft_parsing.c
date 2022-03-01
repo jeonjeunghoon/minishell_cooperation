@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 19:06:14 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 14:41:49 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,6 +286,9 @@ int	create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst)
 void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp)
 {
 	t_token	*token;
+	t_token	*new_token;
+	t_list	*wild_str;
+	t_list	*tmp;
 	int		i;
 
 	i = 0;
@@ -295,10 +298,28 @@ void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp)
 		{
 			token = (t_token *)malloc(sizeof(t_token));
 			token_init(token);
-			if (tokenize(mini, token, input, &i, envp) != ERROR)
-				ft_lstadd_back(lst, ft_lstnew(token));
-			else
+			wild_str = tokenize(mini, token, input, &i, envp);
+			if (wild_str)
+			{
+				while (wild_str)
+				{
+					tmp = wild_str->next;
+					new_token = (t_token *)malloc(sizeof(t_token));
+					new_token->double_quote = token->double_quote;
+					new_token->is_stream = token->is_stream;
+					new_token->single_quote = token->single_quote;
+					new_token->token = (char *)wild_str->content;
+					ft_lstadd_back(lst, ft_lstnew(new_token));
+					free(wild_str);
+					wild_str = tmp;
+				}
+				free(token->token);
 				free(token);
+			}
+			else if(wild_str == (t_list *)ERROR)
+				free(token);
+			else
+				ft_lstadd_back(lst, ft_lstnew(token));
 			token = NULL;
 		}
 		else
