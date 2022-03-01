@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 15:40:38 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:18:26 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include </opt/homebrew/opt/readline/include/readline/readline.h>
+# include </opt/homebrew/opt/readline/include/readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>

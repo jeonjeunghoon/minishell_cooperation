@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 15:58:52 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:32:33 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	clear_resource(t_mini *mini)
 
 void	minishell_init(t_mini *mini)
 {
-	terminal_setting_save(mini);
 	mini->path = NULL;
 	mini->input->token_lst = NULL;
 	mini->input->argv_lst = NULL;
@@ -70,10 +69,11 @@ int	main(int argc, const char **argv, char **envp)
 		printf("Allocation error\n");
 		exit(1);
 	}
+	terminal_setting_save(mini);
 	while (TRUE)
 	{
 		minishell_init(mini);
-		terminal_setting_on(mini);		
+		terminal_setting_on(mini);
 		ft_signal();
 		if (ft_prompt(mini) == ERROR)
 		{
