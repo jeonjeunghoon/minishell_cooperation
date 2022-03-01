@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 16:32:33 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:55:34 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,12 @@ int	main(int argc, const char **argv, char **envp)
 		printf("Allocation error\n");
 		exit(1);
 	}
-	terminal_setting_save(mini);
+	// terminal_setting_save(mini);
+	rl_catch_signals = 0;
 	while (TRUE)
 	{
 		minishell_init(mini);
-		terminal_setting_on(mini);
+		// terminal_setting_on(mini);
 		ft_signal();
 		if (ft_prompt(mini) == ERROR)
 		{

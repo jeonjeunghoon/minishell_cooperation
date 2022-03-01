@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:52:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 16:26:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 17:09:11 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,22 @@ void	sig_func(int signum)
 {
 	if (signum == SIGINT)
 	{
-		if (g_sig->type == BASIC)
+		if (g_sig->type == BASIC || g_sig->type == HEREDOC)
 		{
-			printf("\n");
-			rl_on_new_line();
-			rl_replace_line("", 1);
-			rl_redisplay();
-			g_sig->exitnum = 1;
-		}
-		else if (g_sig->type == HEREDOC)
-		{
-			ioctl(STDIN_FILENO, TIOCSTI, "\n");
-			g_sig->signum = SIGINT;
-			g_sig->exitnum = 1;
+			if (g_sig->type == BASIC)
+			{
+				printf("\n");
+				rl_on_new_line();
+				rl_replace_line("", 1);
+				rl_redisplay();
+				g_sig->exitnum = 1;
+			}
+			else
+			{
+				ioctl(STDIN_FILENO, TIOCSTI, "\n");
+				g_sig->signum = SIGINT;
+				g_sig->exitnum = 1;
+			}
 		}
 		else
 		{

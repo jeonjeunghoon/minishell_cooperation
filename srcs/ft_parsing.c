@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 14:41:49 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/01 17:21:05 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,20 +171,24 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, 
 	
 		fd = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		g_sig->type = HEREDOC;
-		ft_signal();
 		if (fd == ERROR)
 		{
 			error_1(mini, ".heredoc_tmp", "No such file or directory", 1);
 			exit (1);
 		}
 		input = NULL;
-		rl_catch_signals = 0;
 		while (TRUE)
 		{
 			input = readline("> ");
 			if (g_sig->signum == SIGINT || input == NULL)
 			{
 				ft_free(&input);
+				if (g_sig->signum != SIGINT)
+				{
+					ft_putstr_fd("\x1b[1A", STDOUT_FILENO);
+					ft_putstr_fd("> ", STDOUT_FILENO);
+					exit_num_set(mini, 0);
+				}
 				return (0);
 			}
 			if (ft_strncmp(input, next_str, ft_strlen(next_str) + 1) == 0)
@@ -200,7 +204,6 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, 
 		}
 		close(fd);
 		g_sig->type = BASIC;
-		ft_signal();
 	}
 	return (TRUE);
 }

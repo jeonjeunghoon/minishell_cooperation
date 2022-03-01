@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 15:39:14 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:39:03 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, char **envp, t_bool is_
 	pid = 0;
 	if (is_child == FALSE)
 		pid = fork();
-	terminal_setting_reset(mini);
+	rl_catch_signals = 1;
 	if (pid > 0)
 	{
 		waitpid(pid, &stat_loc, 0x00000002);
