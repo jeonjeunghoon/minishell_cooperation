@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 16:49:13 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 18:19:35 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,6 @@ int		terminal_setting_on(t_mini *mini);
 void	terminal_setting_reset(t_mini *mini);
 
 //ft_wildcard
-t_list	*get_wild_str(t_mini *mini, t_token *token, char ** envp);
+t_list	*get_wild_str(t_mini *mini, t_token *token, char **envp);
 
 #endif

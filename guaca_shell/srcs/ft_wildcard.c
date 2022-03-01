@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/01 17:33:15 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 18:27:38 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 		free(argv);
 		if (ft_wifexited(stat_loc) == TRUE)
 			exit_num_set(mini, ft_wstopsig(stat_loc));
-
 		fd = open(".ls_tmp", O_RDONLY, 0644);
 		while (get_next_line(fd, &line))
 			ft_lstadd_back(&ls_lst, ft_lstnew(line));
@@ -45,7 +44,7 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 		fd = open(".ls_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		if (execve("/usr/bin/ls", argv, envp) == ERROR)
+		if (execve("/bin/ls", argv, envp) == ERROR)
 		{
 			ft_error(mini, strerror(errno), 1);
 			exit(mini->sig->exitnum);
@@ -180,12 +179,14 @@ t_list	*get_wild_str(t_mini *mini, t_token *token, char ** envp)
 		flag |= 2;
 	}
 	curr = wild_token;
-	/*printf("%d\n", flag);
-	while(curr)
-	{
-		printf("[%s]\n", (char *)curr->content);
-		curr = curr->next;
-	}*/
+	
+	// printf("%d\n", flag);
+	// while(curr)
+	// {
+	// 	printf("[%s]\n", (char *)curr->content);
+	// 	curr = curr->next;
+	// }
+
 	//ls를 통해서 현재 디렉토리 파일 목록 문자열화
 	if (wild_token || (token->token[0] == '*' && token->token[1] == 0))
 		return (find_wild_str(wild_token, get_ls_list(mini, envp), flag));

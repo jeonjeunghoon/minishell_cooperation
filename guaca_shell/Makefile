@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/03/01 16:45:10 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/03/01 18:18:01 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ LIBFT_PATH			=	./libft
 RL_NAME				=	readline
 RL_PATH				=	/opt/homebrew/opt/readline/lib
 
-RL_INC				=	/opt/homebrew/opt/readline/include/readline/
+RL_INC				=	/opt/homebrew/opt/readline/include/readline
 
 $(NAME)				:	$(OBJS)
 						@$(MAKE) -C $(LIBFT_PATH) bonus
