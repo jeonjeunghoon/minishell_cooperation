@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 19:36:25 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/01 14:31:27 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include </opt/homebrew/opt/readline/include/readline/readline.h>
+# include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
@@ -213,7 +213,7 @@ void	refine_init(t_refine *refine);
 int		refine_str(t_mini *mini, t_token *token, char **envp);
 int		stream_parse(t_token *token, char *input, int *end);
 int		str_parse(t_token *token, char *input, int *end);
-int		tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp);
+t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp);
 
 // tokenize_utility
 void	basic_str(t_refine *refine);
@@ -277,5 +277,8 @@ int		ltor(t_mini *mini, char *file);
 
 //fd_copy
 void fd_copy(int fd, int fd2);
+
+//ft_wildcard
+t_list	*get_wild_str(t_mini *mini, t_token *token, char ** envp);
 
 #endif

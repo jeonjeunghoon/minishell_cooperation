@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utility.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 18:51:19 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/28 09:34:48 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/02/28 16:16:15 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,12 +276,12 @@ int	create_refined_str(t_mini *mini, t_refine *refine)
 		refine->new_str[i++] = '\0';
 	while (refine->str[refine->i])
 	{
-		if (refine->str[refine->i] == '*')
+		/*if (refine->str[refine->i] == '*')
 		{
 			if (wildcard_str(mini, refine) == ERROR)
 				return (0);
 		}
-		else if (refine->str[refine->i] == '~')
+		else*/ if (refine->str[refine->i] == '~')
 			swung_dash_str(mini, refine);
 		else if (refine->str[refine->i] == '\'')
 			single_quote_str(mini, refine);
