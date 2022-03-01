@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/01 14:49:40 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:31:43 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ t_list	*get_wild_str(t_mini *mini, t_token *token, char ** envp)
 		curr = curr->next;
 	}*/
 	//ls를 통해서 현재 디렉토리 파일 목록 문자열화
-	if (wild_token)
+	if (wild_token || (token->token[0] == '*' && token->token[1] == 0))
 		return (find_wild_str(wild_token, get_ls_list(mini, envp), flag));
     return (0);
 }
