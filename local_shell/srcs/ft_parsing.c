@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 17:33:37 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 15:11:29 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,118 +29,108 @@ void	refine_heredoc(t_mini *mini, char **input, char **envp)
 	refine = NULL;
 }
 
-int	valid_symbol_list(char *str, int i)
+void	no_symbol(t_mini *mini, char *symbol)
 {
-	// if (str[i] == '<' && str[i + 1] == '<' && str[i + 2] == '<')
-	// 	return (RTOL3);
+	error_1(mini, symbol, "command not found", 127);
+}
+
+char	*valid_symbol_list(char *str, int i)
+{
 	if (str[i] == '>' && str[i + 1] == '>')
-		return (LTOR2);
+		return (ft_strdup(">>"));
 	else if (str[i] == '<' && str[i + 1] == '<')
-		return (RTOL2);
+		return (ft_strdup("<<"));
 	else if (str[i] == '<' && str[i + 1] == '>')
-		return (RL);
+		return (ft_strdup("<>"));
 	else if (str[i] == '|' && str[i + 1] == '|')
-		return (V2);
+		return (ft_strdup("||"));
 	else if (str[i] == '&' && str[i + 1] == '&')
-		return (E2);
+		return (ft_strdup("&&"));
 	else if (str[i] == '>' && str[i + 1] == '|')
-		return (LV);
-	else if (str[i] == '>' && str[i + 1] == '&')
-		return (LE);
-	else if (str[i] == '<' && str[i + 1] == '&')
-		return (RE);
+		return (ft_strdup(">|"));
 	else if (str[i] == '>')
-		return (LTOR1);
+		return (ft_strdup(">"));
 	else if (str[i] == '<')
-		return (RTOL1);
+		return (ft_strdup("<"));
 	else if (str[i] == '|')
-		return (V1);
-	else if (str[i] == '&')
-		return (E1);
-	return (0);
+		return (ft_strdup("|"));
+	return (ft_strdup(""));
 }
 
 t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, char **envp)
 {
 	int	i;
-	int	symbol;
-	int	near_symbol;
+	char	*symbol;
+	char	*near_symbol;
 
-	near_symbol = 0;
-	symbol = 0;
+	near_symbol = NULL;
+	symbol = NULL;
 	i = 0;
 	while (str[i])
 	{
-		if (symbol != 0)
+		if (symbol != NULL)
 		{
 			near_symbol = valid_symbol_list(str, i);
+			if (near_symbol[0] == '\0')
+			{
+				ft_free(&near_symbol);
+				near_symbol = ft_strdup(&(str[i]));
+			}
 			break ;
 		}
 		symbol = valid_symbol_list(str, i);
-		if (symbol == RTOL3)
-			i += 2;
-		else if (symbol == LTOR2 || symbol == RTOL2 || symbol == RL || \
-				symbol == V2 || symbol == E2 || symbol == LV || \
-				symbol == LE || symbol == RE)
+		if (symbol[0] == '\0')
+		{
+			ft_free(&symbol);
+			no_symbol(mini, str);
+			return (FALSE);
+		}
+		if ((ft_strlen(symbol) == 2))
 			i += 1;
 		i++;
 	}
 	if ((prev_str == NULL || next_str == NULL) && \
-		(symbol == V1 || symbol == V2 || symbol == E1 || symbol == E2))
+		((ft_strncmp(symbol, "|", 2) == 0) || \
+		(ft_strncmp(symbol, "||", 3) == 0) || \
+		(ft_strncmp(symbol, "&&", 3) == 0)))
 	{
-		if (symbol == V1)
-			error_symbol(mini, "|", 258);
-		else if (symbol == V2)
-			error_symbol(mini, "||", 258);
-		else if (symbol == E1)
-			error_symbol(mini, "&", 258);
-		else if (symbol == E2)
-			error_symbol(mini, "&&", 258);
+		error_symbol(mini, symbol, 258);
+		ft_free(&symbol);
+		if (near_symbol != NULL)
+			ft_free(&near_symbol);
 		return (FALSE);
 	}
-	else if (near_symbol != 0)
+	else if (near_symbol != NULL)
 	{
-		if (near_symbol == LTOR1)
-			error_symbol(mini, ">", 258);
-		else if (near_symbol == LTOR2)
-			error_symbol(mini, ">>", 258);
-		else if (near_symbol == RTOL1)
-			error_symbol(mini, "<", 258);
-		else if (near_symbol == RTOL2)
-			error_symbol(mini, "<<", 258);
-		else if (near_symbol == RTOL3)
-			error_symbol(mini, "<<<", 258);
-		else if (near_symbol == RL)
-			error_symbol(mini, "<>", 258);
-		else if (near_symbol == V1)
-			error_symbol(mini, "|", 258);
-		else if (near_symbol == V2)
-			error_symbol(mini, "||", 258);
-		else if (near_symbol == E1)
-			error_symbol(mini, "&", 258);
-		else if (near_symbol == E2)
-			error_symbol(mini, "&&", 258);
-		else if (near_symbol == LV)
-			error_symbol(mini, ">|", 258);
-		else if (near_symbol == LE)
-			error_symbol(mini, ">&", 258);
-		else if (near_symbol == RE)
-			error_symbol(mini, "<&", 258);
+		error_symbol(mini, near_symbol, 258);
+		ft_free(&symbol);
+		ft_free(&near_symbol);
 		return (FALSE);
 	}
 	else if (next_str == NULL)
 	{
 		error_symbol(mini, "newline", 258);
+		ft_free(&symbol);
+		if (near_symbol != NULL)
+			ft_free(&near_symbol);
 		return (FALSE);
 	}
-	if (symbol == LTOR1 || symbol == LTOR2 || symbol == RL || symbol == LV || symbol == LE)
+	if ((ft_strncmp(symbol, ">", 2) == 0) || \
+		(ft_strncmp(symbol, ">>", 3) == 0) || \
+		(ft_strncmp(symbol, "<>", 3) == 0) || \
+		(ft_strncmp(symbol, ">|", 3) == 0))
 	{
 		int	fd;
 
-		if (symbol == LTOR2)
+		if ((ft_strncmp(symbol, ">>", 3) == 0))
 		{
 			if ((fd = open(next_str, O_CREAT | O_TRUNC | O_APPEND | O_EXCL, 0644)) == ERROR)
+			{
+				ft_free(&symbol);
+				if (near_symbol != NULL)
+					ft_free(&near_symbol);
 				return (TRUE);
+			}
 		}
 		else
 			fd = open(next_str, O_CREAT | O_TRUNC, 0644);
@@ -151,7 +141,7 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, 
 		}
 		close(fd);
 	}
-	if (symbol == RTOL1)
+	if ((ft_strncmp(symbol, "<", 2) == 0))
 	{
 		int fd;
 
@@ -159,12 +149,14 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, 
 		if (fd == ERROR)
 		{
 			error_1(mini, next_str, "No such file or directory", 1);
+			ft_free(&symbol);
+			if (near_symbol != NULL)
+				ft_free(&near_symbol);
 			return (FALSE);
 		}
 		close(fd);
 	}
-
-	if (symbol == RTOL2 && next_str != NULL)
+	if ((ft_strncmp(symbol, "<<", 3) == 0))
 	{
 		int		fd;
 		char	*input;
@@ -205,6 +197,9 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, 
 		close(fd);
 		g_sig->type = BASIC;
 	}
+	ft_free(&symbol);
+	if (near_symbol != NULL)
+		ft_free(&near_symbol);
 	return (TRUE);
 }
 

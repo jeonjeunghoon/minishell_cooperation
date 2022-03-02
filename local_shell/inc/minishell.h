@@ -128,7 +128,7 @@ int		ft_prompt(t_mini *mini);
 
 // ft_parsing
 void	refine_heredoc(t_mini *mini, char **input, char **envp);
-int		valid_symbol_list(char *str, int i);
+char	*valid_symbol_list(char *str, int i);
 t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, char **envp);
 int		check_stream_symbol(t_mini *mini, t_list *token_lst, char **envp);
 int		create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst);
