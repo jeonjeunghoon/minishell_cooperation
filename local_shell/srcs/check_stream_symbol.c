@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:08:29 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:01:26 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 19:02:20 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str)
 		return (FALSE);
 	}
 	symbol_free(&symbol, &near_symbol);
-	system("leaks minishell");
 	return (ret);
 }
 
