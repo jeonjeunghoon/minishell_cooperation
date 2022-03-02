@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 15:26:22 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:21:39 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	memory_allocation(t_mini **mini, char **envp)
 int	main(int argc, const char **argv, char **envp)
 {
 	t_mini	*mini;
-	int		error_fd;
 
 	if (argc != 1 || argv == NULL)
 		return (0);
@@ -82,16 +81,7 @@ int	main(int argc, const char **argv, char **envp)
 		if (mini->input->user_input[0] != '\0')
 		{
 			if (ft_parsing(mini) != ERROR)
-			{
 				minishell(mini);
-				error_fd = open(".error_tmp", O_RDONLY, 0644);
-				if (error_fd != -1)
-				{
-					fd_copy(error_fd, 2);
-					close(error_fd);
-					unlink(".error_tmp");
-				}
-			}
 		}
 		clear_resource(mini);
 	}

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:52:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 17:09:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:10:19 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,6 @@ void	ft_signal(void)
 		signal(SIGINT, sig_func);
 	if (g_sig->type == BASIC || g_sig->type == HEREDOC)
 		signal(SIGQUIT, SIG_IGN);
-	else if (g_sig->type == EXECVE)
+	else
 		signal(SIGQUIT, sig_func);
 }
-
-/*
-
-1. 기본, heredoc (부모프로세스)
-	c: 새로운 프롬프트, 1
-	\: SIG_IGN, 0
-	d: 프로세스 종료, 0
-
-2. execve (자식프로세스)
-	c: 새로운 프롬프트, 130
-	\: 프로세스 종료, 출력: Quit 3, 131
-	d: 프로세스 종료, 0
-
-*/

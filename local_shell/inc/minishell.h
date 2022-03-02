@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 16:38:21 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:53:53 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include </opt/homebrew/opt/readline/include/readline/readline.h>
+# include </opt/homebrew/opt/readline/include/readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -127,14 +127,30 @@ char	*get_locate(void);
 int		ft_prompt(t_mini *mini);
 
 // ft_parsing
-void	refine_heredoc(t_mini *mini, char **input);
-char	*valid_symbol_list(char *str, int i);
-t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str);
-int		check_stream_symbol(t_mini *mini, t_list *token_lst);
 int		create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst);
 void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp);
 int		exception_handling(t_mini *mini, char *input);
 int		ft_parsing(t_mini *mini);
+
+// check_stream_symbol
+t_bool	stream_symbol_error(char *prev_str, char *next_str, \
+							char *symbol, char *near_symbol);
+void	near_symbol_exist(char **near_symbol, char *str, int i);
+t_bool	check_str(char **symbol, char **near_symbol, char *str);
+t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str);
+int		check_stream_symbol(t_mini *mini, t_list *token_lst);
+
+// check_stream_utility
+t_bool	open_heredoc(t_mini *mini, char *next_str);
+t_bool	open_file(t_mini *mini, char *symbol, char *next_str);
+t_bool	create_file(char *symbol, char *next_str);
+char	*valid_symbol_list(char *str, int i);
+
+// check_stream_utility2
+void	symbol_free(char **symbol, char **near_symbol);
+void	refine_heredoc(t_mini *mini, char **input);
+void	heredoc_catch_signal(char **input);
+t_bool	is_close_heredoc(char *input, char *next_str);
 
 // ft_signal
 void	sig_func(int signum);
@@ -247,8 +263,8 @@ int		set_redirect(t_mini *mini, t_argv *argv);
 void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, char **envp, t_bool is_child);
 
 // command_utility3
-void	set_original_fd(t_mini *mini);
-void	close_original_fd(t_mini *mini);
+void	save_origin_fd(t_mini *mini);
+void	load_origin_fd(t_mini *mini);
 
 // ft_pipe
 t_bool	when_there_is_pipe(t_mini *mini, t_argv *argv);
@@ -274,6 +290,7 @@ int		terminal_setting_on(t_mini *mini);
 void	terminal_setting_reset(t_mini *mini);
 
 //ft_wildcard
+void	wild_isin(t_list **lst, t_list *wild_str, t_token **token);
 t_list	*get_wild_str(t_mini *mini, t_token *token, char **envp);
 
 #endif

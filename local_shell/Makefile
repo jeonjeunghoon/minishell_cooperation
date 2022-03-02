@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/03/01 18:18:01 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/03/02 17:14:25 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,9 @@ CFLAGS				=	# -Wall -Wextra -Werror
 SRCS_NAME			=	main.c \
 						ft_prompt.c \
 						ft_parsing.c \
+						check_stream_symbol.c \
+						check_symbol_utility.c \
+						check_symbol_utility2.c \
 						ft_signal.c \
 						minishell.c \
 						ft_echo.c \

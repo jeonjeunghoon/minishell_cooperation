@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 16:15:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:39:07 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_command(t_mini *mini, t_argv *argv)
 			ft_free(&cmd_path);
 		}
 		if (is_child == TRUE)
-			exit(mini->sig->exitnum);
+			exit(g_sig->exitnum);
 	}
 	return (0);
 }
@@ -128,25 +128,23 @@ char	**create_cmd(t_list **head, t_argv *argv, t_argv *file)
 	char	**cmd;
 	char	**cmd_argv;
 
-	cmd = NULL;
 	cmd_argv = modify_file_argv(file);
-
-	if (argv->argv[0][0] == '>' || argv->argv[0][0] == '<') // (>) (file [cmd ...])
+	if (argv->argv[0][0] == '>' || argv->argv[0][0] == '<')
 	{
-		if (cmd_argv == NULL) // (>) (file)
+		if (cmd_argv == NULL)
 		{
 			cmd = (char **)malloc(sizeof(char *) * 2);
 			cmd[1] = NULL;
 			cmd[0] = ft_strdup("");
 		}
-		else // (>) (file cmd [...])
+		else
 			cmd = ft_strsdup(cmd_argv);
 	}
-	else // (cmd [...]) (>) (file [cmd ...])
+	else
 	{
-		if (cmd_argv == NULL) // cmd [...] > file
+		if (cmd_argv == NULL)
 			cmd = ft_strsdup(argv->argv);
-		else // (cmd [...]) (>) (file cmd_argv)
+		else
 			cmd = ft_strsjoin(argv->argv, cmd_argv);
 	}
 	if (cmd_argv != NULL)
@@ -154,18 +152,43 @@ char	**create_cmd(t_list **head, t_argv *argv, t_argv *file)
 	return (cmd);
 }
 
-// cmd argument redirect file [r f ...]
+void	finish_create(t_argv *argv, char ***cmd, char ***redirect_file)
+{
+	ft_two_dimension_free(&argv->argv);
+	argv->argv = ft_strsjoin(*cmd, *redirect_file);
+	ft_two_dimension_free(cmd);
+	ft_two_dimension_free(redirect_file);
+	argv->is_redirect = TRUE;
+}
 
-void	combine_argvs(t_list **head, t_argv *argv, t_argv *redirect, t_argv *file)
+void	cmd_argv_exist(char ***cmd, char ***cmd_argv, char ***tmp)
+{
+	*tmp = ft_strsjoin(*cmd, *cmd_argv);
+	ft_two_dimension_free(cmd);
+	ft_two_dimension_free(cmd_argv);
+	*cmd = ft_strsdup(*tmp);
+	ft_two_dimension_free(tmp);
+}
+
+char	**create_first_redirect(t_list **head, t_argv *argv, t_argv *file, char ***cmd)
+{
+	char	**redirect_file;
+
+	*cmd = create_cmd(head, argv, file);
+	redirect_file = ft_strsjoin(((t_argv *)(*head)->content)->argv, \
+								((t_argv *)(*head)->next->content)->argv);
+	(*head) = (*head)->next->next;
+	return (redirect_file);
+}
+
+void	combine_argvs(t_list **head, t_argv *argv, t_argv *file)
 {
 	char	**cmd;
 	char	**redirect_file;
 	char	**cmd_argv;
 	char	**tmp;
 
-	cmd = create_cmd(head, argv, file);
-	redirect_file = ft_strsjoin(((t_argv *)(*head)->content)->argv, ((t_argv *)(*head)->next->content)->argv);
-	(*head) = (*head)->next->next;
+	redirect_file = create_first_redirect(head, argv, file, &cmd);
 	while (*head != NULL && ((t_argv *)(*head)->content)->is_redirect == TRUE)
 	{
 		tmp = ft_strsjoin(redirect_file, ((t_argv *)(*head)->content)->argv);
@@ -175,69 +198,78 @@ void	combine_argvs(t_list **head, t_argv *argv, t_argv *redirect, t_argv *file)
 		(*head) = (*head)->next;
 		cmd_argv = modify_file_argv((*head)->content);
 		if (cmd_argv != NULL)
-		{
-				tmp = ft_strsjoin(cmd, cmd_argv);
-				ft_two_dimension_free(&cmd);
-				ft_two_dimension_free(&cmd_argv);
-				cmd = ft_strsdup(tmp);
-				ft_two_dimension_free(&tmp);
-		}
+			cmd_argv_exist(&cmd, &cmd_argv, &tmp);
 		tmp = ft_strsjoin(redirect_file, ((t_argv *)(*head)->content)->argv);
 		ft_two_dimension_free(&redirect_file);
 		redirect_file = ft_strsdup(tmp);
 		ft_two_dimension_free(&tmp);
 		(*head) = (*head)->next;
 	}
-	ft_two_dimension_free(&argv->argv);
-	argv->argv = ft_strsjoin(cmd, redirect_file);
-	ft_two_dimension_free(&cmd);
-	ft_two_dimension_free(&redirect_file);
-	argv->is_redirect = TRUE;
+	finish_create(argv, &cmd, &redirect_file);
+}
+
+void	is_redirect(t_list **head, t_argv *argv)
+{
+	combine_argvs(head, argv, (*head)->next->content);
+	if (*head == NULL)
+		return ;
+	if (((t_argv *)(*head)->pre->content)->is_pipe == TRUE)
+	{
+		argv->is_pipe = TRUE;
+		((t_argv *)(*head)->next->content)->was_pipe = TRUE;
+	}
+	else if (((t_argv *)(*head)->content)->is_and == TRUE)
+		argv->is_and = TRUE;
+	else if (((t_argv *)(*head)->content)->is_or == TRUE)
+		argv->is_or = TRUE;
+	return ;
+}
+
+t_bool	stream_check(t_list **head, t_argv *argv)
+{
+	if (((t_argv *)(*head)->content)->is_pipe == TRUE)
+	{
+		argv->is_pipe = TRUE;
+		((t_argv *)(*head)->next->next->content)->was_pipe = TRUE;
+		return (TRUE);
+	}
+	else if (((t_argv *)(*head)->content)->is_and == TRUE)
+	{
+		argv->is_and = TRUE;
+		return (TRUE);
+	}
+	else if (((t_argv *)(*head)->content)->is_or == TRUE)
+	{
+		argv->is_or = TRUE;
+		return (TRUE);
+	}
+	else if (((t_argv *)(*head)->content)->is_redirect == TRUE)
+	{
+		is_redirect(head, argv);
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
 void	create_argv_set(t_list **head, t_argv *argv)
 {
-	t_bool	in_redirect;
-
 	if ((*head)->next == NULL)
 		return ;
 	while ((*head)->next != NULL)
 	{
-		in_redirect = FALSE;
-		if (((t_argv *)(*head)->content)->is_pipe == TRUE)
-		{
-			argv->is_pipe = TRUE;
-			((t_argv *)(*head)->next->next->content)->was_pipe = TRUE;
+		if (stream_check(head, argv) == TRUE)
 			return ;
-		}
-		else if (((t_argv *)(*head)->content)->is_and == TRUE)
-		{
-			argv->is_and = TRUE;
-			return ;
-		}
-		else if (((t_argv *)(*head)->content)->is_or == TRUE)
-		{
-			argv->is_or = TRUE;
-			return ;
-		}
-		else if (((t_argv *)(*head)->content)->is_redirect == TRUE)
-		{
-			combine_argvs(head, argv, (*head)->content, (*head)->next->content);
-			if (*head == NULL)
-				return ;
-			if (((t_argv *)(*head)->pre->content)->is_pipe == TRUE)
-			{
-				argv->is_pipe = TRUE;
-				((t_argv *)(*head)->next->content)->was_pipe = TRUE;
-			}
-			else if (((t_argv *)(*head)->content)->is_and == TRUE)
-				argv->is_and = TRUE;
-			else if (((t_argv *)(*head)->content)->is_or == TRUE)
-				argv->is_or = TRUE;
-			return ;
-		}
 		*head = (*head)->next;
 	}
+}
+
+t_bool	check_and_or(t_argv *argv)
+{
+	if (argv->is_and && g_sig->exitnum)
+		return (TRUE);
+	else if (argv->is_or && g_sig->exitnum)
+		return (TRUE);
+	return (FALSE);
 }
 
 int	minishell(t_mini *mini)
@@ -246,65 +278,24 @@ int	minishell(t_mini *mini)
 	t_argv	*argv;
 	int		i;
 
-	/*head = mini->input->argv_lst;
-	printf("[argv_list]\n");
-	printf("head:%p\n", head);
-	while(head!=NULL)
-	{	
-		argv = head->content;
-		char **ptr = ((t_argv *)head->content)->argv;
-		int j = 0;
-		while(ptr[j])
-			printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->is_or);
-		printf("\n");
-		head = head->next;
-	}*/
 	head = mini->input->argv_lst;
-	set_original_fd(mini);
+	save_origin_fd(mini);
 	while (head != NULL)
 	{
 		argv = head->content;
 		if (argv->is_stream == FALSE)
 		{
 			create_argv_set(&head, argv);
-
-			// printf("[after create_argv_set]\n");
-			// printf("head: %s\n", ((t_argv *)head->content)->argv[0]);
-			// char **ptr = argv->argv;
-			// int j = 0;
-			// while(ptr[j])
-			// 	printf("%s %d %d\n", ptr[j++], argv->is_pipe, argv->was_pipe);
-			// printf("\n");
-
 			ft_command(mini, argv);
 			if (head == NULL)
 				break ;
 			if (argv->is_and || argv->is_or)
-			{
-				close_original_fd(mini);
-				set_original_fd(mini);
-			}
-			// if (head->next)
-			// 	((t_argv *)head->next->content)->hav_cmd = 1;
+				load_origin_fd(mini);
 		}
-		// else if(!argv->hav_cmd)
-		// {
-		// 	error_symbol(mini, argv->argv[0], 2);
-		// 	break;
-		// }
-		if (argv->is_and)
-		{
-			if (mini->sig->exitnum)
-				break;
-		}
-		else if (argv->is_or)
-		{
-			if (!mini->sig->exitnum)
-				break;
-		}
+		if (check_and_or(argv) == TRUE)
+			break ;
 		head = head->next;
-		argv = NULL;
 	}
-	close_original_fd(mini);
+	load_origin_fd(mini);
 	return (0);
 }

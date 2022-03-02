@@ -6,11 +6,34 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/02 16:38:40 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 17:33:16 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	wild_isin(t_list **lst, t_list *wild_str, t_token **token)
+{
+	t_list	*tmp;
+	t_token	*new_token;
+
+	tmp = NULL;
+	new_token = NULL;
+	while (wild_str)
+	{
+		tmp = wild_str->next;
+		new_token = (t_token *)malloc(sizeof(t_token));
+		new_token->double_quote = (*token)->double_quote;
+		new_token->is_stream = (*token)->is_stream;
+		new_token->single_quote = (*token)->single_quote;
+		new_token->token = (char *)wild_str->content;
+		ft_lstadd_back(lst, ft_lstnew(new_token));
+		free(wild_str);
+		wild_str = tmp;
+	}
+	ft_free(&((*token)->token));
+	free(*token);
+}
 
 t_list	*get_ls_list(t_mini *mini, char **envp)
 {
