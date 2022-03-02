@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/02 16:00:00 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:29:05 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 		fd = open(".ls_tmp", O_RDONLY, 0644);
 		while (get_next_line(fd, &line))
 			ft_lstadd_back(&ls_lst, ft_lstnew(line));
+		free(line);
 		unlink(".ls_tmp");
 		return ls_lst;
 	}
