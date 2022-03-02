@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/02 17:33:16 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:23:19 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ t_list	*find_wild_str(t_list  *wild_token, t_list *ls_lst, int flag)
 		str = (char *)ls_lst->content;
 		while (wild_curr)
 		{
-			//첫 토큰와 마지막 토큰 예외 처리 필요
 			if ((flag & 1) && wild_curr == wild_token)
 				str = ft_strstrf(str, (char *)wild_curr->content, 1);
 			else if ((flag & 2) && !wild_curr->next)
@@ -153,68 +152,56 @@ t_list	*find_wild_str(t_list  *wild_token, t_list *ls_lst, int flag)
 	return new_ls_lst;
 }
 
-t_list	*get_wild_str(t_mini *mini, t_token *token, char ** envp)
+t_list	*get_wild_str(t_mini *mini, t_token *token)
 {
-    int     i;
-    int     start_idx;
+    int		i;
+    int		start_idx;
 	int		flag;
-    t_token *tmp_token;
-    t_list  *wild_token;
-	t_list	*ls_lst;
-	t_list	*curr;
+    t_token	*tmp_token;
+    t_list	*wild_token;
 
-    i = 0;
-    start_idx = 0;
-    wild_token = 0;
+	i = 0;
+	start_idx = 0;
+	wild_token = 0;
 	flag = 0;
-    tmp_token = (t_token *)malloc(sizeof(t_token));
-    while (token->token[i])
-    {
-        if (token->token[i] == '\"')
-            while (token->token[++i] != '\"')
-                ;
-        else if (token->token[i] == '\'')
-            while (token->token[++i] != '\'')
-                ;
-        else if (token->token[i] == '$' && token->token[i + 1] == '*')
-            i++;
-        else if (token->token[i] == '*')
-        {
-            if (i - start_idx)
-            {
+	tmp_token = (t_token *)malloc(sizeof(t_token));
+	while (token->token[i])
+	{
+		if (token->token[i] == '\"')
+			while (token->token[i] != '\"')
+				i++;
+		else if (token->token[i] == '\'')
+			while (token->token[i] != '\'')
+				i++;
+		else if (token->token[i] == '$' && token->token[i + 1] == '*')
+			i++;
+		else if (token->token[i] == '*')
+		{
+			if (i - start_idx)
+			{
 				tmp_token->token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
 				ft_strlcpy(tmp_token->token, token->token + start_idx, i - start_idx + 1);
-				if (refine_str(mini, tmp_token, envp) == ERROR)
+				if (refine_str(mini, tmp_token, mini->envp) == ERROR)
 					return ((t_list *)ERROR);
 				ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
 				if (start_idx == 0)
 					flag |= 1;
 			}
-            start_idx = i + 1;
-        }
-        i++;
-    }
+			start_idx = i + 1;
+		}
+		i++;
+	}
 	if (start_idx && i - start_idx)
 	{
 		tmp_token->token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
 		ft_strlcpy(tmp_token->token, token->token + start_idx, i - start_idx + 1);
-		if (refine_str(mini, tmp_token, envp) == ERROR)
+		if (refine_str(mini, tmp_token, mini->envp) == ERROR)
 			return ((t_list *)ERROR);
 		ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
 		flag |= 2;
 	}
-	curr = wild_token;
 	free(tmp_token);
-	
-	// printf("%d\n", flag);
-	// while(curr)
-	// {
-	// 	printf("[%s]\n", (char *)curr->content);
-	// 	curr = curr->next;
-	// }
-
-	//ls를 통해서 현재 디렉토리 파일 목록 문자열화
 	if (wild_token || (token->token[0] == '*' && token->token[1] == 0))
-		return (find_wild_str(wild_token, get_ls_list(mini, envp), flag));
-    return (0);
+		return (find_wild_str(wild_token, get_ls_list(mini, mini->envp), flag));
+	return (0);
 }

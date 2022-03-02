@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 16:41:31 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 19:48:10 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,6 @@ void	ft_echo(t_mini *mini, t_argv *argv)
 	int		n_flag;
 	int		error_fd;
 
-	// if (!argv->is_or)
-	// {
-	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-	// 	dup2(error_fd, 2);
-	// 	close(error_fd);
-	// }
 	n_flag = FALSE;
 	if (argv->argv[1] == NULL)
 		write(1, "\n", 1);

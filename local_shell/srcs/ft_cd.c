@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 16:15:58 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 19:50:24 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,13 @@ void	set_env_cd(t_mini *mini, char *old_pwd)
 	pwd = getcwd(NULL, 0);
 	argv[1] = ft_strjoin("PWD=", pwd);
 	ft_free(&pwd);
-	pwd = NULL;
 	argv[2] = ft_strjoin("OLDPWD=", old_pwd);
 	argvt.argv = argv;
-	argvt.is_pipe = 0;
-	argvt.was_pipe = 0;
 	ft_export(mini, &argvt);
 	i = 0;
 	while (i < 4)
 	{
 		ft_free(&(argv[i]));
-		argv[i] = NULL;
 		i++;
 	}
 	free(argv);
@@ -85,7 +81,7 @@ char	*get_path(char **envp, char *argv)
 	return (ptr);
 }
 
-void	ft_cd(t_mini *mini, t_argv* argv)
+void	ft_cd(t_mini *mini, t_argv *argv)
 {
 	char	*path;
 	char	*old_pwd;
@@ -93,12 +89,6 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 	int		error_fd;
 
 	exit_num_set(0);
-	// if(!argv->is_or)
-	// {
-	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-	// 	dup2(error_fd, 2);
-	// 	close(error_fd);
-	// }
 	path = NULL;
 	i = 1;
 	old_pwd = ft_getenv(mini->envp, "PWD");
@@ -109,7 +99,7 @@ void	ft_cd(t_mini *mini, t_argv* argv)
 		{
 			if (check_path(mini, path) == ERROR)
 				exit(g_sig->exitnum);
-			break;
+			break ;
 		}
 		i++;
 	}

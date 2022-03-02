@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 16:17:14 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 19:50:39 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,12 +126,6 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	int		error_fd;
 
 	exit_num_set(0);
-	// if (!argv->is_or)
-	// {
-	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-	// 	dup2(error_fd, 2);
-	// 	close(error_fd);
-	// }
 	size = ft_two_dimension_size(argv->argv) - 1;
 	if (ft_two_dimension_size(argv->argv) > 1)
 	{

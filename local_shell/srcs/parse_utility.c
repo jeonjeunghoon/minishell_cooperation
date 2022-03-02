@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 21:04:00 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:07:31 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	token_init(t_token *token)
 	token->is_stream = FALSE;
 }
 
-int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
+void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 {
 	(*stream) = (t_argv *)malloc(sizeof(t_argv));
 	argv_init(*stream);
@@ -52,16 +52,12 @@ int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 		(*stream)->is_and = TRUE;
 	else if (token->token[0] == '|' && token->token[1] == '|')
 		(*stream)->is_or = TRUE;
-	if ((token->token[0] == '|' && token->token[1] == '|') ||\
-	(token->token[0] == '|' && token->token[1] == 0) ||\
-	token->token[0] == '&' && token->token[1] == '&')
+	if (token->token[0] == '|' || \
+		token->token[0] == '&' && token->token[1] == '&')
 		(*stream)->is_stream = TRUE;
 	if (token->token[0] == '<' && token->token[1] == '<')
 		(*stream)->is_heredoc = TRUE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
-	if (token->token[0] == '|' && token->token[1] == '|')
-		return 1;
-	return 0;
 }
 
 void	check_stream(t_argv *argv, t_list *token_lst, char *str)

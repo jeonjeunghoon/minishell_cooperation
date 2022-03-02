@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 17:23:39 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:19:25 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	str_parse(t_token *token, char *input, int *pos)
 	return (0);
 }
 
-t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp)
+t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start)
 {
 	t_list	*wild_str;
 
@@ -116,10 +116,10 @@ t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start, char **e
 			ft_error("tokenize error", 1);
 			exit(g_sig->exitnum);
 		}
-		wild_str = get_wild_str(mini, token, envp);
+		wild_str = get_wild_str(mini, token);
 		if (!wild_str)
-			if (refine_str(mini, token, envp) == ERROR)
-				return ((t_list*)ERROR);
+			if (refine_str(mini, token, mini->envp) == ERROR)
+				return ((t_list *)ERROR);
 	}
 	return (wild_str);
 }

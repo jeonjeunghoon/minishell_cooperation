@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/03/02 17:14:25 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/03/02 21:03:23 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,9 @@ SRCS_NAME			=	main.c \
 						check_symbol_utility2.c \
 						ft_signal.c \
 						minishell.c \
+						create_argv_set.c \
+						create_argv_set2.c \
+						ft_command.c \
 						ft_echo.c \
 						ft_cd.c \
 						ft_pwd.c \
@@ -38,13 +41,11 @@ SRCS_NAME			=	main.c \
 						tokenize_utility2.c \
 						tokenize_utility3.c \
 						command_utility.c \
-						command_utility2.c \
 						command_utility3.c \
+						exe_cmd.c \
 						w_utility.c \
-						ft_pipe.c \
 						redirect_utility.c \
 						fd_copy.c \
-						terminal_setting.c \
 						ft_wildcard.c
 
 SRCS_PATH			=	./srcs

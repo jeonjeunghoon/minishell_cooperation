@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 18:53:53 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 21:12:27 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,6 @@
 # define BASIC 1
 # define EXECVE 2
 # define HEREDOC 3
-# define LTOR1 1 // >
-# define LTOR2 2 // >>
-# define RTOL1 3 // <
-# define RTOL2 4 // <<
-# define RTOL3 5 // <<<
-# define RL 6 // <>
-# define V1 7 // |
-# define V2 8 // ||
-# define E1 9 // &
-# define E2 10 // &&
-# define LV 11 // >|
-# define LE 12 // >&
-# define RE 13 // <&
 # define WRITE 1
 # define READ 0
 
@@ -87,12 +74,11 @@ typedef struct s_argv
 	t_bool	is_redirect;
 	t_bool	is_heredoc;
 	t_bool	is_stream;
-	t_bool	was_pipe; //이전 argv에 pipe가 있는가? 
-	t_bool	is_pipe; //다음 argv에 pipe가 있는가? "du -h | sort -nr" 이면 du는 was = 0 is = 1, sort는 was = 1, is = 0
-	// t_bool	is_input; //명령어의 input이 존재하는가? "ls -a | sort -nr a.txt"이면 ls 출력x, ls 내용과 무관하게 a.txt를 sort 이때 sort의 is_input은 1
-	t_bool	is_and; // &&
-	t_bool	is_or; // ||
-	t_bool	is_wildcard; // *
+	t_bool	was_pipe;
+	t_bool	is_pipe;
+	t_bool	is_and;
+	t_bool	is_or;
+	t_bool	is_wildcard;
 	t_bool	hav_cmd;
 }	t_argv;
 
@@ -137,7 +123,8 @@ t_bool	stream_symbol_error(char *prev_str, char *next_str, \
 							char *symbol, char *near_symbol);
 void	near_symbol_exist(char **near_symbol, char *str, int i);
 t_bool	check_str(char **symbol, char **near_symbol, char *str);
-t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str);
+t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, \
+						char *next_str);
 int		check_stream_symbol(t_mini *mini, t_list *token_lst);
 
 // check_stream_utility
@@ -157,10 +144,30 @@ void	sig_func(int signum);
 void	ft_signal(void);
 
 // minishell
-int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
-int		ft_command(t_mini *mini, t_argv *argv);
-int		set_stream(t_list *head);
+t_bool	check_and_or(t_argv *argv);
 int		minishell(t_mini *mini);
+
+// create_argv_set
+char	**create_first_redirect(t_list **head, t_argv *argv, \
+								t_argv *file, char ***cmd);
+void	combine_argvs(t_list **head, t_argv *argv, t_argv *file);
+void	is_redirect(t_list **head, t_argv *argv);
+t_bool	stream_check(t_list **head, t_argv *argv);
+void	create_argv_set(t_list **head, t_argv *argv);
+
+// create_argv_set2
+void	refine_file(t_argv *file);
+char	**modify_file_argv(t_argv *file);
+char	**create_cmd(t_list **head, t_argv *argv, t_argv *file);
+void	finish_create(t_argv *argv, char ***cmd, char ***redirect_file);
+void	cmd_argv_exist(char ***cmd, char ***cmd_argv, char ***tmp);
+
+// ft_command
+int		mini_command(t_mini *mini, char *cmd, t_argv *argv);
+int		pid_zero(t_mini *mini, t_argv *argv, char **cmd_path, t_bool is_child);
+void	pid_not_zero(t_mini *mini, t_argv *argv, int pid, int *stat_loc);
+int		pipe_set(t_mini *mini, t_argv *argv, int *pid, t_bool *is_child);
+int		ft_command(t_mini *mini, t_argv *argv);
 
 // ft_echo
 void	print_msg(char **envp, char **argv, int start_ptr, int n_flag);
@@ -216,7 +223,7 @@ void	argv_free(t_list *lst);
 // parse_utility
 int		stream_flag_str(t_token *token);
 void	token_init(t_token *token);
-int		create_stream(t_argv **stream, t_token *token, t_list **argv_lst);
+void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst);
 void	create_argv(t_argv **argv, t_list *token_lst, \
 					t_list **argv_lst, int size);
 
@@ -230,7 +237,7 @@ void	refine_init(t_refine *refine);
 int		refine_str(t_mini *mini, t_token *token, char **envp);
 int		stream_parse(t_token *token, char *input, int *end);
 int		str_parse(t_token *token, char *input, int *end);
-t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start, char **envp);
+t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start);
 
 // tokenize_utility
 void	basic_str(t_refine *refine);
@@ -247,8 +254,10 @@ t_bool	is_stream(char ch);
 t_bool	str_condition(char c, t_token *token);
 
 // tokenize_utility3
-void	create_exitnum_str(t_refine *refine, char *tmp, \
-							char *exit_num, int tmp_len);
+int		env_after_dollor(t_refine *refine);
+void	show_minishell(t_refine *refine);
+void	num_after_dollor(t_refine *refine);
+void	basic_str(t_refine *refine);
 void	exitnum_str(t_mini *mini, t_refine *refine);
 
 // command_utility
@@ -256,41 +265,34 @@ void	create_path_bundle(t_mini *mini);
 void	set_absolute_path(char **file_path, char *cmd);
 void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path);
 
-// command_utility2
-t_bool	ft_s_isreg(int mode);
-t_bool	ft_s_isdir(int mode);
+// exe_cmd
+void	remove_redirection(t_argv *argv);
 int		set_redirect(t_mini *mini, t_argv *argv);
-void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, char **envp, t_bool is_child);
+void	exe_child(char **argv, char *cmd_path, char **envp);
+void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, t_bool is_child);
 
 // command_utility3
 void	save_origin_fd(t_mini *mini);
 void	load_origin_fd(t_mini *mini);
 
-// ft_pipe
-t_bool	when_there_is_pipe(t_mini *mini, t_argv *argv);
-void    pipe_tmp_copy(t_mini *mini, t_argv *argv);
-
 // w_utility
+t_bool	ft_s_isreg(int mode);
+t_bool	ft_s_isdir(int mode);
 int		ft_wexitstatus(int stat_loc);
 int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
 
 // redirect_utility
-int		heredoc(void);
-int		append(char *file);
-int		rtol(char *file);
-int		ltor(char *file);
+int		heredoc(char *argv, int *i);
+int		append(char *argv, char *file, int *i);
+int		rtol(char *argv, char *file, int *i);
+int		ltor(char *argv, char *file, int *i);
 
 //fd_copy
-void fd_copy(int fd, int fd2);
-
-// terminal_setting
-void	terminal_setting_save(t_mini *mini);
-int		terminal_setting_on(t_mini *mini);
-void	terminal_setting_reset(t_mini *mini);
+void	fd_copy(int fd, int fd2);
 
 //ft_wildcard
 void	wild_isin(t_list **lst, t_list *wild_str, t_token **token);
-t_list	*get_wild_str(t_mini *mini, t_token *token, char **envp);
+t_list	*get_wild_str(t_mini *mini, t_token *token);
 
 #endif

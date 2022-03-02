@@ -6,59 +6,53 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:52:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 18:10:19 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 19:53:17 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	sig_func(int signum)
+void	sigquit_func(int signum)
 {
-	if (signum == SIGINT)
+	printf("Quit: 3\n");
+	g_sig->exitnum = 131;
+}
+
+void	sigint_func(int signum)
+{
+	if (g_sig->type == BASIC || g_sig->type == HEREDOC)
 	{
-		if (g_sig->type == BASIC || g_sig->type == HEREDOC)
+		if (g_sig->type == BASIC)
 		{
-			if (g_sig->type == BASIC)
-			{
-				printf("\n");
-				rl_on_new_line();
-				rl_replace_line("", 1);
-				rl_redisplay();
-				g_sig->exitnum = 1;
-			}
-			else
-			{
-				ioctl(STDIN_FILENO, TIOCSTI, "\n");
-				g_sig->signum = SIGINT;
-				g_sig->exitnum = 1;
-			}
+			printf("\n");
+			rl_on_new_line();
+			rl_replace_line("", 1);
+			rl_redisplay();
 		}
 		else
 		{
-			printf("\n");
-			g_sig->exitnum = 130;
+			ioctl(STDIN_FILENO, TIOCSTI, "\n");
+			g_sig->signum = SIGINT;
 		}
+		g_sig->exitnum = 1;
 	}
-	else if (signum == SIGQUIT)
+	else
 	{
-		if (g_sig->type == EXECVE)
-		{
-			printf("Quit: 3\n");
-			g_sig->exitnum = 131;
-		}
+		printf("\n");
+		g_sig->exitnum = 130;
 	}
 }
 
 void	ft_signal(void)
 {
 	if (g_sig->type == BASIC)
-		signal(SIGINT, sig_func);
+		signal(SIGINT, sigint_func);
 	else if (g_sig->type == HEREDOC)
-		signal(SIGINT, sig_func);
+		signal(SIGINT, sigint_func);
 	else if (g_sig->type == EXECVE)
-		signal(SIGINT, sig_func);
+		signal(SIGINT, sigint_func);
 	if (g_sig->type == BASIC || g_sig->type == HEREDOC)
 		signal(SIGQUIT, SIG_IGN);
 	else
-		signal(SIGQUIT, sig_func);
+		signal(SIGQUIT, sigquit_func);
 }

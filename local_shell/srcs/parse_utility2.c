@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 14:16:26 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 10:47:04 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 20:56:44 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	argv_init(t_argv *argv)
 	argv->is_heredoc = FALSE;
 	argv->is_stream = FALSE;
 	argv->was_pipe = FALSE;
-	// argv->is_input = FALSE;
 	argv->is_pipe = FALSE;
 	argv->is_and = FALSE;
 	argv->is_or = FALSE;
