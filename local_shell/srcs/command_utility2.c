@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 16:39:03 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:20:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,22 @@ int	set_redirect(t_mini *mini, t_argv *argv)
 	{
 		if (argv->argv[i][0] == '>' && argv->argv[i][1] == '>')
 		{
-			append(mini, argv->argv[i + 1]);
+			append(argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '>')
 		{
-			ltor(mini, argv->argv[i + 1]);
+			ltor(argv->argv[i + 1]);
 			i++;
 		}
 		else if (argv->argv[i][0] == '<' && argv->argv[i][1] == '<')
 		{
-			heredoc(mini);
+			heredoc();
 			i++;
 		}
 		else if (argv->argv[i][0] == '<')
 		{
-			if (rtol(mini, argv->argv[i + 1]) == ERROR)
+			if (rtol(argv->argv[i + 1]) == ERROR)
 				return (ERROR);
 			i++;
 		}
@@ -109,7 +109,7 @@ void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, char **envp, t_bool is_
 		waitpid(pid, &stat_loc, 0x00000002);
 		unlink(".heredoc_tmp");
 		if (ft_wifexited(stat_loc) == TRUE)
-			exit_num_set(mini, ft_wstopsig(stat_loc));
+			exit_num_set(ft_wstopsig(stat_loc));
 	}
 	else if (pid == 0)
 	{
@@ -127,20 +127,20 @@ void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, char **envp, t_bool is_
 		printf("\n");*/
 		if (argv->argv[0][0] == '\0')
 		{
-			exit_num_set(mini, 0);
-			exit(mini->sig->exitnum);
+			exit_num_set(0);
+			exit(g_sig->exitnum);
 		}
 		if (execve(cmd_path, argv->argv, envp) == ERROR)
 		{
 			if (cmd_path[0] == '/')
-				error_1(mini, cmd_path, "No such file or directory", 127);
+				error_1(cmd_path, "No such file or directory", 127);
 			else if (errno == 2)
-				error_1(mini, cmd_path, "command not found", 127);
+				error_1(cmd_path, "command not found", 127);
 			else if (errno == 13)
-				error_1(mini, cmd_path, "is a directory", 126);
+				error_1(cmd_path, "is a directory", 126);
 			else
-				ft_error(mini, strerror(errno), 1);
-			exit(mini->sig->exitnum);
+				ft_error(strerror(errno), 1);
+			exit(g_sig->exitnum);
 		}
 	}
 }

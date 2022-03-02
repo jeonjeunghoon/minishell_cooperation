@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utility.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 18:51:19 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/28 16:16:15 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:18:47 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	swung_dash_str(t_mini *mini, t_refine *refine)
 		refine->i++;
 		refine->env = ft_getenv(refine->envp, "HOME");
 		if (refine->env == NULL)
-			ft_error(mini, "$Home env error", 1);
+			ft_error("$Home env error", 1);
 		else
 			env_str(refine);
 	}

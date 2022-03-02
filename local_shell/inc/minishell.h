@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 15:07:49 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:20:30 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,10 @@ char	*get_locate(void);
 int		ft_prompt(t_mini *mini);
 
 // ft_parsing
-void	refine_heredoc(t_mini *mini, char **input, char **envp);
+void	refine_heredoc(t_mini *mini, char **input);
 char	*valid_symbol_list(char *str, int i);
-t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str, char **envp);
-int		check_stream_symbol(t_mini *mini, t_list *token_lst, char **envp);
+t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str);
+int		check_stream_symbol(t_mini *mini, t_list *token_lst);
 int		create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst);
 void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp);
 int		exception_handling(t_mini *mini, char *input);
@@ -185,15 +185,15 @@ int		exit_exception(t_mini *mini, int argc, char **argv);
 void	ft_exit(t_mini *mini, t_argv *argv);
 
 // ft_error
-void	error_symbol(t_mini *mini, char *symbol, int exit_num);
-void	error_2(t_mini *mini, char *cmd, char *argv, char *msg, int exit_num);
-void	error_1(t_mini *mini, char *cmd, char *msg, int exit_num);
-void	ft_error(t_mini *mini, char *msg, int exit_num);
+void	error_symbol(char *symbol, int exit_num);
+void	error_2(char *cmd, char *argv, char *msg, int exit_num);
+void	error_1(char *cmd, char *msg, int exit_num);
+void	ft_error(char *msg, int exit_num);
 
 // utility
 char	*get_envname(char *name);
 char	*ft_getenv(char **envp, char *name);
-void	exit_num_set(t_mini *mini, int num);
+void	exit_num_set(int num);
 void	token_free(t_list *lst);
 void	argv_free(t_list *lst);
 
@@ -260,10 +260,10 @@ int		ft_wstopsig(int stat_loc);
 t_bool	ft_wifexited(int stat_loc);
 
 // redirect_utility
-int		heredoc(t_mini *mini);
-int		append(t_mini *mini, char *file);
-int		rtol(t_mini *mini, char *file);
-int		ltor(t_mini *mini, char *file);
+int		heredoc(void);
+int		append(char *file);
+int		rtol(char *file);
+int		ltor(char *file);
 
 //fd_copy
 void fd_copy(int fd, int fd2);

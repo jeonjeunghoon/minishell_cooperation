@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 14:38:18 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:16:49 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	**create_export_envp(char **envp, char *env)
 			new[i++] = ft_strdup(envp[j++]);
 	}
 	new[i] = ft_strdup(env);
-	free(envname);
+	ft_free(&envname);
 	return (new);
 }
 
@@ -87,8 +87,8 @@ int	check_export_argv(t_mini *mini, char *argv)
 		if (is_valid_export(argv, i) == ERROR)
 		{
 			error_msg = ft_strjoin_bothside("`", argv, "'");
-			error_2(mini, "export", error_msg, "not a valid identifier", 1);
-			free(error_msg);
+			error_2("export", error_msg, "not a valid identifier", 1);
+			ft_free(&error_msg);
 			return (ERROR);
 		}
 		if (argv[i] == '=')
@@ -106,7 +106,7 @@ void	ft_export(t_mini *mini, t_argv *argv)
 	char	**new_envp;
 	int		error_fd;
 
-	exit_num_set(mini, 0);
+	exit_num_set(0);
 	// if (!argv->is_or)
 	// {
 	// 	error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);

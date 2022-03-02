@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 18:58:44 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:15:38 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,5 @@ void	ft_echo(t_mini *mini, t_argv *argv)
 			start_ptr++;
 		}
 	}
-	exit_num_set(mini, 0);
+	exit_num_set(0);
 }

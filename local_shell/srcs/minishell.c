@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 20:42:51 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:15:11 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	ft_command(t_mini *mini, t_argv *argv)
 		}
 		if (argv->is_heredoc == TRUE)
 			unlink(".heredoc_tmp");
-		exit_num_set(mini, ft_wexitstatus(stat_loc));
+		exit_num_set(ft_wexitstatus(stat_loc));
 	}
 	else if (pid == 0)
 	{

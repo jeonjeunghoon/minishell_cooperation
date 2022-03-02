@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/16 21:37:12 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 14:59:37 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:09:26 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ char	*ft_getenv(char **envp, char *name)
 	return (NULL);
 }
 
-void	exit_num_set(t_mini *mini, int exitnum)
+void	exit_num_set(int exitnum)
 {
-	mini->sig->exitnum = exitnum;
+	g_sig->exitnum = exitnum;
 }
 
 void	token_free(t_list *lst)

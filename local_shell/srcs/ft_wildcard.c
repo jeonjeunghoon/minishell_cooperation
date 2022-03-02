@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/01 18:27:38 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:21:34 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 		waitpid(pid, &stat_loc, 0x00000002);
 		free(argv);
 		if (ft_wifexited(stat_loc) == TRUE)
-			exit_num_set(mini, ft_wstopsig(stat_loc));
+			exit_num_set(ft_wstopsig(stat_loc));
 		fd = open(".ls_tmp", O_RDONLY, 0644);
 		while (get_next_line(fd, &line))
 			ft_lstadd_back(&ls_lst, ft_lstnew(line));
@@ -46,8 +46,8 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 		close(fd);
 		if (execve("/bin/ls", argv, envp) == ERROR)
 		{
-			ft_error(mini, strerror(errno), 1);
-			exit(mini->sig->exitnum);
+			ft_error(strerror(errno), 1);
+			exit(g_sig->exitnum);
 		}
 	}
 	return 0;

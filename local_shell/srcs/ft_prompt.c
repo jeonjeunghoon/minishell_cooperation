@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 10:42:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 17:11:04 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:14:48 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int	ft_prompt(t_mini *mini)
 	if (mini->input->user_input == NULL)
 	{
 		printf("exit\n");
-		exit_num_set(mini, 1);
-		exit(mini->sig->exitnum);
+		exit_num_set(1);
+		exit(g_sig->exitnum);
 	}
 	return (0);
 }

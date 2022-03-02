@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 20:50:06 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:18:00 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ int	exit_exception(t_mini *mini, int argc, char **argv)
 		return (0);
 	else if (argc > 2)
 	{
-		error_1(mini, "exit", "too many arguments", 1);
+		error_1("exit", "too many arguments", 1);
 		return (ERROR);
 	}
 	else if (argc == 2)
 	{
 		if (check_argv(argv[1]) == ERROR)
 		{
-			error_2(mini, "exit", argv[1], "numeric argument required", 255);
+			error_2("exit", argv[1], "numeric argument required", 255);
 			return (ERROR);
 		}
 	}
@@ -56,7 +56,7 @@ void	ft_exit(t_mini *mini, t_argv *argv)
 	int	argc;
 	int	error_fd;
 
-	exit_num_set(mini, 0);
+	exit_num_set(0);
 	if (!argv->is_or)
 	{
 		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -66,10 +66,10 @@ void	ft_exit(t_mini *mini, t_argv *argv)
 	argc = 0;
 	argc = ft_two_dimension_size(argv->argv);
 	if (exit_exception(mini, argc, argv->argv) == ERROR)
-		exit(mini->sig->exitnum);
+		exit(g_sig->exitnum);
 	if (!(argv->is_pipe || argv->was_pipe))
 		printf("logout\n");
 	if (argc == 2)
-		exit_num_set(mini, ft_atoi(argv->argv[1]));
-	exit(mini->sig->exitnum);
+		exit_num_set(ft_atoi(argv->argv[1]));
+	exit(g_sig->exitnum);
 }

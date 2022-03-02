@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/01 14:51:21 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:18:29 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,16 +106,16 @@ t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start, char **e
 	{
 		if (stream_parse(token, input, start) == ERROR)
 		{
-			ft_error(mini, "tokenize error", 1);
-			exit(mini->sig->exitnum);
+			ft_error("tokenize error", 1);
+			exit(g_sig->exitnum);
 		}
 	}
 	else
 	{
 		if (str_parse(token, input, start) == ERROR)
 		{
-			ft_error(mini, "tokenize error", 1);
-			exit(mini->sig->exitnum);
+			ft_error("tokenize error", 1);
+			exit(g_sig->exitnum);
 		}
 		wild_str = get_wild_str(mini, token, envp);
 		
