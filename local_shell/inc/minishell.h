@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 12:28:12 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 12:47:24 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,5 +298,7 @@ int		ltor(char *argv, char *file, int *i);
 //ft_wildcard
 void	wild_isin(t_list **lst, t_list *wild_str, t_token **token);
 t_list	*get_wild_str(t_mini *mini, char *token);
+t_list	*get_ls_list(t_mini *mini, char **envp);
+t_list	*find_wild_str(t_list *wild_token, t_list *ls_lst, int flag);
 
 #endif
