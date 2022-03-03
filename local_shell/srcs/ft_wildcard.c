@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 10:17:38 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 10:42:59 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 	pid_t	pid;
 	int		stat_loc;
 	t_list	*ls_lst;
-	
+
 	argv = (char **)malloc(sizeof(char *) * 2);
 	argv[0] = (char *)malloc(sizeof(char) * 3);
 	ft_strlcpy(argv[0], "ls", 3);
@@ -62,7 +62,7 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 			ft_lstadd_back(&ls_lst, ft_lstnew(line));
 		free(line);
 		unlink(".ls_tmp");
-		return ls_lst;
+		return (ls_lst);
 	}
 	else if (pid == 0)
 	{
@@ -75,15 +75,15 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 			exit(g_sig->exitnum);
 		}
 	}
-	return 0;
-}	
+	return (0);
+}
 
 char	*ft_strstrf(char *str, char *to_find, int flag)
 {
-	int i;
-	int j;
-	int slen;
-	int tlen;
+	int	i;
+	int	j;
+	int	slen;
+	int	tlen;
 
 	i = 0;
 	slen = ft_strlen(str);
@@ -104,13 +104,13 @@ char	*ft_strstrf(char *str, char *to_find, int flag)
 		if (j == tlen)
 			return (str + i + j);
 		if (flag == 1)
-			break;
+			break ;
 		i++;
 	}
 	return (0);
 }
 
-t_list	*find_wild_str(t_list  *wild_token, t_list *ls_lst, int flag)
+t_list	*find_wild_str(t_list *wild_token, t_list *ls_lst, int flag)
 {
 	t_list	*wild_curr;
 	t_list	*new_ls_lst;
@@ -131,7 +131,7 @@ t_list	*find_wild_str(t_list  *wild_token, t_list *ls_lst, int flag)
 			else
 				str = ft_strstrf(str, (char *)wild_curr->content, 0);
 			if (!str)
-				break;
+				break ;
 			wild_curr = wild_curr->next;
 		}
 		if (str)
@@ -149,40 +149,39 @@ t_list	*find_wild_str(t_list  *wild_token, t_list *ls_lst, int flag)
 		free(wild_token);
 		wild_token = tmp;
 	}
-	return new_ls_lst;
+	return (new_ls_lst);
 }
 
-t_list	*get_wild_str(t_mini *mini, t_token *token)
+t_list	*get_wild_str(t_mini *mini, char *token)
 {
-    int		i;
-    int		start_idx;
+	int		i;
+	int		start_idx;
 	int		flag;
-    t_token	*tmp_token;
-    t_list	*wild_token;
+	t_token	tmp_token;
+	t_list	*wild_token;
 
 	i = 0;
 	start_idx = 0;
 	wild_token = 0;
 	flag = 0;
-	tmp_token = (t_token *)malloc(sizeof(t_token));
-	while (token->token[i])
+	while (token[i])
 	{
-		if (token->token[i] == '\"')
-			while (token->token[i] != '\"')
-				i++;
-		else if (token->token[i] == '\'')
-			while (token->token[i] != '\'')
-				i++;
-		else if (token->token[i] == '$' && token->token[i + 1] == '*')
+		if (token[i] == '\"')
+			while (token[++i] != '\"')
+				;
+		else if (token[i] == '\'')
+			while (token[++i] != '\'')
+				;
+		else if (token[i] == '$' && token[i + 1] == '*')
 			i++;
-		else if (token->token[i] == '*')
+		else if (token[i] == '*')
 		{
 			if (i - start_idx)
 			{
-				tmp_token->token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
-				ft_strlcpy(tmp_token->token, token->token + start_idx, i - start_idx + 1);
-				if (refine_str(mini, tmp_token, mini->envp) != ERROR)
-					ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
+				tmp_token.token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
+				ft_strlcpy(tmp_token.token, token + start_idx, i - start_idx + 1);
+				if (refine_str(mini, &tmp_token, mini->envp) != ERROR)
+					ft_lstadd_back(&wild_token, ft_lstnew(tmp_token.token));
 				if (start_idx == 0)
 					flag |= 1;
 			}
@@ -193,13 +192,12 @@ t_list	*get_wild_str(t_mini *mini, t_token *token)
 	}
 	if (start_idx && i - start_idx)
 	{
-		tmp_token->token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
-		ft_strlcpy(tmp_token->token, token->token + start_idx, i - start_idx + 1);
-		if (refine_str(mini, tmp_token, mini->envp) != ERROR)
-			ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
+		tmp_token.token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
+		ft_strlcpy(tmp_token.token, token + start_idx, i - start_idx + 1);
+		if (refine_str(mini, &tmp_token, mini->envp) != ERROR)
+			ft_lstadd_back(&wild_token, ft_lstnew(tmp_token.token));
 		flag |= 2;
 	}
-	free(tmp_token);
 	if (flag & 4)
 		return (find_wild_str(wild_token, get_ls_list(mini, mini->envp), flag));
 	return (0);
