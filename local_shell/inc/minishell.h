@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 10:51:29 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 12:28:12 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,13 @@ typedef struct s_mini
 	t_sig			*sig;
 }	t_mini;
 
+typedef struct s_wild
+{
+	int		i;
+	int		start_idx;
+	int		flag;
+	t_token	tmp_token;
+}	t_wild;
 // main
 void	clear_resource(t_mini *mini);
 void	minishell_init(t_mini *mini);
