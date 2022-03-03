@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/02 21:23:19 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 10:17:38 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,12 +181,12 @@ t_list	*get_wild_str(t_mini *mini, t_token *token)
 			{
 				tmp_token->token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
 				ft_strlcpy(tmp_token->token, token->token + start_idx, i - start_idx + 1);
-				if (refine_str(mini, tmp_token, mini->envp) == ERROR)
-					return ((t_list *)ERROR);
-				ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
+				if (refine_str(mini, tmp_token, mini->envp) != ERROR)
+					ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
 				if (start_idx == 0)
 					flag |= 1;
 			}
+			flag |= 4;
 			start_idx = i + 1;
 		}
 		i++;
@@ -195,13 +195,12 @@ t_list	*get_wild_str(t_mini *mini, t_token *token)
 	{
 		tmp_token->token = (char *)malloc(sizeof(char) * (i - start_idx + 1));
 		ft_strlcpy(tmp_token->token, token->token + start_idx, i - start_idx + 1);
-		if (refine_str(mini, tmp_token, mini->envp) == ERROR)
-			return ((t_list *)ERROR);
-		ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
+		if (refine_str(mini, tmp_token, mini->envp) != ERROR)
+			ft_lstadd_back(&wild_token, ft_lstnew(tmp_token->token));
 		flag |= 2;
 	}
 	free(tmp_token);
-	if (wild_token || (token->token[0] == '*' && token->token[1] == 0))
+	if (flag & 4)
 		return (find_wild_str(wild_token, get_ls_list(mini, mini->envp), flag));
 	return (0);
 }

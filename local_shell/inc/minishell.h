@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 21:12:27 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 10:14:21 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include </opt/homebrew/opt/readline/include/readline/readline.h>
-# include </opt/homebrew/opt/readline/include/readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
