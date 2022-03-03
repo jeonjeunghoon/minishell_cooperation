@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:37:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/26 19:35:51 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 16:20:29 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ char	*get_envname_parse(char *str, int *i)
 
 void	env_str(t_refine *refine)
 {
-	int		len;
-	int		i;
 	char	*tmp;
 
 	tmp = ft_strjoin(refine->new_str, refine->env);

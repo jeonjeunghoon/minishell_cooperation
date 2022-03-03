@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:50:24 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:09:43 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	set_env_cd(t_mini *mini, char *old_pwd)
 	argv = NULL;
 }
 
-int	go_to_home(t_mini *mini, char **envp, char *path)
+int	go_to_home(char **envp, char *path)
 {
 	if (path == NULL)
 	{
@@ -54,7 +54,7 @@ int	go_to_home(t_mini *mini, char **envp, char *path)
 	return (0);
 }
 
-int	check_path(t_mini *mini, char *path)
+int	check_path(char *path)
 {
 	if (chdir(path) == ERROR)
 	{
@@ -86,7 +86,6 @@ void	ft_cd(t_mini *mini, t_argv *argv)
 	char	*path;
 	char	*old_pwd;
 	int		i;
-	int		error_fd;
 
 	exit_num_set(0);
 	path = NULL;
@@ -97,13 +96,13 @@ void	ft_cd(t_mini *mini, t_argv *argv)
 		path = get_path(mini->envp, argv->argv[i]);
 		if (path != NULL)
 		{
-			if (check_path(mini, path) == ERROR)
+			if (check_path(path) == ERROR)
 				exit(g_sig->exitnum);
 			break ;
 		}
 		i++;
 	}
-	if (go_to_home(mini, mini->envp, path) == ERROR)
+	if (go_to_home(mini->envp, path) == ERROR)
 		exit(g_sig->exitnum);
 	set_env_cd(mini, old_pwd);
 }

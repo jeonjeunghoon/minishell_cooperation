@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:50:39 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:11:09 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	position_init(int **position, int *size, char **envp, char **argv)
 	(*size) = 0;
 }
 
-int	check_unset_argv(t_mini *mini, char **argv, int *size)
+int	check_unset_argv(char **argv, int *size)
 {
 	int		i;
 	int		j;
@@ -123,13 +123,12 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 	int		size;
 	int		*position;
 	char	**new;
-	int		error_fd;
 
 	exit_num_set(0);
 	size = ft_two_dimension_size(argv->argv) - 1;
 	if (ft_two_dimension_size(argv->argv) > 1)
 	{
-		if (check_unset_argv(mini, argv->argv, &size) == ERROR)
+		if (check_unset_argv(argv->argv, &size) == ERROR)
 			return ;
 		if (size != 0)
 		{

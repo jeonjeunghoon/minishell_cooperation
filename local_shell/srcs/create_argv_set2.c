@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 19:42:41 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:42:48 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:06:25 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	**modify_file_argv(t_argv *file)
 	return (cmd_argv);
 }
 
-char	**create_cmd(t_list **head, t_argv *argv, t_argv *file)
+char	**create_cmd(t_argv *argv, t_argv *file)
 {
 	char	**cmd;
 	char	**cmd_argv;

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 19:43:25 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 20:15:24 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:14:36 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 {
 	if ((ft_strncmp(cmd, "echo", 5)) == 0)
-		ft_echo(mini, argv);
+		ft_echo(argv);
 	else if ((ft_strncmp(cmd, "cd", 3)) == 0)
 		ft_cd(mini, argv);
 	else if ((ft_strncmp(cmd, "pwd", 4)) == 0)
-		ft_pwd(mini, argv);
+		ft_pwd(argv);
 	else if ((ft_strncmp(cmd, "env", 4)) == 0)
 		ft_env(mini, argv);
 	else if ((ft_strncmp(cmd, "export", 7)) == 0)
@@ -27,7 +27,7 @@ int	mini_command(t_mini *mini, char *cmd, t_argv *argv)
 	else if ((ft_strncmp(cmd, "unset", 6)) == 0)
 		ft_unset(mini, argv);
 	else if ((ft_strncmp(cmd, "exit", 5)) == 0)
-		ft_exit(mini, argv);
+		ft_exit(argv);
 	else
 		return (FALSE);
 	return (TRUE);
@@ -41,7 +41,7 @@ int	pid_zero(t_mini *mini, t_argv *argv, \
 		dup2(mini->pipe_fd[WRITE], STDOUT_FILENO);
 		close(mini->pipe_fd[READ]);
 	}
-	if (set_redirect(mini, argv) == ERROR)
+	if (set_redirect(argv) == ERROR)
 		return (ERROR);
 	if (mini_command(mini, argv->argv[0], argv) == FALSE)
 	{

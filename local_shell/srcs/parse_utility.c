@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:00:31 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 21:07:31 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 15:50:52 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	stream_flag_str(t_token *token)
 void	token_init(t_token *token)
 {
 	token->token = NULL;
+	token->add_str = NULL;
 	token->single_quote = FALSE;
 	token->double_quote = FALSE;
 	token->is_stream = FALSE;
@@ -53,14 +54,14 @@ void	create_stream(t_argv **stream, t_token *token, t_list **argv_lst)
 	else if (token->token[0] == '|' && token->token[1] == '|')
 		(*stream)->is_or = TRUE;
 	if (token->token[0] == '|' || \
-		token->token[0] == '&' && token->token[1] == '&')
+		(token->token[0] == '&' && token->token[1] == '&'))
 		(*stream)->is_stream = TRUE;
 	if (token->token[0] == '<' && token->token[1] == '<')
 		(*stream)->is_heredoc = TRUE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*stream));
 }
 
-void	check_stream(t_argv *argv, t_list *token_lst, char *str)
+void	check_stream(t_argv *argv, char *str)
 {
 	if (str[0] == '|' && str[1] == 0)
 		argv->is_pipe = TRUE;
@@ -88,7 +89,7 @@ void	create_argv(t_argv **argv, t_list *token_lst, \
 		token_lst = token_lst->next;
 	}
 	if (token_lst != NULL)
-		check_stream(*argv, token_lst, ((t_token *)token_lst->content)->token);
+		check_stream(*argv, ((t_token *)token_lst->content)->token);
 	(*argv)->is_stream = FALSE;
 	ft_lstadd_back(argv_lst, ft_lstnew(*argv));
 }

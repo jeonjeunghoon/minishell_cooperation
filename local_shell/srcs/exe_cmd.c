@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 20:17:52 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:14:11 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	remove_redirection(t_argv *argv)
 	argv->argv = new_argv;
 }
 
-int	set_redirect(t_mini *mini, t_argv *argv)
+int	set_redirect(t_argv *argv)
 {
 	int		i;
 
@@ -89,8 +89,6 @@ void	exe_cmd(t_mini *mini, char *cmd_path, \
 {
 	pid_t	pid;
 	int		stat_loc;
-	t_bool	sig_flag;
-	int		error_fd;
 
 	pid = 0;
 	if (is_child == FALSE)

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 18:51:19 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 21:19:37 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 15:32:09 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,6 @@ void	dollar_str(t_mini *mini, t_refine *refine)
 		exitnum_str(mini, refine);
 	else if (refine->str[refine->i + 1] == '*')
 		refine->i += 2;
-	else if (refine->str[refine->i + 1] == '\0' || \
-			!((refine->str[refine->i + 1] >= 'a' && \
-			refine->str[refine->i + 1] <= 'z') || \
-			(refine->str[refine->i + 1] >= 'A' && \
-			refine->str[refine->i + 1] <= 'Z') || \
-			(refine->str[refine->i + 1] >= '0' && \
-			refine->str[refine->i + 1] <= '9')))
-		basic_str(refine);
 	else if ((refine->str[refine->i + 1] == '\'' || \
 			refine->str[refine->i + 1] == '\"') && \
 			refine->is_basic == TRUE)
@@ -33,8 +25,16 @@ void	dollar_str(t_mini *mini, t_refine *refine)
 	else if (refine->str[refine->i + 1] >= '0' && \
 			refine->str[refine->i + 1] <= '9')
 		num_after_dollor(refine);
-	else
+	else if ((refine->str[refine->i + 1] >= 'a' && \
+			refine->str[refine->i + 1] <= 'z') || \
+			(refine->str[refine->i + 1] >= 'A' && \
+			refine->str[refine->i + 1] <= 'Z') || \
+			(refine->str[refine->i + 1] >= '0' && \
+			refine->str[refine->i + 1] <= '9') || \
+			refine->str[refine->i + 1] == '_')
 		env_after_dollor(refine);
+	else
+		basic_str(refine);
 }
 
 void	double_quote_str(t_mini *mini, t_refine *refine)
@@ -81,7 +81,7 @@ void	single_quote_str(t_mini *mini, t_refine *refine)
 	refine->is_basic = TRUE;
 }
 
-void	swung_dash_str(t_mini *mini, t_refine *refine)
+void	swung_dash_str(t_refine *refine)
 {
 	if ((refine->str[refine->i + 1] == '\0' || \
 		refine->str[refine->i + 1] == '/') && \
@@ -112,7 +112,7 @@ int	create_refined_str(t_mini *mini, t_refine *refine)
 	while (refine->str[refine->i])
 	{
 		if (refine->str[refine->i] == '~')
-			swung_dash_str(mini, refine);
+			swung_dash_str(refine);
 		else if (refine->str[refine->i] == '\'')
 			single_quote_str(mini, refine);
 		else if (refine->str[refine->i] == '\"')

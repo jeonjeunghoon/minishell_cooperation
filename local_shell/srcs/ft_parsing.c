@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 10:15:16 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 16:11:22 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst)
+int	create_argv_lst(t_list **argv_lst, t_list *token_lst)
 {
 	int		size;
 	t_argv	*str;
 	t_argv	*stream;
 	t_list	*head;
-	int		i;
 
 	argv_lst_init(&str, &stream, &size);
 	head = token_lst;
@@ -41,7 +40,7 @@ int	create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst)
 	return (0);
 }
 
-void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp)
+void	create_token_lst(t_mini *mini, t_list **lst, char *input)
 {
 	t_token	*token;
 	t_list	*wild_str;
@@ -68,7 +67,7 @@ void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp)
 	}
 }
 
-int	exception_handling(t_mini *mini, char *input)
+int	exception_handling(char *input)
 {
 	int		i;
 	t_bool	sin;
@@ -99,12 +98,12 @@ int	exception_handling(t_mini *mini, char *input)
 
 int	ft_parsing(t_mini *mini)
 {
-	if (exception_handling(mini, mini->input->user_input) == ERROR)
+	if (exception_handling(mini->input->user_input) == ERROR)
 		return (ERROR);
 	add_history(mini->input->user_input);
 	create_token_lst(mini, &(mini->input->token_lst), \
-					mini->input->user_input, mini->envp);
-	if (create_argv_lst(mini, &(mini->input->argv_lst), \
+					mini->input->user_input);
+	if (create_argv_lst(&(mini->input->argv_lst), \
 						mini->input->token_lst) == ERROR)
 		return (ERROR);
 	if (check_stream_symbol(mini, mini->input->token_lst) == ERROR)

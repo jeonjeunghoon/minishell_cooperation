@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/03/03 12:48:23 by seungcoh         ###   ########.fr        #
+#    Updated: 2022/03/03 13:08:36 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME				=	minishell
 CC					=	gcc
-CFLAGS				=	# -Wall -Wextra -Werror
+CFLAGS				=	-Wall -Wextra -Werror
 
 SRCS_NAME			=	main.c \
 						ft_prompt.c \
@@ -41,7 +41,7 @@ SRCS_NAME			=	main.c \
 						tokenize_utility2.c \
 						tokenize_utility3.c \
 						command_utility.c \
-						command_utility3.c \
+						command_utility2.c \
 						exe_cmd.c \
 						w_utility.c \
 						redirect_utility.c \

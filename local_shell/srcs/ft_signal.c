@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:52:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:53:17 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:05:53 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 
 void	sigquit_func(int signum)
 {
+	if (signum != SIGQUIT)
+		return ;
 	printf("Quit: 3\n");
 	g_sig->exitnum = 131;
 }
 
 void	sigint_func(int signum)
 {
+	if (signum != SIGINT)
+		return ;
 	if (g_sig->type == BASIC || g_sig->type == HEREDOC)
 	{
 		if (g_sig->type == BASIC)

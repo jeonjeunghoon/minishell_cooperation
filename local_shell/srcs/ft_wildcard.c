@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 12:48:02 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 16:05:03 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,6 @@ t_list	*get_wild_str(t_mini *mini, char *token)
 		wild.flag |= 2;
 	if (wild.flag & 4)
 		return (find_wild_str(wild_token, \
-		get_ls_list(mini, mini->envp), wild.flag));
+		get_ls_list(mini->envp), wild.flag));
 	return (0);
 }

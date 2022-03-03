@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:45:34 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 12:48:02 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:14:55 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	exec_ls(char **argv, char **envp)
 	}
 }
 
-t_list	*get_ls_list(t_mini *mini, char **envp)
+t_list	*get_ls_list(char **envp)
 {
 	int		val;
 	char	**argv;

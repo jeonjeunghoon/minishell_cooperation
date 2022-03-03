@@ -6,16 +6,14 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:48:10 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:08:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	print_msg(char **envp, char **argv, int start_ptr, int n_flag)
+void	print_msg(char **argv, int start_ptr, int n_flag)
 {
-	char	*str;
-
 	ft_putstr_fd(argv[start_ptr], 1);
 	if (argv[start_ptr + 1] != NULL)
 		write(1, " ", 1);
@@ -35,11 +33,10 @@ int	n_option(char **argv, int *start_ptr)
 	return (TRUE);
 }
 
-void	ft_echo(t_mini *mini, t_argv *argv)
+void	ft_echo(t_argv *argv)
 {
 	int		start_ptr;
 	int		n_flag;
-	int		error_fd;
 
 	n_flag = FALSE;
 	if (argv->argv[1] == NULL)
@@ -50,7 +47,7 @@ void	ft_echo(t_mini *mini, t_argv *argv)
 		n_flag = n_option(argv->argv, &start_ptr);
 		while (argv->argv[start_ptr] != NULL)
 		{
-			print_msg(mini->envp, argv->argv, start_ptr, n_flag);
+			print_msg(argv->argv, start_ptr, n_flag);
 			start_ptr++;
 		}
 	}

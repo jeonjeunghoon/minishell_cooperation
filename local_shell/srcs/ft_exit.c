@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:13 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 16:18:00 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:17:09 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_argv(char *argv)
 	return (0);
 }
 
-int	exit_exception(t_mini *mini, int argc, char **argv)
+int	exit_exception(int argc, char **argv)
 {
 	if (argc == 1)
 		return (0);
@@ -51,21 +51,14 @@ int	exit_exception(t_mini *mini, int argc, char **argv)
 	return (0);
 }
 
-void	ft_exit(t_mini *mini, t_argv *argv)
+void	ft_exit(t_argv *argv)
 {
 	int	argc;
-	int	error_fd;
 
 	exit_num_set(0);
-	if (!argv->is_or)
-	{
-		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-		dup2(error_fd, 2);
-		close(error_fd);
-	}
 	argc = 0;
 	argc = ft_two_dimension_size(argv->argv);
-	if (exit_exception(mini, argc, argv->argv) == ERROR)
+	if (exit_exception(argc, argv->argv) == ERROR)
 		exit(g_sig->exitnum);
 	if (!(argv->is_pipe || argv->was_pipe))
 		printf("logout\n");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 12:47:24 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 16:11:13 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include </opt/homebrew/opt/readline/include/readline/readline.h>
+# include </opt/homebrew/opt/readline/include/readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -62,6 +62,7 @@ typedef struct s_refine
 typedef struct s_token
 {
 	char	*token;
+	char	*add_str;
 	t_bool	single_quote;
 	t_bool	double_quote;
 	t_bool	is_stream;
@@ -108,6 +109,7 @@ typedef struct s_wild
 	int		flag;
 	t_token	tmp_token;
 }	t_wild;
+
 // main
 void	clear_resource(t_mini *mini);
 void	minishell_init(t_mini *mini);
@@ -120,9 +122,9 @@ char	*get_locate(void);
 int		ft_prompt(t_mini *mini);
 
 // ft_parsing
-int		create_argv_lst(t_mini *mini, t_list **argv_lst, t_list *token_lst);
-void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp);
-int		exception_handling(t_mini *mini, char *input);
+int		create_argv_lst(t_list **argv_lst, t_list *token_lst);
+void	create_token_lst(t_mini *mini, t_list **lst, char *input);
+int		exception_handling(char *input);
 int		ft_parsing(t_mini *mini);
 
 // check_stream_symbol
@@ -165,7 +167,7 @@ void	create_argv_set(t_list **head, t_argv *argv);
 // create_argv_set2
 void	refine_file(t_argv *file);
 char	**modify_file_argv(t_argv *file);
-char	**create_cmd(t_list **head, t_argv *argv, t_argv *file);
+char	**create_cmd(t_argv *argv, t_argv *file);
 void	finish_create(t_argv *argv, char ***cmd, char ***redirect_file);
 void	cmd_argv_exist(char ***cmd, char ***cmd_argv, char ***tmp);
 
@@ -177,32 +179,32 @@ int		pipe_set(t_mini *mini, t_argv *argv, int *pid, t_bool *is_child);
 int		ft_command(t_mini *mini, t_argv *argv);
 
 // ft_echo
-void	print_msg(char **envp, char **argv, int start_ptr, int n_flag);
+void	print_msg(char **argv, int start_ptr, int n_flag);
 int		n_option(char **argv, int *start_ptr);
-void	ft_echo(t_mini *mini, t_argv *argv);
+void	ft_echo(t_argv *argv);
 
 // ft_cd
 void	set_env_cd(t_mini *mini, char *old_pwd);
-int		go_to_home(t_mini *mini, char **envp, char *path);
-int		check_path(t_mini *mini, char *path);
+int		go_to_home(char **envp, char *path);
+int		check_path(char *path);
 char	*get_path(char **envp, char *argv);
 void	ft_cd(t_mini *mini, t_argv *argv);
 
 // ft_pwd
-void	ft_pwd(t_mini *mini, t_argv *argv);
+void	ft_pwd(t_argv *argv);
 
 // ft_export
 char	*get_envname_export(char *argv);
 char	**create_export_envp(char **envp, char *env);
 int		is_valid_export(char *argv, int i);
-int		check_export_argv(t_mini *mini, char *argv);
+int		check_export_argv(char *argv);
 void	ft_export(t_mini *mini, t_argv *argv);
 
 // ft_unset
 char	**create_unset_envp(char **envp, int *position, int size);
 void	get_position(int *position, char **envp, char **argv);
 void	position_init(int **position, int *size, char **envp, char **argv);
-int		check_unset_argv(t_mini *mini, char **argv, int *size);
+int		check_unset_argv(char **argv, int *size);
 void	ft_unset(t_mini *mini, t_argv *argv);
 
 // ft_env
@@ -211,8 +213,8 @@ void	ft_env(t_mini *mini, t_argv *argv);
 
 // ft_exit
 int		check_argv(char *argv);
-int		exit_exception(t_mini *mini, int argc, char **argv);
-void	ft_exit(t_mini *mini, t_argv *argv);
+int		exit_exception(int argc, char **argv);
+void	ft_exit(t_argv *argv);
 
 // ft_error
 void	error_symbol(char *symbol, int exit_num);
@@ -274,7 +276,7 @@ void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path);
 
 // exe_cmd
 void	remove_redirection(t_argv *argv);
-int		set_redirect(t_mini *mini, t_argv *argv);
+int		set_redirect(t_argv *argv);
 void	exe_child(char **argv, char *cmd_path, char **envp);
 void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, t_bool is_child);
 
@@ -298,7 +300,7 @@ int		ltor(char *argv, char *file, int *i);
 //ft_wildcard
 void	wild_isin(t_list **lst, t_list *wild_str, t_token **token);
 t_list	*get_wild_str(t_mini *mini, char *token);
-t_list	*get_ls_list(t_mini *mini, char **envp);
+t_list	*get_ls_list(char **envp);
 t_list	*find_wild_str(t_list *wild_token, t_list *ls_lst, int flag);
 
 #endif

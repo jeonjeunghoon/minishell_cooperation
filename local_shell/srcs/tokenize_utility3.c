@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 17:56:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 20:57:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:13:50 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	exitnum_str(t_mini *mini, t_refine *refine)
 {
 	char	*exitnum;
 	char	*tmp;
-	int		len;
 
 	exitnum = ft_itoa(mini->sig->exitnum);
 	refine->new_str[refine->j] = '\0';

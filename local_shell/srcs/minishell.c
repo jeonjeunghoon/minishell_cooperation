@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:43:19 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:06:05 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	minishell(t_mini *mini)
 {
 	t_list	*head;
 	t_argv	*argv;
-	int		i;
 
 	head = mini->input->argv_lst;
 	save_origin_fd(mini);

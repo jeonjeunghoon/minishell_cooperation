@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 20:19:09 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:49:02 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	is_valid_export(char *argv, int i)
 {
 	if (argv[0] == '=' || (argv[0] >= '0' && argv[0] <= '9'))
 		return (ERROR);
-	if (argv[i] == '_' || argv[i] == '='\
+	if (argv[i] == '_' || argv[i] == '=' \
 		|| (argv[i] >= 'a' && argv[i] <= 'z') \
 		|| (argv[i] >= 'A' && argv[i] <= 'Z') \
 		|| (argv[i] >= '0' && argv[i] <= '9'))
@@ -74,7 +74,7 @@ int	is_valid_export(char *argv, int i)
 	return (ERROR);
 }
 
-int	check_export_argv(t_mini *mini, char *argv)
+int	check_export_argv(char *argv)
 {
 	int		i;
 	t_bool	is_env;
@@ -104,7 +104,6 @@ void	ft_export(t_mini *mini, t_argv *argv)
 {
 	int		i;
 	char	**new_envp;
-	int		error_fd;
 
 	exit_num_set(0);
 	if (ft_two_dimension_size(argv->argv) > 1)
@@ -112,7 +111,7 @@ void	ft_export(t_mini *mini, t_argv *argv)
 		i = 1;
 		while (argv->argv[i])
 		{
-			if (check_export_argv(mini, argv->argv[i]) != ERROR)
+			if (check_export_argv(argv->argv[i]) != ERROR)
 			{
 				new_envp = create_export_envp(mini->envp, argv->argv[i]);
 				ft_two_dimension_free(&(mini->envp));

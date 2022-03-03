@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 19:41:15 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:47:20 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:06:57 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	**create_first_redirect(t_list **head, t_argv *argv, \
 {
 	char	**redirect_file;
 
-	*cmd = create_cmd(head, argv, file);
+	*cmd = create_cmd(argv, file);
 	redirect_file = ft_strsjoin(((t_argv *)(*head)->content)->argv, \
 								((t_argv *)(*head)->next->content)->argv);
 	(*head) = (*head)->next->next;

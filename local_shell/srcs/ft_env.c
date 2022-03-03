@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:59 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:53:31 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 13:17:00 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,7 @@ void	show_env(char **envp)
 
 void	ft_env(t_mini *mini, t_argv *argv)
 {
-	int		error_fd;
-
 	exit_num_set(0);
-	if (!argv->is_or)
-	{
-		error_fd = open(".error_tmp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-		dup2(error_fd, 2);
-		close(error_fd);
-	}
 	if (ft_two_dimension_size(argv->argv) != 1)
 	{
 		error_2(argv->argv[0], argv->argv[1], \

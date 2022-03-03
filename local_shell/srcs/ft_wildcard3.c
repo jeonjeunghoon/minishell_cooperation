@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:46:37 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 12:48:01 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 15:00:34 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	strstr_token( t_list *wild_token, char **str, int *flag)
 
 t_list	*find_wild_str(t_list *wild_token, t_list *ls_lst, int flag)
 {
-	t_list	*wild_curr;
 	t_list	*new_ls_lst;
 	t_list	*tmp;
 	char	*str;
