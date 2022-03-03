@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 15:52:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:08:01 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 18:10:22 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ void	print_msg(char **argv, int start_ptr, int n_flag)
 
 int	n_option(char **argv, int *start_ptr)
 {
-	int	i;
-
-	i = 2;
 	while (ft_strncmp(argv[*start_ptr], "-n", 3) == 0)
 		(*start_ptr)++;
 	if (*start_ptr == 1)
