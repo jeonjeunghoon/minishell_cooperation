@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 18:11:27 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 20:28:34 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_get_wild_str(t_wild *wild, t_list **wild_token)
 void	refine_wild_token(t_wild *wild, t_list **wild_token, \
 char *token, t_mini *mini)
 {
-	char *tmp;
+	char	*tmp;
 
 	wild->tmp_token.token = (char *)malloc(sizeof(char) * \
 	(wild->i - wild->start_idx + 1));

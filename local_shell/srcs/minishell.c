@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 15:02:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:06:05 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 21:05:29 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 t_bool	check_and_or(t_argv *argv)
 {
-	if (argv->is_and && g_sig->exitnum)
+	if (argv->is_and && g_sig->exitnum != 0)
 		return (TRUE);
-	else if (argv->is_or && g_sig->exitnum)
+	else if (argv->is_or && g_sig->exitnum == 0)
 		return (TRUE);
 	return (FALSE);
 }

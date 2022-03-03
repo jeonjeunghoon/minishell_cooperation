@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:09:18 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 18:52:06 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 21:03:19 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ t_bool	open_heredoc(t_mini *mini, char *next_str)
 	{
 		input = readline("> ");
 		if (is_close_heredoc(input, next_str) == TRUE)
-			break ;
+		{
+			close(fd);
+			return (FALSE);
+		}
 		if (input != NULL)
 			refine_heredoc(mini, &input);
 		write(fd, input, ft_strlen(input));

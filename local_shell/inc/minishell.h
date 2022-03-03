@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 18:11:49 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 20:45:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include </opt/homebrew/opt/readline/include/readline/readline.h>
+# include </opt/homebrew/opt/readline/include/readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -186,7 +186,6 @@ void	ft_echo(t_argv *argv);
 
 // ft_cd
 void	set_env_cd(t_mini *mini, char *old_pwd);
-int		go_to_home(char **envp, char *path);
 int		check_path(char *path);
 char	*get_path(char **envp, char *argv);
 void	ft_cd(t_mini *mini, t_argv *argv);

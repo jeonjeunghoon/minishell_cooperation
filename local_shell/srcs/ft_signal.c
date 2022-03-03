@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:52:37 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:05:53 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 21:01:56 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	sigint_func(int signum)
 			ioctl(STDIN_FILENO, TIOCSTI, "\n");
 			g_sig->signum = SIGINT;
 		}
-		g_sig->exitnum = 1;
+		exit_num_set(1);
 	}
 	else
 	{

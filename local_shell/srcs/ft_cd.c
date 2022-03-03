@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:09:43 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 20:48:27 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,12 @@ void	set_env_cd(t_mini *mini, char *old_pwd)
 	argv = NULL;
 }
 
-int	go_to_home(char **envp, char *path)
-{
-	if (path == NULL)
-	{
-		path = ft_getenv(envp, "HOME");
-		if (path == NULL)
-		{
-			error_2("cd", "HOME", "not set", 1);
-			return (ERROR);
-		}
-		else
-			chdir(path);
-	}
-	return (0);
-}
-
 int	check_path(char *path)
 {
 	if (chdir(path) == ERROR)
 	{
 		error_2("cd", path, strerror(errno), 1);
+		exit_num_set(1);
 		return (ERROR);
 	}
 	return (0);
@@ -94,15 +79,9 @@ void	ft_cd(t_mini *mini, t_argv *argv)
 	while (argv->argv[i])
 	{
 		path = get_path(mini->envp, argv->argv[i]);
-		if (path != NULL)
-		{
-			if (check_path(path) == ERROR)
-				exit(g_sig->exitnum);
-			break ;
-		}
+		if (check_path(path) == ERROR)
+			return ;
 		i++;
 	}
-	if (go_to_home(mini->envp, path) == ERROR)
-		exit(g_sig->exitnum);
 	set_env_cd(mini, old_pwd);
 }

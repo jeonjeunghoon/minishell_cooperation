@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:10:41 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 18:55:48 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 21:02:45 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	heredoc_catch_signal(char **input)
 	{
 		ft_putstr_fd("\x1b[1A", STDOUT_FILENO);
 		ft_putstr_fd("> ", STDOUT_FILENO);
-		exit_num_set(0);
 	}
 }
 
