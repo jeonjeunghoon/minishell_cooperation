@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 16:39:07 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 21:05:51 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 10:15:16 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ void	create_token_lst(t_mini *mini, t_list **lst, char *input, char **envp)
 			token = (t_token *)malloc(sizeof(t_token));
 			token_init(token);
 			wild_str = tokenize(mini, token, input, &i);
-			if (wild_str)
-				wild_isin(lst, wild_str, &token);
+			if (!wild_str)
+				ft_lstadd_back(lst, ft_lstnew(token));
 			else if (wild_str == (t_list *)ERROR)
 				free(token);
 			else
-				ft_lstadd_back(lst, ft_lstnew(token));
+				wild_isin(lst, wild_str, &token);
 			token = NULL;
 		}
 		else

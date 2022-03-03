@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 21:12:27 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/03 12:47:24 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include </opt/homebrew/opt/readline/include/readline/readline.h>
-# include </opt/homebrew/opt/readline/include/readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -101,6 +101,13 @@ typedef struct s_mini
 	t_sig			*sig;
 }	t_mini;
 
+typedef struct s_wild
+{
+	int		i;
+	int		start_idx;
+	int		flag;
+	t_token	tmp_token;
+}	t_wild;
 // main
 void	clear_resource(t_mini *mini);
 void	minishell_init(t_mini *mini);
@@ -288,11 +295,10 @@ int		append(char *argv, char *file, int *i);
 int		rtol(char *argv, char *file, int *i);
 int		ltor(char *argv, char *file, int *i);
 
-//fd_copy
-void	fd_copy(int fd, int fd2);
-
 //ft_wildcard
 void	wild_isin(t_list **lst, t_list *wild_str, t_token **token);
-t_list	*get_wild_str(t_mini *mini, t_token *token);
+t_list	*get_wild_str(t_mini *mini, char *token);
+t_list	*get_ls_list(t_mini *mini, char **envp);
+t_list	*find_wild_str(t_list *wild_token, t_list *ls_lst, int flag);
 
 #endif
