@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 10:42:59 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 10:58:52 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,26 @@ void	wild_isin(t_list **lst, t_list *wild_str, t_token **token)
 	free(*token);
 }
 
+void	exec_ls(char **argv, char **envp)
+{
+	int fd;
+
+	fd = open(".ls_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+	if (execve("/bin/ls", argv, envp) == ERROR)
+	{
+		ft_error(strerror(errno), 1);
+		exit(g_sig->exitnum);
+	}
+}
+
 t_list	*get_ls_list(t_mini *mini, char **envp)
 {
-	int		fd;
+	int		val;
 	char	**argv;
 	char	*line;
 	pid_t	pid;
-	int		stat_loc;
 	t_list	*ls_lst;
 
 	argv = (char **)malloc(sizeof(char *) * 2);
@@ -52,29 +65,20 @@ t_list	*get_ls_list(t_mini *mini, char **envp)
 	pid = fork();
 	if (pid > 0)
 	{
-		waitpid(pid, &stat_loc, 0x00000002);
+		waitpid(pid, &val, 0x00000002);
 		free(argv[0]);
 		free(argv);
-		if (ft_wifexited(stat_loc) == TRUE)
-			exit_num_set(ft_wstopsig(stat_loc));
-		fd = open(".ls_tmp", O_RDONLY, 0644);
-		while (get_next_line(fd, &line))
+		if (ft_wifexited(val) == TRUE)
+			exit_num_set(ft_wstopsig(val));
+		val = open(".ls_tmp", O_RDONLY, 0644);
+		while (get_next_line(val, &line))
 			ft_lstadd_back(&ls_lst, ft_lstnew(line));
 		free(line);
 		unlink(".ls_tmp");
 		return (ls_lst);
 	}
 	else if (pid == 0)
-	{
-		fd = open(".ls_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-		if (execve("/bin/ls", argv, envp) == ERROR)
-		{
-			ft_error(strerror(errno), 1);
-			exit(g_sig->exitnum);
-		}
-	}
+		exec_ls(argv, envp);
 	return (0);
 }
 

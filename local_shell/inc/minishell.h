@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 10:43:16 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/03 10:51:29 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,9 +287,6 @@ int		heredoc(char *argv, int *i);
 int		append(char *argv, char *file, int *i);
 int		rtol(char *argv, char *file, int *i);
 int		ltor(char *argv, char *file, int *i);
-
-//fd_copy
-void	fd_copy(int fd, int fd2);
 
 //ft_wildcard
 void	wild_isin(t_list **lst, t_list *wild_str, t_token **token);
