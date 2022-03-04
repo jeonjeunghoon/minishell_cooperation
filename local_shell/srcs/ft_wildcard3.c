@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:46:37 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 15:00:34 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/04 11:39:20 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,18 @@ t_list	*find_wild_str(t_list *wild_token, t_list *ls_lst, int flag)
 	}
 	ft_lstclear(&wild_token, free);
 	return (new_ls_lst);
+}
+
+void	flag_set(t_wild	*wild, t_bool null_flag)
+{
+	if (wild->i - wild->start_idx && wild->start_idx == 0 && !null_flag)
+		wild->flag |= 1;
+	wild->flag |= 4;
+	wild->start_idx = wild->i + 1;
+}
+
+void	flag_set2(t_wild *wild, t_bool null_flag)
+{
+	if (wild->start_idx && wild->i - wild->start_idx && !null_flag)
+		wild->flag |= 2;
 }
