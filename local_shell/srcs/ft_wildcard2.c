@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/03 12:45:34 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/03 13:14:55 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/04 10:55:25 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	init_get_wild_str(t_wild *wild, t_list **wild_token)
+{
+	wild->i = 0;
+	wild->start_idx = 0;
+	*wild_token = 0;
+	wild->flag = 0;
+	wild->str = 0;
+}
 
 void	wild_isin(t_list **lst, t_list *wild_str, t_token **token)
 {
