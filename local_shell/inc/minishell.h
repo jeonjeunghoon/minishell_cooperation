@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 20:45:01 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/04 10:55:34 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include </opt/homebrew/opt/readline/include/readline/readline.h>
-# include </opt/homebrew/opt/readline/include/readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -298,6 +298,7 @@ int		rtol(char *argv, char *file, int *i);
 int		ltor(char *argv, char *file, int *i);
 
 //ft_wildcard
+void	init_get_wild_str(t_wild *wild, t_list **wild_token);
 void	wild_isin(t_list **lst, t_list *wild_str, t_token **token);
 t_list	*get_wild_str(t_mini *mini, char *token);
 t_list	*get_ls_list(char **envp);
