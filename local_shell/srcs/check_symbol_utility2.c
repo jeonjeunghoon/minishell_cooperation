@@ -6,11 +6,25 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:10:41 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 21:02:45 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/04 16:04:43 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+t_bool	is_symbol(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (is_stream(str[i]) == TRUE)
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}
 
 void	symbol_free(char **symbol, char **near_symbol)
 {
@@ -37,9 +51,8 @@ void	refine_heredoc(t_mini *mini, char **input)
 	refine = NULL;
 }
 
-void	heredoc_catch_signal(char **input)
+void	heredoc_catch_signal(void)
 {
-	ft_free(input);
 	if (g_sig->signum != SIGINT)
 	{
 		ft_putstr_fd("\x1b[1A", STDOUT_FILENO);
@@ -47,17 +60,13 @@ void	heredoc_catch_signal(char **input)
 	}
 }
 
-t_bool	is_close_heredoc(char *input, char *next_str)
+t_bool	is_signal_heredoc(char *input)
 {
 	if (g_sig->signum == SIGINT || input == NULL)
 	{
-		heredoc_catch_signal(&input);
-		return (TRUE);
-	}
-	if (ft_strncmp(input, next_str, ft_strlen(next_str) + 1) == 0)
-	{
-		ft_free(&input);
-		return (TRUE);
+		heredoc_catch_signal();
+		unlink(".heredoc_tmp");
+		return (SIGNAL);
 	}
 	return (FALSE);
 }

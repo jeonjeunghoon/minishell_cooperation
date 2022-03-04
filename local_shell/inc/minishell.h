@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/04 11:39:36 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/04 16:04:48 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include </opt/homebrew/opt/readline/include/readline/readline.h>
+# include </opt/homebrew/opt/readline/include/readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
@@ -35,6 +35,7 @@
 # define HEREDOC 3
 # define WRITE 1
 # define READ 0
+# define SIGNAL -1
 
 typedef struct s_sig
 {
@@ -130,25 +131,33 @@ int		exception_handling(char *input);
 int		ft_parsing(t_mini *mini);
 
 // check_stream_symbol
-t_bool	stream_symbol_error(char *prev_str, char *next_str, \
+int		stream_symbol_error(char *prev_str, char *next_str, \
 							char *symbol, char *near_symbol);
 void	near_symbol_exist(char **near_symbol, char *str, int i);
-t_bool	check_str(char **symbol, char **near_symbol, char *str);
+int		check_symbol(char **symbol, char **near_symbol, char *str);
 t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, \
 						char *next_str);
 int		check_stream_symbol(t_mini *mini, t_list *token_lst);
 
+// symbol_error_utility
+int		error_check_another(char *symbol);
+int		error_check_nearsymbol(char *near_symbol);
+int		error_check_redirect(char *next_str);
+int		error_check_pipe(char *prev_str, char *next_str, char *symbol);
+int		error_check_and_or(char *prev_str, char *next_str, char *symbol);
+
 // check_stream_utility
-t_bool	open_heredoc(t_mini *mini, char *next_str);
-t_bool	open_file(t_mini *mini, char *symbol, char *next_str);
-t_bool	create_file(char *symbol, char *next_str);
+int		open_heredoc(t_mini *mini, char *next_str);
+int		open_file(t_mini *mini, char *symbol, char *next_str);
+int		create_file(char *symbol, char *next_str);
 char	*valid_symbol_list(char *str, int i);
 
 // check_stream_utility2
+t_bool	is_symbol(char *str);
 void	symbol_free(char **symbol, char **near_symbol);
 void	refine_heredoc(t_mini *mini, char **input);
-void	heredoc_catch_signal(char **input);
-t_bool	is_close_heredoc(char *input, char *next_str);
+void	heredoc_catch_signal(void);
+t_bool	is_signal_heredoc(char *input);
 
 // ft_signal
 void	sig_func(int signum);
@@ -260,7 +269,7 @@ int		create_refined_str(t_mini *mini, t_refine *refine);
 char	*get_envname_parse(char *str, int *i);
 void	create_new_str(t_refine *refine, int env_len, char *tmp);
 void	env_str(t_refine *refine);
-t_bool	is_stream(char ch);
+t_bool	is_stream(char c);
 t_bool	str_condition(char c, t_token *token);
 
 // tokenize_utility3
