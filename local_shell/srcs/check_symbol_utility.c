@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:09:18 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/04 16:07:28 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:17:07 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	create_file(char *symbol, char *next_str)
 	{
 		fd = open(next_str, O_CREAT | O_TRUNC | O_APPEND | O_EXCL, 0644);
 		if (fd == ERROR)
-			return (ERROR);
+			return (0);
 		close(fd);
 	}
 	else if ((ft_strncmp(symbol, ">", 2) == 0))

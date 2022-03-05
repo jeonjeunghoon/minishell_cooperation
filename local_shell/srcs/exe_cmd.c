@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:14:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:55:49 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,10 @@ int	set_redirect(t_argv *argv)
 void	exe_child(char **argv, char *cmd_path, char **envp)
 {
 	if (argv[0][0] == '\0')
-	{
 		exit_num_set(0);
-		exit(g_sig->exitnum);
-	}
-	if (execve(cmd_path, argv, envp) == ERROR)
+	else if (cmd_path == NULL)
+		error_1(cmd_path, "No such file or directory", 127);
+	else if (execve(cmd_path, argv, envp) == ERROR)
 	{
 		if (cmd_path[0] == '/')
 			error_1(cmd_path, "No such file or directory", 127);
@@ -80,8 +79,8 @@ void	exe_child(char **argv, char *cmd_path, char **envp)
 			error_1(cmd_path, "is a directory", 126);
 		else
 			ft_error(strerror(errno), 1);
-		exit(g_sig->exitnum);
-	}
+	}	
+	exit(g_sig->exitnum);
 }
 
 void	exe_cmd(t_mini *mini, char *cmd_path, \
@@ -102,5 +101,5 @@ void	exe_cmd(t_mini *mini, char *cmd_path, \
 			exit_num_set(ft_wstopsig(stat_loc));
 	}
 	else if (pid == 0)
-		exe_child(argv->argv, cmd_path, mini->envp);
+		exe_child(argv->argv, cmd_path, mini->env_list);
 }

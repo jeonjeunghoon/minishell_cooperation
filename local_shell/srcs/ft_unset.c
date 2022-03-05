@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:35 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:11:09 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:53:08 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,12 @@ void	ft_unset(t_mini *mini, t_argv *argv)
 			return ;
 		if (size != 0)
 		{
-			position_init(&position, &size, mini->envp, argv->argv);
-			get_position(position, mini->envp, argv->argv);
-			size = ft_two_dimension_size(mini->envp) - ft_numlen(position);
-			new = create_unset_envp(mini->envp, position, size);
-			ft_two_dimension_free(&(mini->envp));
-			mini->envp = new;
+			position_init(&position, &size, mini->env_list, argv->argv);
+			get_position(position, mini->env_list, argv->argv);
+			size = ft_two_dimension_size(mini->env_list) - ft_numlen(position);
+			new = create_unset_envp(mini->env_list, position, size);
+			ft_two_dimension_free(&(mini->env_list));
+			mini->env_list = new;
 			free(position);
 			position = NULL;
 		}

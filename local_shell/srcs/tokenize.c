@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 00:02:03 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/04 15:38:39 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:54:51 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_list	*tokenize(t_mini *mini, t_token *token, char *input, int *start)
 		}
 		wild_str = get_wild_str(mini, token->token);
 		if (!wild_str)
-			if (refine_str(mini, token, mini->envp) == ERROR)
+			if (refine_str(mini, token, mini->env_list) == ERROR)
 				return ((t_list *)ERROR);
 	}
 	return (wild_str);

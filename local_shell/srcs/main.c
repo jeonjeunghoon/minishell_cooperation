@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/04 11:31:34 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:50:58 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,18 @@ int	memory_allocation(t_mini **mini, char **envp)
 
 	(*mini) = (t_mini *)malloc(sizeof(t_mini));
 	size = ft_two_dimension_size(envp);
-	(*mini)->envp = (char **)malloc(sizeof(char *) * (size + 1));
-	(*mini)->envp[size] = NULL;
-	i = -1;
-	while (envp[++i])
-		(*mini)->envp[i] = ft_strdup(envp[i]);
+	(*mini)->env_list = (char **)malloc(sizeof(char *) * (size + 1));
+	(*mini)->export_list = (char **)malloc(sizeof(char *) * (size + 1));
+	(*mini)->env_list[size] = NULL;
+	(*mini)->export_list[size] = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		(*mini)->env_list[i] = ft_strdup(envp[i]);
+		(*mini)->export_list[i] = ft_strjoin("declare -x ", (*mini)->env_list[i]);
+		printf("%s\n", (*mini)->export_list[i]);
+		i++;
+	}
 	(*mini)->input = (t_input *)malloc(sizeof(t_input));
 	(*mini)->sig = (t_sig *)malloc(sizeof(t_sig));
 	g_sig = (*mini)->sig;

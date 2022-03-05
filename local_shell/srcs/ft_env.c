@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:59 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:17:00 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:54:34 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,5 @@ void	ft_env(t_mini *mini, t_argv *argv)
 				"With no options or arguments", 1);
 		exit(g_sig->exitnum);
 	}
-	show_env(mini->envp);
+	show_env(mini->env_list);
 }

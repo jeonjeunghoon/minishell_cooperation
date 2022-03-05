@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:11 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/03 13:49:02 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:50:08 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,10 @@ int	is_valid_export(char *argv, int i)
 int	check_export_argv(char *argv)
 {
 	int		i;
-	t_bool	is_env;
 	char	*error_msg;
 
-	is_env = FALSE;
 	i = 0;
-	while (argv[i] && is_env == FALSE)
+	while (argv[i])
 	{
 		if (is_valid_export(argv, i) == ERROR)
 		{
@@ -91,19 +89,27 @@ int	check_export_argv(char *argv)
 			ft_free(&error_msg);
 			return (ERROR);
 		}
-		if (argv[i] == '=')
-			is_env = TRUE;
 		i++;
 	}
-	if (is_env == FALSE)
-		return (ERROR);
 	return (0);
+}
+
+void	print_export(char **export_list)
+{
+	int	i;
+
+	i = 0;
+	while (export_list[i] != NULL)
+	{
+		printf("%s\n", export_list[i]);
+		i++;
+	}
 }
 
 void	ft_export(t_mini *mini, t_argv *argv)
 {
 	int		i;
-	char	**new_envp;
+	char	**new_envlst;
 
 	exit_num_set(0);
 	if (ft_two_dimension_size(argv->argv) > 1)
@@ -113,13 +119,13 @@ void	ft_export(t_mini *mini, t_argv *argv)
 		{
 			if (check_export_argv(argv->argv[i]) != ERROR)
 			{
-				new_envp = create_export_envp(mini->envp, argv->argv[i]);
-				ft_two_dimension_free(&(mini->envp));
-				mini->envp = new_envp;
+				new_envlst = create_export_envp(mini->env_list, argv->argv[i]);
+				ft_two_dimension_free(&(mini->env_list));
+				mini->env_list = new_envlst;
 			}
 			i++;
 		}
 	}
 	else
-		ft_env(mini, argv);
+		print_export(mini->export_list);
 }

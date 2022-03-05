@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/02/27 16:40:40 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 02:55:21 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	create_path_bundle(t_mini *mini)
 {
 	char	*path_str;
 
-	path_str = ft_getenv(mini->envp, "PATH");
+	path_str = ft_getenv(mini->env_list, "PATH");
 	if (path_str == NULL)
 		return ;
 	if (mini->path == NULL)

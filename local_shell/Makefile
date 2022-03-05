@@ -63,9 +63,9 @@ LIBFT_NAME			=	ft
 LIBFT_PATH			=	./libft
 
 RL_NAME				=	readline
-RL_PATH				=	/Users/seungcoh/.brew/opt/readline/lib
+RL_PATH				=	/opt/homebrew/opt/readline/lib
 
-RL_INC				=	/Users/seungcoh/.brew/opt/readline/include
+RL_INC				=	/opt/homebrew/opt/readline/include
 
 $(NAME)				:	$(OBJS)
 						@$(MAKE) -C $(LIBFT_PATH) bonus
