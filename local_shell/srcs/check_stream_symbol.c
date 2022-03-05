@@ -6,50 +6,33 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:08:29 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/02 19:02:20 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/04 15:53:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-t_bool	stream_symbol_error(char *prev_str, char *next_str, \
+int	stream_symbol_error(char *prev_str, char *next_str, \
 							char *symbol, char *near_symbol)
 {
-	if ((prev_str == NULL || next_str == NULL) && \
-		((ft_strncmp(symbol, "|", 2) == 0) || \
-		(ft_strncmp(symbol, "||", 3) == 0) || \
-		(ft_strncmp(symbol, "&&", 3) == 0)))
-	{
-		error_symbol(symbol, 258);
-		symbol_free(&symbol, &near_symbol);
-		return (FALSE);
-	}
+	if (((ft_strncmp(symbol, "||", 3) == 0) || \
+		(ft_strncmp(symbol, "&&", 3) == 0)) && \
+		near_symbol == NULL)
+		return (error_check_and_or(prev_str, next_str, symbol));
+	else if ((ft_strncmp(symbol, "|", 2) == 0) && \
+			near_symbol == NULL)
+		return (error_check_pipe(prev_str, next_str, symbol));
+	else if ((symbol[0] == '>' || symbol[0] == '<') && \
+			near_symbol == NULL)
+		return (error_check_redirect(next_str));
 	else if (near_symbol != NULL)
-	{
-		error_symbol(near_symbol, 258);
-		symbol_free(&symbol, &near_symbol);
-		return (FALSE);
-	}
-	else if (next_str == NULL)
-	{
-		error_symbol("newline", 258);
-		symbol_free(&symbol, &near_symbol);
-		return (FALSE);
-	}
-	return (TRUE);
+		return (error_check_nearsymbol(near_symbol));
+	else
+		return (error_check_another(symbol));
+	return (0);
 }
 
-void	near_symbol_exist(char **near_symbol, char *str, int i)
-{
-	*near_symbol = valid_symbol_list(str, i);
-	if ((*near_symbol)[0] == '\0')
-	{
-		ft_free(near_symbol);
-		*near_symbol = ft_strdup(&(str[i]));
-	}
-}
-
-t_bool	check_str(char **symbol, char **near_symbol, char *str)
+int	check_symbol(char **symbol, char **near_symbol, char *str)
 {
 	int	i;
 
@@ -58,48 +41,50 @@ t_bool	check_str(char **symbol, char **near_symbol, char *str)
 	{
 		if (*symbol != NULL)
 		{
-			near_symbol_exist(near_symbol, str, i);
+			*near_symbol = valid_symbol_list(str, i);
+			if (*near_symbol == NULL)
+				*near_symbol = ft_strdup(&(str[i]));
 			break ;
 		}
 		*symbol = valid_symbol_list(str, i);
-		if ((*symbol)[0] == '\0')
+		if (*symbol == NULL)
 		{
 			error_1(*symbol, "command not found", 127);
-			symbol_free(symbol, near_symbol);
-			return (FALSE);
+			return (ERROR);
 		}
 		if ((ft_strlen(*symbol) == 2))
 			i += 1;
 		i++;
 	}
-	return (TRUE);
+	return (0);
 }
 
 t_bool	is_valid_symbol(t_mini *mini, char *str, char *prev_str, char *next_str)
 {
 	char	*symbol;
 	char	*near_symbol;
-	t_bool	ret;
 
 	near_symbol = NULL;
 	symbol = NULL;
-	ret = TRUE;
-	if (check_str(&symbol, &near_symbol, str) == FALSE)
+	if (check_symbol(&symbol, &near_symbol, str) == ERROR)
 		return (FALSE);
-	if (stream_symbol_error(prev_str, next_str, symbol, near_symbol) == FALSE)
-		return (FALSE);
-	if (create_file(symbol, next_str) == FALSE)
+	if (stream_symbol_error(prev_str, next_str, symbol, near_symbol) == ERROR)
 	{
 		symbol_free(&symbol, &near_symbol);
 		return (FALSE);
 	}
-	if (open_file(mini, symbol, next_str) == FALSE)
+	if (create_file(symbol, next_str) == ERROR)
+	{
+		symbol_free(&symbol, &near_symbol);
+		return (FALSE);
+	}
+	if (open_file(mini, symbol, next_str) == ERROR)
 	{
 		symbol_free(&symbol, &near_symbol);
 		return (FALSE);
 	}
 	symbol_free(&symbol, &near_symbol);
-	return (ret);
+	return (TRUE);
 }
 
 int	check_stream_symbol(t_mini *mini, t_list *token_lst)

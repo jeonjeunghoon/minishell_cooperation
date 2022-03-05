@@ -6,7 +6,7 @@
 #    By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/19 14:19:40 by jeunjeon          #+#    #+#              #
-#    Updated: 2022/03/03 13:08:36 by jeunjeon         ###   ########.fr        #
+#    Updated: 2022/03/04 15:44:49 by jeunjeon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRCS_NAME			=	main.c \
 						ft_prompt.c \
 						ft_parsing.c \
 						check_stream_symbol.c \
+						symbol_error_utility.c \
 						check_symbol_utility.c \
 						check_symbol_utility2.c \
 						ft_signal.c \
