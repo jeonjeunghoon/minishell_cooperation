@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/04 11:39:14 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/05 11:25:42 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ t_list	*get_wild_str(t_mini *mini, char *token)
 	t_list	*ret;
 
 	mini->wild_chk = 1;
+	ret = 0;
 	init_get_wild_str(&wild, &wild_token);
 	wild_token = get_wild_token(mini, token, &wild);
 	if (wild.flag & 4)
@@ -107,6 +108,8 @@ t_list	*get_wild_str(t_mini *mini, char *token)
 		get_ls_list(mini->envp), wild.flag));
 		if (!ret)
 			ft_lstadd_back(&ret, ft_lstnew(wild.str));
+		else
+			free(wild.str);
 		return (ret);
 	}
 	mini->wild_chk = 0;

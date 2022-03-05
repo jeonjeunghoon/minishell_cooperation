@@ -6,7 +6,7 @@
 /*   By: seungcoh <seungcoh@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 18:51:19 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/04 11:32:06 by seungcoh         ###   ########.fr       */
+/*   Updated: 2022/03/04 16:45:34 by seungcoh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	double_quote_str(t_mini *mini, t_refine *refine)
 	}
 	while (refine->str[refine->i] == '\"' && refine->str[refine->i] != '\0')
 		refine->i++;
+	if (!mini->wild_chk && refine->new_str[0] == '\0')
+		ft_strlcpy(refine->new_str, refine->str, ft_strlen(refine->str) + 1);
 	refine->is_double = FALSE;
 	refine->is_basic = TRUE;
 }
@@ -77,6 +79,8 @@ void	single_quote_str(t_mini *mini, t_refine *refine)
 	}
 	while (refine->str[refine->i] == '\'' && refine->str[refine->i] != '\0')
 		refine->i++;
+	if (!mini->wild_chk && refine->new_str[0] == '\0')
+		ft_strlcpy(refine->new_str, refine->str, ft_strlen(refine->str) + 1);
 	refine->is_single = FALSE;
 	refine->is_basic = TRUE;
 }
