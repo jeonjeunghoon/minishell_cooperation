@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 02:39:17 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 17:20:53 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,18 +205,25 @@ void	ft_cd(t_mini *mini, t_argv *argv);
 void	ft_pwd(t_argv *argv);
 
 // ft_export
-char	*get_envname_export(char *argv);
-char	**create_export_envp(char **envp, char *env);
-int		is_valid_export(char *argv, int i);
+void	print_export(char **export_list);
+void	export_list(char ***list, t_argv *argv, int i);
 int		check_export_argv(char *argv);
 void	ft_export(t_mini *mini, t_argv *argv);
 
+// export_utility
+char	*get_envname_export(char *argv);
+char	**create_export_envp(char **envp, char *env);
+int		is_valid_export(char *argv, int i);
+
 // ft_unset
+void	unset_list(char ***list, t_argv *argv);
+int		check_unset_argv(char **argv, int *size);
+void	ft_unset(t_mini *mini, t_argv *argv);
+
+// unset_utility
 char	**create_unset_envp(char **envp, int *position, int size);
 void	get_position(int *position, char **envp, char **argv);
 void	position_init(int **position, int *size, char **envp, char **argv);
-int		check_unset_argv(char **argv, int *size);
-void	ft_unset(t_mini *mini, t_argv *argv);
 
 // ft_env
 void	show_env(char **envp);

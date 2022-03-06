@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:10:41 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 02:51:38 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 16:08:01 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	refine_heredoc(t_mini *mini, char **input)
 
 	refine = (t_refine *)malloc(sizeof(t_refine));
 	refine_init(refine);
-	refine->envp = mini->env_list;
+	refine->envp = mini->export_list;
 	refine->str = *input;
 	create_refined_str(mini, refine);
 	ft_free(input);

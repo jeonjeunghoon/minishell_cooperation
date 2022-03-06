@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:44:33 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 02:52:53 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 16:08:27 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ void	ft_cd(t_mini *mini, t_argv *argv)
 	exit_num_set(0);
 	path = NULL;
 	i = 1;
-	old_pwd = ft_getenv(mini->env_list, "PWD");
+	old_pwd = ft_getenv(mini->export_list, "PWD");
 	while (argv->argv[i])
 	{
-		path = get_path(mini->env_list, argv->argv[i]);
+		path = get_path(mini->export_list, argv->argv[i]);
 		if (check_path(path) == ERROR)
 			return ;
 		i++;

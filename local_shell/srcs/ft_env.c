@@ -6,20 +6,20 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 15:45:59 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 02:54:34 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 16:08:50 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	show_env(char **envp)
+void	show_env(char **env)
 {
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (env[i])
 	{
-		printf("%s\n", envp[i]);
+		printf("%s\n", env[i]);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 16:01:40 by seungcoh          #+#    #+#             */
-/*   Updated: 2022/03/06 02:56:06 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 16:09:40 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char *token, t_mini *mini)
 	(wild->i - wild->start_idx + 1));
 	ft_strlcpy(wild->tmp_token.token, token + wild->start_idx, \
 	wild->i - wild->start_idx + 1);
-	if (refine_str(mini, &wild->tmp_token, mini->env_list) == ERROR)
+	if (refine_str(mini, &wild->tmp_token, mini->export_list) == ERROR)
 		return (ERROR);
 	ft_lstadd_back(wild_token, ft_lstnew(wild->tmp_token.token));
 	joinstr(wild, wild->tmp_token.token);
@@ -105,7 +105,7 @@ t_list	*get_wild_str(t_mini *mini, char *token)
 	if (wild.flag & 4)
 	{
 		ret = (find_wild_str(wild_token, \
-		get_ls_list(mini->env_list), wild.flag));
+		get_ls_list(mini->export_list), wild.flag));
 		if (!ret)
 			ft_lstadd_back(&ret, ft_lstnew(wild.str));
 		else

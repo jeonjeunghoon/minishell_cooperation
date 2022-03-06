@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:06 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 02:50:58 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/06 16:07:35 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,15 @@ int	memory_allocation(t_mini **mini, char **envp)
 
 	(*mini) = (t_mini *)malloc(sizeof(t_mini));
 	size = ft_two_dimension_size(envp);
-	(*mini)->env_list = (char **)malloc(sizeof(char *) * (size + 1));
 	(*mini)->export_list = (char **)malloc(sizeof(char *) * (size + 1));
-	(*mini)->env_list[size] = NULL;
+	(*mini)->env_list = (char **)malloc(sizeof(char *) * (size + 1));
 	(*mini)->export_list[size] = NULL;
+	(*mini)->env_list[size] = NULL;
 	i = 0;
 	while (envp[i])
 	{
+		(*mini)->export_list[i] = ft_strdup(envp[i]);
 		(*mini)->env_list[i] = ft_strdup(envp[i]);
-		(*mini)->export_list[i] = ft_strjoin("declare -x ", (*mini)->env_list[i]);
-		printf("%s\n", (*mini)->export_list[i]);
 		i++;
 	}
 	(*mini)->input = (t_input *)malloc(sizeof(t_input));
