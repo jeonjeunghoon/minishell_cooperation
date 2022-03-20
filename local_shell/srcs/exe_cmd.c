@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/06 14:14:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 16:08:18 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/20 12:00:57 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	set_redirect(t_argv *argv)
 	return (0);
 }
 
-void	exe_child(char **argv, char *cmd_path, char **envp)
+void	exe_child(t_mini *mini, char **argv, char *cmd_path, char **envp)
 {
 	if (argv[0][0] == '\0')
 		exit_num_set(0);
@@ -71,7 +71,7 @@ void	exe_child(char **argv, char *cmd_path, char **envp)
 		error_1(cmd_path, "No such file or directory", 127);
 	else if (execve(cmd_path, argv, envp) == ERROR)
 	{
-		if (cmd_path[0] == '/')
+		if (cmd_path[0] == '/' || mini->path == NULL)
 			error_1(cmd_path, "No such file or directory", 127);
 		else if (errno == 2)
 			error_1(cmd_path, "command not found", 127);
@@ -101,5 +101,5 @@ void	exe_cmd(t_mini *mini, char *cmd_path, \
 			exit_num_set(ft_wstopsig(stat_loc));
 	}
 	else if (pid == 0)
-		exe_child(argv->argv, cmd_path, mini->export_list);
+		exe_child(mini, argv->argv, cmd_path, mini->export_list);
 }

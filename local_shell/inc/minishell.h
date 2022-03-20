@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 21:49:58 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/20 11:25:00 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/20 12:02:28 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,7 +295,7 @@ void	create_cmdpath(t_mini *mini, char *cmd, char **cmd_path);
 // exe_cmd
 void	remove_redirection(t_argv *argv);
 int		set_redirect(t_argv *argv);
-void	exe_child(char **argv, char *cmd_path, char **envp);
+void	exe_child(t_mini *mini, char **argv, char *cmd_path, char **envp);
 void	exe_cmd(t_mini *mini, char *cmd_path, t_argv *argv, t_bool is_child);
 
 // command_utility3

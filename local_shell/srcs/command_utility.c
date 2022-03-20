@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:57:53 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 16:08:11 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/20 11:56:32 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ void	set_relative_path(t_mini *mini, char **cmd_path, char *cmd)
 
 	create_path_bundle(mini);
 	if (mini->path == NULL)
+	{
+		*cmd_path = ft_strdup(cmd);
 		return ;
+	}
 	tmp = ft_strjoin("/", cmd);
 	i = 0;
 	while (mini->path[i])
