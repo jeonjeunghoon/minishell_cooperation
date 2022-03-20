@@ -6,7 +6,7 @@
 /*   By: jeunjeon <jeunjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 17:18:17 by jeunjeon          #+#    #+#             */
-/*   Updated: 2022/03/06 17:19:03 by jeunjeon         ###   ########.fr       */
+/*   Updated: 2022/03/20 11:37:10 by jeunjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int	is_valid_export(char *argv, int i)
 	if (argv[i] == '_' || argv[i] == '=' \
 		|| (argv[i] >= 'a' && argv[i] <= 'z') \
 		|| (argv[i] >= 'A' && argv[i] <= 'Z') \
-		|| (argv[i] >= '0' && argv[i] <= '9'))
+		|| (argv[i] >= '0' && argv[i] <= '9') \
+		|| argv[i] == '/')
 		return (0);
 	return (ERROR);
 }
